@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PutzxStore - Toko OWN</title>
+  <title>PutzxStore</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background: #f5f7fa; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 12px 0 80px 0; }
-    .app-container { max-width: 420px; width: 100%; background: #ffffff; border-radius: 24px 24px 0 0; box-shadow: 0 0 20px rgba(0,0,0,0.05); overflow: hidden; padding: 16px 16px 80px 16px; position: relative; }
+    .app-container { max-width: 420px; width: 100%; background: white; border-radius: 24px; padding: 16px 16px 80px; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; }
 
     /* AUTH */
-    .auth-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px 16px; background: white; border-radius: 24px; }
+    .auth-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
     .auth-page .logo { font-size: 28px; font-weight: 700; color: #00a86b; margin-bottom: 4px; }
     .auth-page .subtitle { color: #6b7280; margin-bottom: 24px; font-size: 14px; }
     .auth-tabs { display: flex; width: 100%; max-width: 340px; background: #f0f2f5; border-radius: 30px; padding: 4px; margin-bottom: 20px; }
@@ -75,7 +75,6 @@
 
     .main-content { margin-top: 8px; min-height: 200px; }
     .section-title { font-weight: 700; font-size: 16px; color: #1f2937; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .section-title small { font-weight: 400; font-size: 12px; color: #00a86b; cursor: pointer; }
 
     .product-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
     .product-card { background: #f8fafc; border-radius: 12px; padding: 12px; border: 1px solid #e9edf2; transition: transform 0.1s; position: relative; }
@@ -95,7 +94,7 @@
     .empty-state h3 { font-weight: 600; color: #1f2937; margin-bottom: 6px; }
     .empty-state p { font-size: 14px; }
 
-    /* Panel OWN */
+    /* PANEL OWN */
     .own-panel { background: #f8fafc; border-radius: 16px; padding: 20px; border: 1px solid #e9edf2; margin-top: 8px; }
     .own-panel .panel-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; flex-wrap: wrap; }
     .own-panel .panel-tab { padding: 8px 18px; border-radius: 30px; border: none; background: transparent; font-weight: 600; color: #6b7280; cursor: pointer; transition: all 0.2s; }
@@ -106,15 +105,13 @@
     .own-panel h3 { margin-bottom: 16px; color: #1f2937; display: flex; align-items: center; gap: 8px; }
     .own-panel .form-group { margin-bottom: 16px; }
     .own-panel label { font-weight: 600; font-size: 14px; color: #1f2937; display: block; margin-bottom: 4px; }
-    .own-panel input[type="text"], .own-panel input[type="number"], .own-panel textarea { width: 100%; padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 30px; font-size: 14px; outline: none; background: white; }
+    .own-panel input, .own-panel textarea { width: 100%; padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 30px; font-size: 14px; outline: none; background: white; }
     .own-panel textarea { border-radius: 16px; resize: vertical; min-height: 60px; }
     .own-panel input:focus, .own-panel textarea:focus { border-color: #00a86b; }
     .own-panel .btn-save { margin-top: 8px; background: #00a86b; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; }
     .own-panel .btn-save:hover { background: #008c5a; }
     .own-panel .btn-danger { background: #ef4444; }
     .own-panel .btn-danger:hover { background: #dc2626; }
-    .own-panel .btn-warning { background: #f59e0b; color: white; }
-    .own-panel .btn-warning:hover { background: #d97706; }
     .own-panel .btn-sm { padding: 6px 14px; border-radius: 20px; font-size: 12px; width: auto; display: inline-block; }
     .own-panel .product-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .own-panel .product-item .thumb { width: 60px; height: 60px; background: #e5e7eb; border-radius: 8px; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
@@ -128,7 +125,6 @@
     .own-panel .product-item .actions label:hover { background: #d1d5db; }
     .own-panel .product-item .actions .btn-del { background: #fee2e2; color: #991b1b; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
     .own-panel .product-item .actions .btn-del:hover { background: #fecaca; }
-
     .own-panel .qr-upload { margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 20px; }
     .own-panel .qr-preview { margin-top: 8px; max-width: 200px; border-radius: 8px; border: 1px solid #e5e7eb; padding: 8px; background: white; }
     .own-panel .qr-preview img { width: 100%; height: auto; display: block; }
@@ -141,15 +137,11 @@
     .user-item .user-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
     .user-item .user-actions input { width: 80px; padding: 4px 8px; border: 1px solid #e5e7eb; border-radius: 20px; font-size: 12px; }
     .user-item .user-actions .btn-saldo { background: #dbeafe; color: #1e40af; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-    .user-item .user-actions .btn-saldo:hover { background: #bfdbfe; }
     .user-item .user-actions .btn-del-user { background: #fee2e2; color: #991b1b; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-    .user-item .user-actions .btn-del-user:hover { background: #fecaca; }
     .user-item .user-actions .btn-del-user:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .request-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid #e5e7eb; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .request-item .req-info { flex: 1; min-width: 140px; }
-    .request-item .req-info .uname { font-weight: 600; }
-    .request-item .req-info .detail { font-size: 13px; color: #6b7280; }
     .request-item .req-actions { display: flex; gap: 8px; }
     .request-item .req-actions button { padding: 6px 16px; border: none; border-radius: 20px; font-weight: 600; cursor: pointer; }
     .request-item .req-actions .btn-approve { background: #d1fae5; color: #065f46; }
@@ -171,30 +163,22 @@
     .nav-item i { font-size: 22px; margin-bottom: 2px; }
     .nav-item.active { color: #00a86b; }
     .nav-item:hover { color: #00a86b; }
-    .nav-item .badge { background: #ef4444; color: white; font-size: 9px; border-radius: 30px; padding: 1px 6px; margin-left: 4px; }
     .nav-item.hidden { display: none; }
 
     @media (max-width:420px) {
-      .app-container { padding: 12px 12px 80px 12px; }
+      .app-container { padding: 12px 12px 80px; }
       .saldo-nominal { font-size: 22px; }
       .stats-grid { gap: 6px; }
       .stat-item { padding: 10px 4px; }
       .stat-number { font-size: 17px; }
       .own-panel .product-item { flex-direction: column; align-items: stretch; }
-      .own-panel .product-item .actions { justify-content: flex-start; }
       .user-item { flex-direction: column; align-items: stretch; }
     }
 
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
-      display: none; justify-content: center; align-items: center; z-index: 999;
-    }
+    /* MODAL */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 999; }
     .modal-overlay.active { display: flex; }
-    .modal-box {
-      background: white; max-width: 380px; width: 92%; border-radius: 24px; padding: 24px 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease;
-      max-height: 95vh; overflow-y: auto;
-    }
+    .modal-box { background: white; max-width: 380px; width: 92%; border-radius: 24px; padding: 24px 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease; max-height: 95vh; overflow-y: auto; }
     @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     .modal-box h3 { margin-bottom: 8px; color: #1f2937; }
     .modal-box p { color: #6b7280; margin-bottom: 16px; font-size: 14px; }
@@ -205,11 +189,8 @@
     .modal-box .modal-actions .btn-confirm { background: #00a86b; color: white; }
     .modal-box .modal-actions .btn-confirm:hover { background: #008c5a; }
     .modal-box .modal-actions .btn-cancel { background: #e5e7eb; color: #4b5563; }
-    .modal-box .modal-actions .btn-cancel:hover { background: #d1d5db; }
     .modal-box .btn-request { background: #00a86b; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 12px; }
-    .modal-box .btn-request:hover { background: #008c5a; }
     .modal-box .btn-request:disabled { opacity: 0.5; cursor: not-allowed; }
-
     .qr-container { text-align: center; margin: 16px 0; }
     .qr-container img { max-width: 220px; border-radius: 12px; border: 1px solid #e5e7eb; padding: 12px; background: white; }
     .qr-container .qr-amount { font-size: 20px; color: #00a86b; font-weight: 700; }
@@ -339,129 +320,93 @@
 <script>
 (function() {
   // ============================================================
-  // KONFIGURASI DEFAULT
+  // KONFIGURASI
   // ============================================================
-  const DEFAULT_WA_LINK = 'https://whatsapp.com/channel/0029VbCcuGlLdQegM83dGq3B';
-  const DEFAULT_WA_NUMBER = '08139196934';
-  const OWNER_USERNAME = 'putzx';
-  const OWNER_PASSWORD = 'putzx123';
+  const WA_LINK = 'https://whatsapp.com/channel/0029VbCcuGlLdQegM83dGq3B';
+  const WA_NUMBER = '08139196934';
+  const OWNER_USER = 'putzx';
+  const OWNER_PASS = 'putzx123';
 
   // ============================================================
   // STORAGE HELPERS
   // ============================================================
-  function getUsers() {
-    const data = localStorage.getItem('users');
-    return data ? JSON.parse(data) : [];
-  }
-  function saveUsers(users) { localStorage.setItem('users', JSON.stringify(users)); }
+  const get = key => { try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; } };
+  const set = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
-  function getCurrentUser() {
-    const data = localStorage.getItem('currentUser');
-    return data ? JSON.parse(data) : null;
-  }
-  function setCurrentUser(user) { localStorage.setItem('currentUser', JSON.stringify(user)); }
+  function getUsers() { return get('users') || []; }
+  function saveUsers(u) { set('users', u); }
+  function getCurrentUser() { return get('currentUser'); }
+  function setCurrentUser(u) { set('currentUser', u); }
   function clearCurrentUser() { localStorage.removeItem('currentUser'); }
 
   function getUserSaldo(username) {
-    const data = localStorage.getItem('userSaldo');
-    const map = data ? JSON.parse(data) : {};
+    const map = get('userSaldo') || {};
     return map[username] || 0;
   }
   function setUserSaldo(username, amount) {
-    const data = localStorage.getItem('userSaldo');
-    const map = data ? JSON.parse(data) : {};
+    const map = get('userSaldo') || {};
     map[username] = amount;
-    localStorage.setItem('userSaldo', JSON.stringify(map));
+    set('userSaldo', map);
   }
   function addUserSaldo(username, amount) {
     setUserSaldo(username, getUserSaldo(username) + amount);
   }
 
-  function getProducts() {
-    const data = localStorage.getItem('products');
-    return data ? JSON.parse(data) : [];
-  }
-  function saveProducts(products) { localStorage.setItem('products', JSON.stringify(products)); }
+  function getProducts() { return get('products') || []; }
+  function saveProducts(p) { set('products', p); }
 
-  function getDepositRequests() {
-    const data = localStorage.getItem('depositRequests');
-    return data ? JSON.parse(data) : [];
-  }
-  function saveDepositRequests(reqs) { localStorage.setItem('depositRequests', JSON.stringify(reqs)); }
+  function getDepositRequests() { return get('depositRequests') || []; }
+  function saveDepositRequests(r) { set('depositRequests', r); }
 
   function getAdminConfig() {
-    const data = localStorage.getItem('adminConfig');
-    if (data) {
-      try { return JSON.parse(data); } catch(e) {}
-    }
-    return { waNumber: DEFAULT_WA_NUMBER, slLink: DEFAULT_WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online Terpercaya' };
+    const def = { waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' };
+    const data = get('adminConfig');
+    return data ? { ...def, ...data } : def;
   }
-  function setAdminConfig(config) { localStorage.setItem('adminConfig', JSON.stringify(config)); }
+  function setAdminConfig(c) { set('adminConfig', c); }
 
   // ============================================================
-  // INISIALISASI AKUN OWN
+  // INISIALISASI
   // ============================================================
-  function initOwnerAccount() {
+  function init() {
+    // Buat akun OWN jika belum ada
     let users = getUsers();
-    const hasOwner = users.some(u => u.role === 'owner');
-    if (!hasOwner) {
-      users.push({
-        name: 'Putzx',
-        username: OWNER_USERNAME,
-        phone: DEFAULT_WA_NUMBER,
-        password: OWNER_PASSWORD,
-        role: 'owner'
-      });
+    if (!users.some(u => u.role === 'owner')) {
+      users.push({ name: 'Putzx', username: OWNER_USER, phone: WA_NUMBER, password: OWNER_PASS, role: 'owner' });
       saveUsers(users);
-      setUserSaldo(OWNER_USERNAME, 0);
+      setUserSaldo(OWNER_USER, 0);
     }
     // Pastikan semua user punya saldo
-    users.forEach(u => {
-      if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0);
-    });
-  }
+    users.forEach(u => { if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0); });
 
-  // ============================================================
-  // PRODUK DEFAULT
-  // ============================================================
-  function initDefaultProducts() {
-    let products = getProducts();
-    if (products.length === 0) {
-      products = [
+    // Produk default jika kosong
+    if (getProducts().length === 0) {
+      saveProducts([
         { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
-        { id: 2, name: 'Mug Custom Own', price: 65000, stock: 20, image: '' },
+        { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '' },
         { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '' },
         { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '' },
-        { id: 5, name: 'Tas Ransel Premium', price: 320000, stock: 5, image: '' },
-        { id: 6, name: 'Dompet Kulit Asli', price: 150000, stock: 15, image: '' }
-      ];
-      saveProducts(products);
+        { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
+        { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' }
+      ]);
     }
   }
+  init();
 
   // ============================================================
-  // AUTH FUNCTIONS
+  // AUTH
   // ============================================================
   function login(username, password) {
-    const users = getUsers();
-    const found = users.find(u => u.username === username && u.password === password);
-    if (found) {
-      setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role });
-      return true;
-    }
+    const found = getUsers().find(u => u.username === username && u.password === password);
+    if (found) { setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role }); return true; }
     return false;
   }
 
   function signup(name, username, phone, password) {
     const users = getUsers();
-    if (users.find(u => u.username === username)) {
-      return { success: false, message: 'Username sudah digunakan.' };
-    }
-    if (password.length < 6) {
-      return { success: false, message: 'Password minimal 6 karakter.' };
-    }
-    const newUser = { name, username, phone, password, role: 'member' };
-    users.push(newUser);
+    if (users.find(u => u.username === username)) return { success: false, message: 'Username sudah digunakan.' };
+    if (password.length < 6) return { success: false, message: 'Password minimal 6 karakter.' };
+    users.push({ name, username, phone, password, role: 'member' });
     saveUsers(users);
     setUserSaldo(username, 0);
     setCurrentUser({ name, username, phone, role: 'member' });
@@ -469,124 +414,109 @@
   }
 
   // ============================================================
-  // DEPOSIT FUNCTIONS
+  // DEPOSIT
   // ============================================================
   function createDepositRequest(username, amount) {
     const reqs = getDepositRequests();
-    const newReq = {
-      id: Date.now(),
-      username: username,
-      amount: amount,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
+    const newReq = { id: Date.now(), username, amount, status: 'pending', createdAt: new Date().toISOString() };
     reqs.push(newReq);
     saveDepositRequests(reqs);
     return newReq;
   }
-
   function updateDepositRequest(id, status) {
     const reqs = getDepositRequests();
     const idx = reqs.findIndex(r => r.id === id);
-    if (idx !== -1) {
-      reqs[idx].status = status;
-      saveDepositRequests(reqs);
-      return true;
-    }
+    if (idx !== -1) { reqs[idx].status = status; saveDepositRequests(reqs); return true; }
     return false;
   }
-
-  function getPendingDeposits() {
-    return getDepositRequests().filter(r => r.status === 'pending');
-  }
-
-  function getUserDeposits(username) {
-    return getDepositRequests().filter(r => r.username === username).sort((a,b) => b.id - a.id);
-  }
+  function getPendingDeposits() { return getDepositRequests().filter(r => r.status === 'pending'); }
+  function getUserDeposits(username) { return getDepositRequests().filter(r => r.username === username).sort((a,b) => b.id - a.id); }
 
   // ============================================================
-  // ELEMEN DOM
+  // DOM ELEMENTS
   // ============================================================
-  const authPage = document.getElementById('authPage');
-  const appMain = document.getElementById('appMain');
-  const mainContent = document.getElementById('mainContent');
-  const navItems = document.querySelectorAll('.nav-item');
-  const searchInput = document.getElementById('searchInput');
-  const panelNav = document.getElementById('panelNav');
-
-  // Auth
-  const loginForm = document.getElementById('loginForm');
-  const signupForm = document.getElementById('signupForm');
+  const $ = id => document.getElementById(id);
+  const authPage = $('authPage'), appMain = $('appMain'), mainContent = $('mainContent');
+  const navItems = document.querySelectorAll('.nav-item'), panelNav = $('panelNav');
+  const loginForm = $('loginForm'), signupForm = $('signupForm');
   const authTabs = document.querySelectorAll('.auth-tab');
-  const loginUsername = document.getElementById('loginUsername');
-  const loginPassword = document.getElementById('loginPassword');
-  const loginBtn = document.getElementById('loginBtn');
-  const loginError = document.getElementById('loginError');
-  const signupName = document.getElementById('signupName');
-  const signupUsername = document.getElementById('signupUsername');
-  const signupPhone = document.getElementById('signupPhone');
-  const signupPassword = document.getElementById('signupPassword');
-  const signupConfirm = document.getElementById('signupConfirm');
-  const signupBtn = document.getElementById('signupBtn');
-  const signupError = document.getElementById('signupError');
-  const switchToSignup = document.getElementById('switchToSignup');
-  const switchToLogin = document.getElementById('switchToLogin');
+  const loginUsername = $('loginUsername'), loginPassword = $('loginPassword'), loginBtn = $('loginBtn'), loginError = $('loginError');
+  const signupName = $('signupName'), signupUsername = $('signupUsername'), signupPhone = $('signupPhone');
+  const signupPassword = $('signupPassword'), signupConfirm = $('signupConfirm'), signupBtn = $('signupBtn'), signupError = $('signupError');
+  const switchToSignup = $('switchToSignup'), switchToLogin = $('switchToLogin');
+  const displayName = $('displayName'), displayPhone = $('displayPhone'), roleText = $('roleText'), logoutBtn = $('logoutBtn');
+  const totalUserStat = $('totalUserStat'), totalProductStat = $('totalProductStat'), pendingDepositStat = $('pendingDepositStat');
+  const searchInput = $('searchInput'), depositBtn = $('depositBtn');
+  const depositModal = $('depositModal'), depositAmount = $('depositAmount'), depositConfirmBtn = $('depositConfirm'), depositCancelBtn = $('depositCancel');
+  const depositError = $('depositError'), depositStep1 = $('depositStep1'), depositStep2 = $('depositStep2'), depositStep3 = $('depositStep3');
+  const qrNominal = $('qrNominal'), qrContainer = $('qrContainer'), requestDepositBtn = $('requestDepositBtn');
+  const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNominal = $('reqNominal'), reqStatus = $('reqStatus');
 
-  const displayName = document.getElementById('displayName');
-  const displayPhone = document.getElementById('displayPhone');
-  const roleText = document.getElementById('roleText');
-  const logoutBtn = document.getElementById('logoutBtn');
-
-  // Stats
-  const totalUserStat = document.getElementById('totalUserStat');
-  const totalProductStat = document.getElementById('totalProductStat');
-  const pendingDepositStat = document.getElementById('pendingDepositStat');
-
-  // Deposit Modal
-  const depositModal = document.getElementById('depositModal');
-  const depositAmount = document.getElementById('depositAmount');
-  const depositConfirmBtn = document.getElementById('depositConfirm');
-  const depositCancelBtn = document.getElementById('depositCancel');
-  const depositError = document.getElementById('depositError');
-  const depositStep1 = document.getElementById('depositStep1');
-  const depositStep2 = document.getElementById('depositStep2');
-  const depositStep3 = document.getElementById('depositStep3');
-  const qrNominal = document.getElementById('qrNominal');
-  const qrContainer = document.getElementById('qrContainer');
-  const requestDepositBtn = document.getElementById('requestDepositBtn');
-  const depositBack = document.getElementById('depositBack');
-  const depositClose = document.getElementById('depositClose');
-  const reqNominal = document.getElementById('reqNominal');
-  const reqStatus = document.getElementById('reqStatus');
-
-  let pendingAmount = 0;
-  let currentPage = 'produk';
+  let currentPage = 'produk', pendingAmount = 0;
 
   // ============================================================
-  // FUNGSI TAMPILAN
+  // UI FUNCTIONS
   // ============================================================
+  function updateSaldoDisplay() {
+    const user = getCurrentUser();
+    if (user) $('saldoDisplay').textContent = 'Rp ' + getUserSaldo(user.username).toLocaleString('id-ID');
+  }
+
+  function updateStats() {
+    const users = getUsers(), products = getProducts(), pending = getPendingDeposits();
+    totalUserStat.textContent = users.length;
+    totalProductStat.textContent = products.length;
+    pendingDepositStat.textContent = pending.length;
+  }
+
+  function showToast(msg, type = 'info') {
+    const old = document.querySelector('.toast');
+    if (old) old.remove();
+    const div = document.createElement('div');
+    div.className = 'toast ' + type;
+    div.textContent = msg;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 4000);
+  }
+
+  function showAlert(id, msg, type) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'alert ' + type;
+    setTimeout(() => el.className = 'alert', 4000);
+  }
+
   function showApp(user) {
     authPage.style.display = 'none';
     appMain.style.display = 'block';
     displayName.textContent = user.name;
     displayPhone.textContent = user.phone;
-    const roleDisplay = user.role === 'owner' ? 'OWNER' : user.role.toUpperCase();
-    roleText.textContent = roleDisplay;
+    roleText.textContent = user.role === 'owner' ? 'OWNER' : user.role.toUpperCase();
     const badge = document.getElementById('roleBadge');
-    if (user.role === 'owner') {
-      badge.style.background = '#00a86b';
-      panelNav.classList.remove('hidden');
-    } else {
-      badge.style.background = '#6b7280';
-      panelNav.classList.add('hidden');
-    }
+    badge.style.background = user.role === 'owner' ? '#00a86b' : '#6b7280';
+    panelNav.classList.toggle('hidden', user.role !== 'owner');
     updateStats();
     updateSaldoDisplay();
     navigateTo('produk');
-    // Polling status deposit
     if (window._depositPoll) clearInterval(window._depositPoll);
     window._depositPoll = setInterval(() => {
-      checkDepositStatus();
+      const u = getCurrentUser();
+      if (!u) return;
+      const deposits = getUserDeposits(u.username);
+      if (deposits.length === 0) return;
+      const latest = deposits[0];
+      if (latest.status === 'approved' && window._lastNotified !== latest.id) {
+        window._lastNotified = latest.id;
+        updateSaldoDisplay();
+        showToast('Deposit Rp ' + latest.amount.toLocaleString('id-ID') + ' disetujui!', 'success');
+        if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
+        if (currentPage === 'riwayat') navigateTo('riwayat');
+      } else if (latest.status === 'rejected' && window._lastNotified !== latest.id) {
+        window._lastNotified = latest.id;
+        showToast('Deposit ditolak admin.', 'error');
+        if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
+      }
       updateStats();
     }, 3000);
   }
@@ -598,106 +528,45 @@
     if (window._depositPoll) clearInterval(window._depositPoll);
     loginError.style.display = 'none';
     signupError.style.display = 'none';
-    loginUsername.value = '';
-    loginPassword.value = '';
-    signupName.value = '';
-    signupUsername.value = '';
-    signupPhone.value = '';
-    signupPassword.value = '';
-    signupConfirm.value = '';
+    loginUsername.value = loginPassword.value = '';
+    signupName.value = signupUsername.value = signupPhone.value = signupPassword.value = signupConfirm.value = '';
   }
 
-  function updateSaldoDisplay() {
-    const user = getCurrentUser();
-    if (user) {
-      const saldo = getUserSaldo(user.username);
-      document.getElementById('saldoDisplay').textContent = 'Rp ' + saldo.toLocaleString('id-ID');
-    }
-  }
-
-  function updateStats() {
-    const users = getUsers();
-    const products = getProducts();
-    const pending = getPendingDeposits();
-    totalUserStat.textContent = users.length;
-    totalProductStat.textContent = products.length;
-    pendingDepositStat.textContent = pending.length;
-  }
-
-  function checkDepositStatus() {
-    const user = getCurrentUser();
-    if (!user) return;
-    const deposits = getUserDeposits(user.username);
-    if (deposits.length === 0) return;
-    const latest = deposits[0];
-    if (latest.status === 'approved' && window._lastNotified !== latest.id) {
-      window._lastNotified = latest.id;
-      updateSaldoDisplay();
-      showToast('Deposit Rp ' + latest.amount.toLocaleString('id-ID') + ' telah disetujui!', 'success');
-      // Jika modal deposit masih terbuka, update status
-      if (!depositStep3.classList.contains('hidden')) {
-        updateRequestStatusDisplay(latest);
-      }
-      // Refresh riwayat jika sedang di halaman riwayat
-      if (currentPage === 'riwayat') renderPage('riwayat');
-    } else if (latest.status === 'rejected' && window._lastNotified !== latest.id) {
-      window._lastNotified = latest.id;
-      showToast('Deposit Anda ditolak oleh admin.', 'error');
-      if (!depositStep3.classList.contains('hidden')) {
-        updateRequestStatusDisplay(latest);
-      }
-    }
-  }
-
-  function updateRequestStatusDisplay(request) {
-    reqStatus.textContent = request.status === 'pending' ? 'Menunggu Konfirmasi' :
-                           request.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-    reqStatus.className = 'status-badge ' + request.status;
-  }
-
-  function showToast(message, type = 'info') {
-    const old = document.querySelector('.toast');
-    if (old) old.remove();
-    const div = document.createElement('div');
-    div.className = 'toast ' + type;
-    div.textContent = message;
-    document.body.appendChild(div);
-    setTimeout(() => div.remove(), 4000);
+  function updateRequestStatusDisplay(req) {
+    reqStatus.textContent = req.status === 'pending' ? 'Menunggu Konfirmasi' : req.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+    reqStatus.className = 'status-badge ' + req.status;
   }
 
   // ============================================================
-  // RENDER KONTEN
+  // RENDER FUNCTIONS
   // ============================================================
   function renderProductGrid(productList) {
-    if (!productList || productList.length === 0) {
-      return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk kosong</h3><p>Belum ada produk yang tersedia.</p></div>`;
-    }
     const user = getCurrentUser();
-    let html = `<div class="product-grid">`;
+    if (!productList || productList.length === 0) return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk kosong</h3></div>`;
+    let html = '<div class="product-grid">';
     productList.forEach(p => {
-      const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}" />` : `<i class="fas fa-image"></i>`;
+      const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
       const inStock = p.stock > 0;
+      const btnHtml = user && user.role !== 'owner' ?
+        `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>` : '';
       html += `
         <div class="product-card">
-          <div class="product-image">${imgHtml}</div>
+          <div class="product-image">${img}</div>
           <div class="product-name">${p.name}</div>
           <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
           <div class="product-stock">Stok: ${p.stock}</div>
-          ${user && user.role !== 'owner' ? `<button class="btn-beli" data-id="${p.id}" ${!inStock ? 'disabled' : ''}>${inStock ? 'Beli' : 'Habis'}</button>` : ''}
+          ${btnHtml}
         </div>
       `;
     });
-    html += `</div>`;
+    html += '</div>';
     return html;
   }
 
   function renderUserList() {
-    const users = getUsers();
-    const current = getCurrentUser();
-    if (users.length === 0) {
-      return `<div class="empty-state"><i class="fas fa-users"></i><h3>Belum ada pengguna</h3></div>`;
-    }
-    let html = `<div class="user-list">`;
+    const users = getUsers(), current = getCurrentUser();
+    if (users.length === 0) return `<div class="empty-state"><i class="fas fa-users"></i><h3>Belum ada pengguna</h3></div>`;
+    let html = '<div class="user-list">';
     users.forEach(u => {
       const isSelf = current && u.username === current.username;
       const saldo = getUserSaldo(u.username);
@@ -712,24 +581,20 @@
           <div class="user-actions">
             <input type="number" class="saldo-input" placeholder="Rp" min="0" step="1000" />
             <button class="btn-saldo btn-sm" data-username="${u.username}"><i class="fas fa-edit"></i> Ubah</button>
-            <button class="btn-del-user btn-sm" data-username="${u.username}" ${isSelf ? 'disabled' : ''}>
-              <i class="fas fa-trash"></i> ${isSelf ? 'Diri' : 'Hapus'}
-            </button>
+            <button class="btn-del-user btn-sm" data-username="${u.username}" ${isSelf ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isSelf ? 'Diri' : 'Hapus'}</button>
           </div>
         </div>
       `;
     });
-    html += `</div>`;
+    html += '</div>';
     return html;
   }
 
   function renderPendingRequests() {
-    const requests = getPendingDeposits();
-    if (requests.length === 0) {
-      return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
-    }
-    let html = `<div class="user-list">`;
-    requests.forEach(r => {
+    const reqs = getPendingDeposits();
+    if (reqs.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
+    let html = '<div class="user-list">';
+    reqs.forEach(r => {
       const user = getUsers().find(u => u.username === r.username);
       const name = user ? user.name : r.username;
       html += `
@@ -746,7 +611,7 @@
         </div>
       `;
     });
-    html += `</div>`;
+    html += '</div>';
     return html;
   }
 
@@ -754,49 +619,36 @@
     const user = getCurrentUser();
     if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
     const deposits = getUserDeposits(user.username);
-    let html = `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div>`;
-    if (deposits.length === 0) {
-      html += `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
-    } else {
-      html += `<div class="user-list">`;
-      deposits.forEach(r => {
-        const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-        html += `
-          <div class="user-item">
-            <div class="user-info">
-              <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
-              <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
-              <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
-            </div>
+    if (deposits.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
+    let html = `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div><div class="user-list">`;
+    deposits.forEach(r => {
+      const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+      html += `
+        <div class="user-item">
+          <div class="user-info">
+            <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
+            <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
+            <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
           </div>
-        `;
-      });
-      html += `</div>`;
-    }
-    html += `</div>`;
+        </div>
+      `;
+    });
+    html += '</div></div>';
     return html;
   }
 
   function renderInfo() {
     const config = getAdminConfig();
-    const wa = config.waNumber || 'Belum diatur';
-    const sl = config.slLink || 'Belum diatur';
-    const info = config.storeInfo || 'PutzxStore - Toko Online Terpercaya';
     const qr = config.paymentQr ? `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid #e5e7eb; padding:12px; background:white;" />` : '<p style="color:#6b7280;">QR belum diatur.</p>';
     return `
       <div class="page-content">
         <div class="section-title"><span>Informasi Toko</span></div>
         <div style="background:#f8fafc; border-radius:12px; padding:16px; border:1px solid #e9edf2;">
-          <p style="margin-bottom:8px;"><i class="fas fa-store" style="color:#00a86b; width:24px;"></i> <strong>${info}</strong></p>
-          <p style="margin-bottom:8px;"><i class="fas fa-crown" style="color:#00a86b; width:24px;"></i> Toko Own (Produk Sendiri)</p>
-          <p style="margin-bottom:8px;"><i class="fas fa-shield-alt" style="color:#00a86b; width:24px;"></i> 100% Amanah & Terpercaya</p>
-          <p style="margin-bottom:8px;"><i class="fas fa-phone" style="color:#00a86b; width:24px;"></i> Admin WA: <strong>${wa}</strong></p>
-          <p style="margin-bottom:8px;"><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran: <a href="${sl}" target="_blank">PUTZX MARKET</a></p>
+          <p><i class="fas fa-store" style="color:#00a86b; width:24px;"></i> <strong>${config.storeInfo}</strong></p>
+          <p><i class="fas fa-phone" style="color:#00a86b; width:24px;"></i> Admin WA: <strong>${config.waNumber}</strong></p>
+          <p><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran: <a href="${config.slLink}" target="_blank">PUTZX MARKET</a></p>
           <hr style="margin:12px 0; border:0; border-top:1px solid #e5e7eb;">
-          <div style="text-align:center;">
-            <p style="font-weight:600; margin-bottom:4px;">QR Pembayaran</p>
-            ${qr}
-          </div>
+          <div style="text-align:center;"><p style="font-weight:600;">QR Pembayaran</p>${qr}</div>
         </div>
       </div>
     `;
@@ -804,31 +656,19 @@
 
   function renderPanel() {
     const user = getCurrentUser();
-    if (!user || user.role !== 'owner') {
-      return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya pemilik toko (OWN) yang dapat mengakses panel ini.</p></div>`;
-    }
-
-    const products = getProducts();
-    const config = getAdminConfig();
-
+    if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
+    const products = getProducts(), config = getAdminConfig();
     let productListHtml = products.map(p => `
       <div class="product-item" data-id="${p.id}">
         <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:#9ca3af;"></i>'}</div>
-        <div class="info">
-          <div class="name">${p.name}</div>
-          <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
-          <div class="stock">Stok: ${p.stock}</div>
-        </div>
+        <div class="info"><div class="name">${p.name}</div><div class="price">Rp ${p.price.toLocaleString('id-ID')}</div><div class="stock">Stok: ${p.stock}</div></div>
         <div class="actions">
-          <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti Gambar</label>
+          <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti</label>
           <input type="file" id="img-${p.id}" accept="image/*" />
           <button class="btn-del btn-sm" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
         </div>
       </div>
     `).join('');
-
-    const userListHtml = renderUserList();
-    const pendingHtml = renderPendingRequests();
 
     return `
       <div class="page-content">
@@ -840,51 +680,38 @@
             <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
             <button class="panel-tab" data-panel-tab="info">Info</button>
           </div>
-
-          <!-- Tab Produk -->
           <div id="panelTabProduk" class="panel-tab-content active">
-            <h3><i class="fas fa-boxes"></i> Daftar Produk</h3>
-            ${productListHtml}
-            <hr style="margin:20px 0; border:0; border-top:1px solid #e5e7eb;">
-            <h3><i class="fas fa-plus-circle"></i> Tambah Produk</h3>
-            <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama produk" /></div>
+            <h3>Daftar Produk</h3>${productListHtml}
+            <hr><h3>Tambah Produk</h3>
+            <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama" /></div>
             <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
             <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
             <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
-            <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah Produk</button>
+            <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah</button>
             <div id="panelAlert" class="alert"></div>
-
             <div class="qr-upload">
               <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
-              <div class="form-group"><label>Upload QR Code</label><input type="file" id="qrUpload" accept="image/*" /></div>
+              <div class="form-group"><label>Upload QR</label><input type="file" id="qrUpload" accept="image/*" /></div>
               ${config.paymentQr ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:#6b7280;">Belum ada QR.</p>'}
               <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
               <div id="qrAlert" class="alert"></div>
             </div>
           </div>
-
-          <!-- Tab Akun -->
           <div id="panelTabAkun" class="panel-tab-content">
-            <h3><i class="fas fa-users"></i> Daftar Akun</h3>
-            <p style="font-size:13px; color:#6b7280; margin-bottom:12px;">Username, Password, No HP, dan Saldo. OWN bisa ubah saldo langsung.</p>
-            ${userListHtml}
+            <h3>Daftar Akun</h3><p style="font-size:13px; color:#6b7280;">Username, Password, No HP, Saldo.</p>
+            ${renderUserList()}
             <div id="userAlert" class="alert"></div>
           </div>
-
-          <!-- Tab Deposit -->
           <div id="panelTabDeposit" class="panel-tab-content">
-            <h3><i class="fas fa-hand-holding-usd"></i> Permintaan Deposit</h3>
-            <p style="font-size:13px; color:#6b7280; margin-bottom:12px;">Setujui atau tolak permintaan deposit member.</p>
-            ${pendingHtml}
+            <h3>Permintaan Deposit</h3>
+            ${renderPendingRequests()}
             <div id="depositAlert" class="alert"></div>
           </div>
-
-          <!-- Tab Info -->
           <div id="panelTabInfo" class="panel-tab-content">
-            <h3><i class="fas fa-edit"></i> Edit Info Toko</h3>
-            <div class="form-group"><label>Nama Toko / Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
-            <div class="form-group"><label>Nomor WhatsApp Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
-            <div class="form-group"><label>Link Saluran WhatsApp</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
+            <h3>Edit Info Toko</h3>
+            <div class="form-group"><label>Nama/Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
+            <div class="form-group"><label>Nomor WA Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
+            <div class="form-group"><label>Link Saluran</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
             <button class="btn-save" id="saveInfoBtn"><i class="fas fa-save"></i> Simpan Info</button>
             <div id="infoAlert" class="alert"></div>
           </div>
@@ -899,248 +726,112 @@
   function navigateTo(page) {
     currentPage = page;
     navItems.forEach(item => {
-      item.classList.remove('active');
-      if (item.dataset.page === page) item.classList.add('active');
+      item.classList.toggle('active', item.dataset.page === page);
     });
     const user = getCurrentUser();
     let content = '';
     switch (page) {
-      case 'produk':
-        const products = getProducts();
-        content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(products)}</div>`;
-        break;
-      case 'riwayat':
-        content = renderRiwayat();
-        break;
-      case 'info':
-        content = renderInfo();
-        break;
-      case 'panel':
-        content = renderPanel();
-        break;
-      default:
-        content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
+      case 'produk': content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(getProducts())}</div>`; break;
+      case 'riwayat': content = renderRiwayat(); break;
+      case 'info': content = renderInfo(); break;
+      case 'panel': content = renderPanel(); break;
+      default: content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
     }
     mainContent.innerHTML = content;
     searchInput.value = '';
-
-    // Attach event listeners
-    attachProductEvents();
-    attachPanelEvents();
-    attachPurchaseEvents();
-    attachUserEvents();
-    attachDepositEvents();
-    attachInfoEvents();
+    attachEvents();
   }
 
   // ============================================================
-  // EVENT LISTENERS
+  // EVENT DELEGATION & ATTACH
   // ============================================================
+  function attachEvents() {
+    // === PEMBELIAN (delegasi) ===
+    mainContent.removeEventListener('click', handlePurchase);
+    mainContent.addEventListener('click', handlePurchase);
 
-  // --- AUTH ---
-  authTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      authTabs.forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-      const tabName = this.dataset.tab;
-      if (tabName === 'login') {
-        loginForm.classList.add('active');
-        signupForm.classList.remove('active');
-        loginError.style.display = 'none';
-      } else {
-        signupForm.classList.add('active');
-        loginForm.classList.remove('active');
-        signupError.style.display = 'none';
-      }
-    });
-  });
-  switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
-  switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
-
-  loginBtn.addEventListener('click', function() {
-    const username = loginUsername.value.trim();
-    const password = loginPassword.value.trim();
-    if (!username || !password) {
-      loginError.textContent = 'Harap isi username dan password.';
-      loginError.style.display = 'block';
-      return;
-    }
-    if (login(username, password)) {
-      loginError.style.display = 'none';
-      showApp(getCurrentUser());
-    } else {
-      loginError.textContent = 'Username atau password salah.';
-      loginError.style.display = 'block';
-    }
-  });
-  loginUsername.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-  loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-
-  signupBtn.addEventListener('click', function() {
-    const name = signupName.value.trim();
-    const username = signupUsername.value.trim();
-    const phone = signupPhone.value.trim();
-    const password = signupPassword.value.trim();
-    const confirm = signupConfirm.value.trim();
-    if (!name || !username || !phone || !password || !confirm) {
-      signupError.textContent = 'Semua field wajib diisi.';
-      signupError.style.display = 'block';
-      return;
-    }
-    if (password !== confirm) {
-      signupError.textContent = 'Password dan konfirmasi tidak cocok.';
-      signupError.style.display = 'block';
-      return;
-    }
-    const result = signup(name, username, phone, password);
-    if (result.success) {
-      signupError.style.display = 'none';
-      showApp(getCurrentUser());
-    } else {
-      signupError.textContent = result.message;
-      signupError.style.display = 'block';
-    }
-  });
-  signupName.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupUsername.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupPhone.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupPassword.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupConfirm.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-
-  logoutBtn.addEventListener('click', function() {
-    if (confirm('Yakin ingin logout?')) showAuth();
-  });
-
-  // --- NAVIGASI ---
-  navItems.forEach(item => {
-    item.addEventListener('click', function() {
-      const page = this.dataset.page;
-      if (page === 'panel') {
-        const user = getCurrentUser();
-        if (user && user.role === 'owner') {
-          navigateTo('panel');
-        } else {
-          alert('Akses ditolak. Hanya OWN.');
-        }
-        return;
-      }
-      navigateTo(page);
-    });
-  });
-
-  // --- SEARCH ---
-  searchInput.addEventListener('input', function() {
-    const keyword = this.value.toLowerCase().trim();
-    if (currentPage === 'produk') {
-      const products = getProducts();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
-      const content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(filtered)}</div>`;
-      mainContent.innerHTML = content;
-      attachProductEvents();
-      attachPurchaseEvents();
-    }
-  });
-
-  // --- ATTACH: PRODUCT EVENTS ---
-  function attachProductEvents() {
-    // Tidak perlu khusus, sudah di render
-  }
-
-  // --- ATTACH: PURCHASE EVENTS ---
-  function attachPurchaseEvents() {
-    document.querySelectorAll('.btn-beli').forEach(btn => {
-      btn.removeEventListener('click', handlePurchase);
-      btn.addEventListener('click', handlePurchase);
-    });
-  }
-
-  function handlePurchase(e) {
-    const btn = e.currentTarget;
-    const productId = parseInt(btn.dataset.id);
-    const user = getCurrentUser();
-    if (!user) { alert('Silakan login terlebih dahulu.'); return; }
-    if (user.role === 'owner') { alert('Anda adalah OWN, tidak bisa membeli.'); return; }
-
-    const products = getProducts();
-    const product = products.find(p => p.id === productId);
-    if (!product) { alert('Produk tidak ditemukan.'); return; }
-    if (product.stock <= 0) { alert('Stok habis.'); return; }
-
-    const saldo = getUserSaldo(user.username);
-    if (saldo < product.price) {
-      alert('Saldo tidak cukup! Silakan deposit terlebih dahulu.\nSaldo: Rp ' + saldo.toLocaleString('id-ID') + '\nHarga: Rp ' + product.price.toLocaleString('id-ID'));
-      return;
-    }
-
-    if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
-      // Kurangi saldo
-      addUserSaldo(user.username, -product.price);
-      // Kurangi stok
-      const idx = products.findIndex(p => p.id === productId);
-      products[idx].stock -= 1;
-      saveProducts(products);
-      updateSaldoDisplay();
-      showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
-      // Refresh
-      navigateTo(currentPage);
-      // Update stats
-      updateStats();
-    }
-  }
-
-  // --- ATTACH: PANEL EVENTS ---
-  function attachPanelEvents() {
-    // Tab switching
+    // === PANEL TABS ===
     document.querySelectorAll('.panel-tab').forEach(tab => {
       tab.removeEventListener('click', handlePanelTab);
       tab.addEventListener('click', handlePanelTab);
     });
 
-    // Hapus produk
+    // === HAPUS PRODUK ===
     document.querySelectorAll('.product-item .btn-del').forEach(btn => {
       btn.removeEventListener('click', handleDeleteProduct);
       btn.addEventListener('click', handleDeleteProduct);
     });
 
-    // Upload gambar produk
+    // === UPLOAD GAMBAR PRODUK ===
     document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
-      input.removeEventListener('change', handleProductImageUpload);
-      input.addEventListener('change', handleProductImageUpload);
+      input.removeEventListener('change', handleProductImage);
+      input.addEventListener('change', handleProductImage);
     });
 
-    // Tambah produk
+    // === TAMBAH PRODUK ===
     const addBtn = document.getElementById('addProductBtn');
     if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
 
-    // Simpan QR
-    const saveQrBtn = document.getElementById('saveQrBtn');
-    if (saveQrBtn) { saveQrBtn.removeEventListener('click', handleSaveQr); saveQrBtn.addEventListener('click', handleSaveQr); }
+    // === SIMPAN QR ===
+    const saveQr = document.getElementById('saveQrBtn');
+    if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
 
-    // Simpan info
-    const saveInfoBtn = document.getElementById('saveInfoBtn');
-    if (saveInfoBtn) { saveInfoBtn.removeEventListener('click', handleSaveInfo); saveInfoBtn.addEventListener('click', handleSaveInfo); }
+    // === SIMPAN INFO ===
+    const saveInfo = document.getElementById('saveInfoBtn');
+    if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
 
-    // User: ubah saldo
+    // === UBAH SALDO USER ===
     document.querySelectorAll('.btn-saldo').forEach(btn => {
       btn.removeEventListener('click', handleUserSaldo);
       btn.addEventListener('click', handleUserSaldo);
     });
 
-    // User: hapus
+    // === HAPUS USER ===
     document.querySelectorAll('.btn-del-user').forEach(btn => {
       btn.removeEventListener('click', handleDeleteUser);
       btn.addEventListener('click', handleDeleteUser);
     });
 
-    // Deposit: approve/reject
+    // === APPROVE/REJECT DEPOSIT ===
     document.querySelectorAll('.btn-approve').forEach(btn => {
-      btn.removeEventListener('click', handleApproveDeposit);
-      btn.addEventListener('click', handleApproveDeposit);
+      btn.removeEventListener('click', handleApprove);
+      btn.addEventListener('click', handleApprove);
     });
     document.querySelectorAll('.btn-reject').forEach(btn => {
-      btn.removeEventListener('click', handleRejectDeposit);
-      btn.addEventListener('click', handleRejectDeposit);
+      btn.removeEventListener('click', handleReject);
+      btn.addEventListener('click', handleReject);
     });
+  }
+
+  // ============================================================
+  // HANDLER FUNCTIONS
+  // ============================================================
+  function handlePurchase(e) {
+    const btn = e.target.closest('.btn-beli');
+    if (!btn) return;
+    const productId = parseInt(btn.dataset.id);
+    const user = getCurrentUser();
+    if (!user) { alert('Silakan login.'); return; }
+    if (user.role === 'owner') { alert('OWN tidak bisa membeli.'); return; }
+    const products = getProducts();
+    const product = products.find(p => p.id === productId);
+    if (!product) { alert('Produk tidak ditemukan.'); return; }
+    if (product.stock <= 0) { alert('Stok habis.'); return; }
+    const saldo = getUserSaldo(user.username);
+    if (saldo < product.price) {
+      alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
+      return;
+    }
+    if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
+      addUserSaldo(user.username, -product.price);
+      const idx = products.findIndex(p => p.id === productId);
+      products[idx].stock -= 1;
+      saveProducts(products);
+      updateSaldoDisplay();
+      showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
+      navigateTo(currentPage);
+      updateStats();
+    }
   }
 
   function handlePanelTab(e) {
@@ -1148,27 +839,17 @@
     this.classList.add('active');
     const target = this.dataset.panelTab;
     document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
-    const contentMap = {
-      produk: document.getElementById('panelTabProduk'),
-      akun: document.getElementById('panelTabAkun'),
-      deposit: document.getElementById('panelTabDeposit'),
-      info: document.getElementById('panelTabInfo')
-    };
-    if (contentMap[target]) contentMap[target].classList.add('active');
-    if (target === 'akun') {
-      const container = document.getElementById('panelTabAkun');
-      const list = container.querySelector('.user-list');
-      if (list) { list.outerHTML = renderUserList(); attachPanelEvents(); }
-    }
-    if (target === 'deposit') {
-      const container = document.getElementById('panelTabDeposit');
-      const list = container.querySelector('.user-list');
-      if (list) { list.outerHTML = renderPendingRequests(); attachPanelEvents(); }
+    const map = { produk: 'panelTabProduk', akun: 'panelTabAkun', deposit: 'panelTabDeposit', info: 'panelTabInfo' };
+    const el = document.getElementById(map[target]);
+    if (el) {
+      el.classList.add('active');
+      if (target === 'akun') { const c = document.getElementById('panelTabAkun'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderUserList(); attachEvents(); } }
+      if (target === 'deposit') { const c = document.getElementById('panelTabDeposit'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderPendingRequests(); attachEvents(); } }
     }
   }
 
   function handleDeleteProduct(e) {
-    if (!confirm('Yakin hapus produk ini?')) return;
+    if (!confirm('Hapus produk ini?')) return;
     const id = parseInt(this.dataset.id);
     let products = getProducts();
     products = products.filter(p => p.id !== id);
@@ -1178,7 +859,7 @@
     updateStats();
   }
 
-  function handleProductImageUpload(e) {
+  function handleProductImage(e) {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -1187,12 +868,7 @@
       const productId = parseInt(this.closest('.product-item').dataset.id);
       let products = getProducts();
       const idx = products.findIndex(p => p.id === productId);
-      if (idx !== -1) {
-        products[idx].image = base64;
-        saveProducts(products);
-        showToast('Gambar produk diperbarui!', 'success');
-        navigateTo('panel');
-      }
+      if (idx !== -1) { products[idx].image = base64; saveProducts(products); showToast('Gambar diperbarui!', 'success'); navigateTo('panel'); }
     }.bind(this);
     reader.readAsDataURL(file);
   }
@@ -1202,17 +878,14 @@
     const price = parseInt(document.getElementById('newProductPrice').value);
     const stock = parseInt(document.getElementById('newProductStock').value);
     const fileInput = document.getElementById('newProductImage');
-    if (!name || isNaN(price) || isNaN(stock)) {
-      showAlert('panelAlert', 'Isi semua field dengan benar.', 'error');
-      return;
-    }
+    if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
     const reader = new FileReader();
     reader.onload = function(e) {
       let products = getProducts();
       const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
       products.push({ id: newId, name, price, stock, image: e.target.result || '' });
       saveProducts(products);
-      showAlert('panelAlert', 'Produk berhasil ditambahkan!', 'success');
+      showAlert('panelAlert', 'Produk ditambahkan!', 'success');
       navigateTo('panel');
       updateStats();
     };
@@ -1223,7 +896,7 @@
       const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
       products.push({ id: newId, name, price, stock, image: '' });
       saveProducts(products);
-      showAlert('panelAlert', 'Produk berhasil ditambahkan!', 'success');
+      showAlert('panelAlert', 'Produk ditambahkan!', 'success');
       navigateTo('panel');
       updateStats();
     }
@@ -1231,16 +904,13 @@
 
   function handleSaveQr() {
     const fileInput = document.getElementById('qrUpload');
-    if (!fileInput.files || !fileInput.files[0]) {
-      showAlert('qrAlert', 'Pilih file QR terlebih dahulu.', 'error');
-      return;
-    }
+    if (!fileInput.files || !fileInput.files[0]) { showAlert('qrAlert', 'Pilih file QR.', 'error'); return; }
     const reader = new FileReader();
     reader.onload = function(e) {
       const config = getAdminConfig();
       config.paymentQr = e.target.result;
       setAdminConfig(config);
-      showAlert('qrAlert', 'QR berhasil disimpan!', 'success');
+      showAlert('qrAlert', 'QR disimpan!', 'success');
       navigateTo('panel');
     };
     reader.readAsDataURL(fileInput.files[0]);
@@ -1251,11 +921,11 @@
     const wa = document.getElementById('editWaNumber').value.trim();
     const sl = document.getElementById('editSlLink').value.trim();
     const config = getAdminConfig();
-    config.storeInfo = info || 'PutzxStore - Toko Online Terpercaya';
-    config.waNumber = wa || DEFAULT_WA_NUMBER;
-    config.slLink = sl || DEFAULT_WA_LINK;
+    config.storeInfo = info || 'PutzxStore - Toko Online';
+    config.waNumber = wa || WA_NUMBER;
+    config.slLink = sl || WA_LINK;
     setAdminConfig(config);
-    showAlert('infoAlert', 'Info toko berhasil disimpan!', 'success');
+    showAlert('infoAlert', 'Info disimpan!', 'success');
     navigateTo('panel');
   }
 
@@ -1265,10 +935,7 @@
     const item = btn.closest('.user-item');
     const input = item.querySelector('.saldo-input');
     const amount = parseInt(input.value);
-    if (isNaN(amount) || amount < 0) {
-      alert('Masukkan nominal yang valid (minimal 0).');
-      return;
-    }
+    if (isNaN(amount) || amount < 0) { alert('Nominal valid (min 0).'); return; }
     if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
     setUserSaldo(username, amount);
     const saldoText = item.querySelector('.saldo-text');
@@ -1276,27 +943,25 @@
     input.value = '';
     showToast('Saldo ' + username + ' diubah!', 'success');
     updateStats();
-    // Jika yang diubah adalah diri sendiri, update tampilan saldo
-    const user = getCurrentUser();
-    if (user && user.username === username) updateSaldoDisplay();
+    if (getCurrentUser() && getCurrentUser().username === username) updateSaldoDisplay();
   }
 
   function handleDeleteUser(e) {
     if (this.disabled) return;
     const username = this.dataset.username;
-    if (!confirm('Yakin hapus akun "' + username + '"?')) return;
+    if (!confirm('Hapus akun "' + username + '"?')) return;
     let users = getUsers();
     users = users.filter(u => u.username !== username);
     saveUsers(users);
-    const saldoMap = JSON.parse(localStorage.getItem('userSaldo') || '{}');
-    delete saldoMap[username];
-    localStorage.setItem('userSaldo', JSON.stringify(saldoMap));
+    const map = get('userSaldo') || {};
+    delete map[username];
+    set('userSaldo', map);
     showToast('Akun dihapus!', 'success');
     navigateTo('panel');
     updateStats();
   }
 
-  function handleApproveDeposit() {
+  function handleApprove(e) {
     const id = parseInt(this.dataset.id);
     if (!confirm('Setujui deposit ini?')) return;
     const reqs = getDepositRequests();
@@ -1305,16 +970,13 @@
       addUserSaldo(req.username, req.amount);
       updateDepositRequest(id, 'approved');
       showToast('Deposit disetujui! Saldo ' + req.username + ' bertambah.', 'success');
-      // Update notifikasi untuk user bersangkutan
-      if (getCurrentUser() && getCurrentUser().username === req.username) {
-        updateSaldoDisplay();
-      }
+      if (getCurrentUser() && getCurrentUser().username === req.username) updateSaldoDisplay();
       navigateTo('panel');
       updateStats();
     }
   }
 
-  function handleRejectDeposit() {
+  function handleReject(e) {
     const id = parseInt(this.dataset.id);
     if (!confirm('Tolak deposit ini?')) return;
     updateDepositRequest(id, 'rejected');
@@ -1323,38 +985,12 @@
     updateStats();
   }
 
-  function showAlert(id, message, type) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = message;
-    el.className = 'alert ' + type;
-    setTimeout(() => { el.className = 'alert'; }, 4000);
-  }
-
-  // --- ATTACH: USER EVENTS ---
-  function attachUserEvents() {
-    // sudah di handle di attachPanelEvents
-  }
-
-  // --- ATTACH: DEPOSIT EVENTS ---
-  function attachDepositEvents() {
-    // sudah di handle di attachPanelEvents
-  }
-
-  // --- ATTACH: INFO EVENTS ---
-  function attachInfoEvents() {
-    // sudah di handle di attachPanelEvents
-  }
-
   // ============================================================
   // DEPOSIT MODAL
   // ============================================================
-  document.getElementById('depositBtn').addEventListener('click', function() {
+  depositBtn.addEventListener('click', function() {
     const config = getAdminConfig();
-    if (!config.paymentQr) {
-      alert('QR pembayaran belum diatur oleh OWN. Silakan hubungi admin.');
-      return;
-    }
+    if (!config.paymentQr) { alert('QR belum diatur oleh OWN.'); return; }
     depositModal.classList.add('active');
     depositStep1.classList.remove('hidden');
     depositStep2.classList.add('hidden');
@@ -1365,29 +1001,24 @@
     pendingAmount = 0;
   });
 
-  depositCancelBtn.addEventListener('click', function() {
-    depositModal.classList.remove('active');
-  });
+  depositCancelBtn.addEventListener('click', () => depositModal.classList.remove('active'));
 
   depositConfirmBtn.addEventListener('click', function() {
     const amount = parseInt(depositAmount.value);
-    if (isNaN(amount) || amount <= 0) {
-      depositError.style.display = 'block';
-      return;
-    }
+    if (isNaN(amount) || amount <= 0) { depositError.style.display = 'block'; return; }
     depositError.style.display = 'none';
     pendingAmount = amount;
     depositStep1.classList.add('hidden');
     depositStep2.classList.remove('hidden');
     qrNominal.textContent = 'Rp ' + amount.toLocaleString('id-ID');
     const config = getAdminConfig();
-    qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR Pembayaran" />`;
+    qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR" />`;
     requestDepositBtn.disabled = false;
   });
 
   requestDepositBtn.addEventListener('click', function() {
     const user = getCurrentUser();
-    if (!user) { alert('Silakan login terlebih dahulu.'); return; }
+    if (!user) { alert('Login dulu.'); return; }
     if (pendingAmount <= 0) return;
     const req = createDepositRequest(user.username, pendingAmount);
     depositStep2.classList.add('hidden');
@@ -1422,21 +1053,109 @@
   // ============================================================
   document.getElementById('chatAdminBtn').addEventListener('click', function() {
     const config = getAdminConfig();
-    const wa = config.waNumber || DEFAULT_WA_NUMBER;
-    window.open('https://wa.me/' + wa.replace(/\D/g, ''), '_blank');
+    window.open('https://wa.me/' + (config.waNumber || WA_NUMBER).replace(/\D/g, ''), '_blank');
   });
-
   document.getElementById('channelBtn').addEventListener('click', function() {
     const config = getAdminConfig();
-    const link = config.slLink || DEFAULT_WA_LINK;
-    window.open(link, '_blank');
+    window.open(config.slLink || WA_LINK, '_blank');
   });
 
   // ============================================================
-  // INIT
+  // SEARCH
   // ============================================================
-  initOwnerAccount();
-  initDefaultProducts();
+  searchInput.addEventListener('input', function() {
+    const keyword = this.value.toLowerCase().trim();
+    if (currentPage === 'produk') {
+      const filtered = getProducts().filter(p => p.name.toLowerCase().includes(keyword));
+      const content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(filtered)}</div>`;
+      mainContent.innerHTML = content;
+      attachEvents();
+    }
+  });
+
+  // ============================================================
+  // NAVIGASI ITEMS
+  // ============================================================
+  navItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const page = this.dataset.page;
+      if (page === 'panel') {
+        const user = getCurrentUser();
+        if (user && user.role === 'owner') navigateTo('panel');
+        else alert('Akses ditolak. Hanya OWN.');
+        return;
+      }
+      navigateTo(page);
+    });
+  });
+
+  // ============================================================
+  // AUTH EVENTS
+  // ============================================================
+  authTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      authTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      const tabName = this.dataset.tab;
+      loginForm.classList.toggle('active', tabName === 'login');
+      signupForm.classList.toggle('active', tabName === 'signup');
+      loginError.style.display = 'none';
+      signupError.style.display = 'none';
+    });
+  });
+
+  switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
+  switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
+
+  loginBtn.addEventListener('click', function() {
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value.trim();
+    if (!username || !password) { loginError.textContent = 'Isi semua field.'; loginError.style.display = 'block'; return; }
+    if (login(username, password)) {
+      loginError.style.display = 'none';
+      showApp(getCurrentUser());
+    } else {
+      loginError.textContent = 'Username atau password salah.';
+      loginError.style.display = 'block';
+    }
+  });
+  loginUsername.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+  loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+
+  signupBtn.addEventListener('click', function() {
+    const name = signupName.value.trim();
+    const username = signupUsername.value.trim();
+    const phone = signupPhone.value.trim();
+    const password = signupPassword.value.trim();
+    const confirm = signupConfirm.value.trim();
+    if (!name || !username || !phone || !password || !confirm) {
+      signupError.textContent = 'Semua field wajib diisi.';
+      signupError.style.display = 'block';
+      return;
+    }
+    if (password !== confirm) { signupError.textContent = 'Password tidak cocok.'; signupError.style.display = 'block'; return; }
+    const result = signup(name, username, phone, password);
+    if (result.success) {
+      signupError.style.display = 'none';
+      showApp(getCurrentUser());
+    } else {
+      signupError.textContent = result.message;
+      signupError.style.display = 'block';
+    }
+  });
+  signupName.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+  signupUsername.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+  signupPhone.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+  signupPassword.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+  signupConfirm.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+
+  logoutBtn.addEventListener('click', function() {
+    if (confirm('Yakin logout?')) showAuth();
+  });
+
+  // ============================================================
+  // START
+  // ============================================================
   const user = getCurrentUser();
   if (user) {
     showApp(user);

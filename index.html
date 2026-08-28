@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PutzxStore - Deposit via Admin</title>
+  <title>PutzxStore - Toko OWN</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
-    /* (CSS sama seperti sebelumnya, tidak diubah) */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background: #f5f7fa; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 12px 0 80px 0; }
     .app-container { max-width: 420px; width: 100%; background: #ffffff; border-radius: 24px 24px 0 0; box-shadow: 0 0 20px rgba(0,0,0,0.05); overflow: hidden; padding: 16px 16px 80px 16px; position: relative; }
 
+    /* AUTH */
     .auth-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px 16px; background: white; border-radius: 24px; }
     .auth-page .logo { font-size: 28px; font-weight: 700; color: #00a86b; margin-bottom: 4px; }
     .auth-page .subtitle { color: #6b7280; margin-bottom: 24px; font-size: 14px; }
@@ -27,8 +27,8 @@
     .auth-error { color: #ef4444; font-size: 13px; margin-top: 8px; text-align: center; display: none; }
     .auth-switch { margin-top: 16px; text-align: center; font-size: 14px; color: #6b7280; }
     .auth-switch a { color: #00a86b; font-weight: 600; cursor: pointer; text-decoration: none; }
-    .auth-switch a:hover { text-decoration: underline; }
 
+    /* APP */
     .app-main { display: none; }
     .saldo-card { background: linear-gradient(135deg, #00a86b, #008c5a); border-radius: 16px; padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .saldo-left { display: flex; flex-direction: column; }
@@ -78,13 +78,16 @@
     .section-title small { font-weight: 400; font-size: 12px; color: #00a86b; cursor: pointer; }
 
     .product-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-    .product-card { background: #f8fafc; border-radius: 12px; padding: 12px; border: 1px solid #e9edf2; transition: transform 0.1s; }
+    .product-card { background: #f8fafc; border-radius: 12px; padding: 12px; border: 1px solid #e9edf2; transition: transform 0.1s; position: relative; }
     .product-card:hover { transform: translateY(-2px); }
     .product-image { width: 100%; aspect-ratio: 1/1; background: #e5e7eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 28px; margin-bottom: 8px; overflow: hidden; }
     .product-image img { width: 100%; height: 100%; object-fit: cover; }
     .product-name { font-weight: 600; font-size: 13px; color: #1f2937; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .product-price { font-weight: 700; color: #00a86b; font-size: 14px; margin-top: 2px; }
     .product-stock { font-size: 11px; color: #6b7280; }
+    .btn-beli { background: #00a86b; color: white; border: none; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; margin-top: 8px; width: 100%; transition: background 0.2s; }
+    .btn-beli:hover { background: #008c5a; }
+    .btn-beli:disabled { background: #9ca3af; cursor: not-allowed; }
 
     .page-content { padding: 8px 0; }
     .empty-state { text-align: center; padding: 40px 20px; color: #6b7280; }
@@ -92,6 +95,7 @@
     .empty-state h3 { font-weight: 600; color: #1f2937; margin-bottom: 6px; }
     .empty-state p { font-size: 14px; }
 
+    /* Panel OWN */
     .own-panel { background: #f8fafc; border-radius: 16px; padding: 20px; border: 1px solid #e9edf2; margin-top: 8px; }
     .own-panel .panel-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; flex-wrap: wrap; }
     .own-panel .panel-tab { padding: 8px 18px; border-radius: 30px; border: none; background: transparent; font-weight: 600; color: #6b7280; cursor: pointer; transition: all 0.2s; }
@@ -102,14 +106,16 @@
     .own-panel h3 { margin-bottom: 16px; color: #1f2937; display: flex; align-items: center; gap: 8px; }
     .own-panel .form-group { margin-bottom: 16px; }
     .own-panel label { font-weight: 600; font-size: 14px; color: #1f2937; display: block; margin-bottom: 4px; }
-    .own-panel input[type="text"], .own-panel input[type="number"] { width: 100%; padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 30px; font-size: 14px; outline: none; background: white; }
-    .own-panel input:focus { border-color: #00a86b; }
+    .own-panel input[type="text"], .own-panel input[type="number"], .own-panel textarea { width: 100%; padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 30px; font-size: 14px; outline: none; background: white; }
+    .own-panel textarea { border-radius: 16px; resize: vertical; min-height: 60px; }
+    .own-panel input:focus, .own-panel textarea:focus { border-color: #00a86b; }
     .own-panel .btn-save { margin-top: 8px; background: #00a86b; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; }
     .own-panel .btn-save:hover { background: #008c5a; }
     .own-panel .btn-danger { background: #ef4444; }
     .own-panel .btn-danger:hover { background: #dc2626; }
     .own-panel .btn-warning { background: #f59e0b; color: white; }
     .own-panel .btn-warning:hover { background: #d97706; }
+    .own-panel .btn-sm { padding: 6px 14px; border-radius: 20px; font-size: 12px; width: auto; display: inline-block; }
     .own-panel .product-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .own-panel .product-item .thumb { width: 60px; height: 60px; background: #e5e7eb; border-radius: 8px; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
     .own-panel .product-item .thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -132,7 +138,11 @@
     .user-item .user-info { flex: 1; min-width: 140px; }
     .user-item .user-info .uname { font-weight: 600; }
     .user-item .user-info .detail { font-size: 13px; color: #6b7280; }
-    .user-item .user-actions .btn-del-user { background: #fee2e2; color: #991b1b; border: none; padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+    .user-item .user-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .user-item .user-actions input { width: 80px; padding: 4px 8px; border: 1px solid #e5e7eb; border-radius: 20px; font-size: 12px; }
+    .user-item .user-actions .btn-saldo { background: #dbeafe; color: #1e40af; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+    .user-item .user-actions .btn-saldo:hover { background: #bfdbfe; }
+    .user-item .user-actions .btn-del-user { background: #fee2e2; color: #991b1b; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
     .user-item .user-actions .btn-del-user:hover { background: #fecaca; }
     .user-item .user-actions .btn-del-user:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -156,7 +166,7 @@
     .alert.error { background: #fee2e2; color: #991b1b; display: block; }
     .alert.info { background: #dbeafe; color: #1e40af; display: block; }
 
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e9edf2; display: flex; justify-content: space-around; padding: 8px 0 12px 0; max-width: 420px; margin: 0 auto; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 10px rgba(0,0,0,0.03); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e9edf2; display: flex; justify-content: space-around; padding: 8px 0 12px 0; max-width: 420px; margin: 0 auto; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 10px rgba(0,0,0,0.03); z-index: 100; }
     .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #9ca3af; cursor: pointer; transition: color 0.2s; padding: 4px 8px; border: none; background: transparent; }
     .nav-item i { font-size: 22px; margin-bottom: 2px; }
     .nav-item.active { color: #00a86b; }
@@ -172,6 +182,7 @@
       .stat-number { font-size: 17px; }
       .own-panel .product-item { flex-direction: column; align-items: stretch; }
       .own-panel .product-item .actions { justify-content: flex-start; }
+      .user-item { flex-direction: column; align-items: stretch; }
     }
 
     .modal-overlay {
@@ -201,7 +212,6 @@
 
     .qr-container { text-align: center; margin: 16px 0; }
     .qr-container img { max-width: 220px; border-radius: 12px; border: 1px solid #e5e7eb; padding: 12px; background: white; }
-    .qr-container .qr-label { font-weight: 600; color: #1f2937; margin-bottom: 8px; }
     .qr-container .qr-amount { font-size: 20px; color: #00a86b; font-weight: 700; }
     .hidden { display: none; }
 
@@ -266,13 +276,13 @@
   </div>
   <div class="stats-grid">
     <div class="stat-item"><div class="stat-number" id="totalUserStat">0</div><div class="stat-label">TOTAL USER</div></div>
-    <div class="stat-item"><div class="stat-number">8</div><div class="stat-label">TOP USER</div></div>
-    <div class="stat-item"><div class="stat-number">Rp 2.5Jt</div><div class="stat-label">TOP PEMBELIAN</div></div>
+    <div class="stat-item"><div class="stat-number" id="totalProductStat">0</div><div class="stat-label">TOTAL PRODUK</div></div>
+    <div class="stat-item"><div class="stat-number" id="pendingDepositStat">0</div><div class="stat-label">DEPOSIT PENDING</div></div>
   </div>
-  <div class="status-loading"><i class="fas fa-circle-notch spinner"></i><span>Memuat... Memuat status...</span></div>
+  <div class="status-loading"><i class="fas fa-circle-notch spinner"></i><span>Memuat...</span></div>
   <div class="action-buttons">
-    <button class="action-btn" id="channelBtn"><i class="fab fa-whatsapp"></i> Gabung Saluran WhatsApp</button>
-    <button class="action-btn admin" id="chatAdminBtn"><i class="fas fa-headset"></i> Chat Admin Bantuan</button>
+    <button class="action-btn" id="channelBtn"><i class="fab fa-whatsapp"></i> Saluran WhatsApp</button>
+    <button class="action-btn admin" id="chatAdminBtn"><i class="fas fa-headset"></i> Chat Admin</button>
   </div>
   <div class="trust-badge">
     <span><i class="fas fa-shield-alt"></i> Transaksi Aman</span>
@@ -286,11 +296,9 @@
   <div id="mainContent" class="main-content"></div>
   <div class="bottom-nav" id="bottomNav">
     <button class="nav-item active" data-page="produk"><i class="fas fa-store"></i> Produk</button>
-    <button class="nav-item" data-page="keranjang"><i class="fas fa-shopping-cart"></i> Keranjang</button>
-    <button class="nav-item" data-page="special"><i class="fas fa-star"></i> Special <span class="badge">NEW</span></button>
     <button class="nav-item" data-page="riwayat"><i class="fas fa-history"></i> Riwayat</button>
     <button class="nav-item" data-page="info"><i class="fas fa-info-circle"></i> Info</button>
-    <button class="nav-item" data-page="panel" id="panelNav"><i class="fas fa-user-cog"></i> Panel</button>
+    <button class="nav-item hidden" data-page="panel" id="panelNav"><i class="fas fa-user-cog"></i> Panel</button>
   </div>
 </div>
 
@@ -330,185 +338,115 @@
 
 <script>
 (function() {
-  // ---------- KONFIGURASI DEFAULT ----------
+  // ============================================================
+  // KONFIGURASI DEFAULT
+  // ============================================================
   const DEFAULT_WA_LINK = 'https://whatsapp.com/channel/0029VbCcuGlLdQegM83dGq3B';
-  const DEFAULT_WA_NUMBER = '08139196934'; // Nomor admin baru
+  const DEFAULT_WA_NUMBER = '08139196934';
+  const OWNER_USERNAME = 'putzx';
+  const OWNER_PASSWORD = 'putzx123';
 
-  // ---------- INISIALISASI PRODUK ----------
-  function getDefaultProducts() {
-    return [
-      { id: 1, name: 'Kara Dolce Dramium', price: 125000, stock: 30, image: '' },
-      { id: 2, name: 'Mini Custom Quan', price: 75000, stock: 25, image: '' },
-      { id: 3, name: 'Headset Pro', price: 250000, stock: 8, image: '' },
-      { id: 4, name: 'Jam Tangan Lux', price: 180000, stock: 12, image: '' },
-      { id: 5, name: 'Tas Ransel Premium', price: 320000, stock: 5, image: '' },
-      { id: 6, name: 'Dompet Kulit Asli', price: 150000, stock: 15, image: '' }
-    ];
-  }
-
-  function getProducts() {
-    const data = localStorage.getItem('products');
-    if (data) {
-      try { return JSON.parse(data); } catch(e) {}
-    }
-    const def = getDefaultProducts();
-    saveProducts(def);
-    return def;
-  }
-
-  function saveProducts(products) {
-    localStorage.setItem('products', JSON.stringify(products));
-  }
-
-  // ---------- SALDO ----------
-  function getUserSaldo(username) {
-    const data = localStorage.getItem('userSaldo');
-    const saldoMap = data ? JSON.parse(data) : {};
-    return saldoMap[username] || 0;
-  }
-
-  function setUserSaldo(username, amount) {
-    const data = localStorage.getItem('userSaldo');
-    const saldoMap = data ? JSON.parse(data) : {};
-    saldoMap[username] = amount;
-    localStorage.setItem('userSaldo', JSON.stringify(saldoMap));
-  }
-
-  function addUserSaldo(username, amount) {
-    const current = getUserSaldo(username);
-    setUserSaldo(username, current + amount);
-  }
-
-  function updateSaldoDisplay() {
-    const user = getCurrentUser();
-    if (user) {
-      const saldo = getUserSaldo(user.username);
-      document.getElementById('saldoDisplay').textContent = 'Rp ' + saldo.toLocaleString('id-ID');
-    } else {
-      document.getElementById('saldoDisplay').textContent = 'Rp 0';
-    }
-  }
-
-  // ---------- DEPOSIT REQUESTS ----------
-  function getDepositRequests() {
-    const data = localStorage.getItem('depositRequests');
-    return data ? JSON.parse(data) : [];
-  }
-
-  function saveDepositRequests(requests) {
-    localStorage.setItem('depositRequests', JSON.stringify(requests));
-  }
-
-  function createDepositRequest(username, amount) {
-    const requests = getDepositRequests();
-    const newReq = {
-      id: Date.now(),
-      username: username,
-      amount: amount,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
-    requests.push(newReq);
-    saveDepositRequests(requests);
-    return newReq;
-  }
-
-  function updateDepositRequest(id, status) {
-    const requests = getDepositRequests();
-    const idx = requests.findIndex(r => r.id === id);
-    if (idx !== -1) {
-      requests[idx].status = status;
-      saveDepositRequests(requests);
-      return true;
-    }
-    return false;
-  }
-
-  function getPendingRequests() {
-    return getDepositRequests().filter(r => r.status === 'pending');
-  }
-
-  function getRequestByUser(username) {
-    const requests = getDepositRequests();
-    return requests.filter(r => r.username === username).sort((a,b) => b.id - a.id);
-  }
-
-  // ---------- ADMIN CONFIG ----------
-  function getAdminConfig() {
-    const data = localStorage.getItem('adminConfig');
-    if (data) {
-      try { return JSON.parse(data); } catch(e) {}
-    }
-    return {
-      waNumber: DEFAULT_WA_NUMBER,
-      slLink: DEFAULT_WA_LINK,
-      paymentQr: ''
-    };
-  }
-
-  function setAdminConfig(config) {
-    localStorage.setItem('adminConfig', JSON.stringify(config));
-  }
-
-  // ---------- AUTH ----------
+  // ============================================================
+  // STORAGE HELPERS
+  // ============================================================
   function getUsers() {
     const data = localStorage.getItem('users');
     return data ? JSON.parse(data) : [];
   }
-
-  function saveUsers(users) {
-    localStorage.setItem('users', JSON.stringify(users));
-  }
+  function saveUsers(users) { localStorage.setItem('users', JSON.stringify(users)); }
 
   function getCurrentUser() {
     const data = localStorage.getItem('currentUser');
     return data ? JSON.parse(data) : null;
   }
+  function setCurrentUser(user) { localStorage.setItem('currentUser', JSON.stringify(user)); }
+  function clearCurrentUser() { localStorage.removeItem('currentUser'); }
 
-  function setCurrentUser(user) {
-    localStorage.setItem('currentUser', JSON.stringify(user));
+  function getUserSaldo(username) {
+    const data = localStorage.getItem('userSaldo');
+    const map = data ? JSON.parse(data) : {};
+    return map[username] || 0;
+  }
+  function setUserSaldo(username, amount) {
+    const data = localStorage.getItem('userSaldo');
+    const map = data ? JSON.parse(data) : {};
+    map[username] = amount;
+    localStorage.setItem('userSaldo', JSON.stringify(map));
+  }
+  function addUserSaldo(username, amount) {
+    setUserSaldo(username, getUserSaldo(username) + amount);
   }
 
-  function clearCurrentUser() {
-    localStorage.removeItem('currentUser');
+  function getProducts() {
+    const data = localStorage.getItem('products');
+    return data ? JSON.parse(data) : [];
   }
+  function saveProducts(products) { localStorage.setItem('products', JSON.stringify(products)); }
 
+  function getDepositRequests() {
+    const data = localStorage.getItem('depositRequests');
+    return data ? JSON.parse(data) : [];
+  }
+  function saveDepositRequests(reqs) { localStorage.setItem('depositRequests', JSON.stringify(reqs)); }
+
+  function getAdminConfig() {
+    const data = localStorage.getItem('adminConfig');
+    if (data) {
+      try { return JSON.parse(data); } catch(e) {}
+    }
+    return { waNumber: DEFAULT_WA_NUMBER, slLink: DEFAULT_WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online Terpercaya' };
+  }
+  function setAdminConfig(config) { localStorage.setItem('adminConfig', JSON.stringify(config)); }
+
+  // ============================================================
+  // INISIALISASI AKUN OWN
+  // ============================================================
   function initOwnerAccount() {
     let users = getUsers();
-    const hasOwner = users.some(u => u.role && u.role.toLowerCase() === 'owner');
+    const hasOwner = users.some(u => u.role === 'owner');
     if (!hasOwner) {
       users.push({
         name: 'Putzx',
-        username: 'putzx',
-        phone: DEFAULT_WA_NUMBER, // nomor admin
-        password: 'putzx123',
+        username: OWNER_USERNAME,
+        phone: DEFAULT_WA_NUMBER,
+        password: OWNER_PASSWORD,
         role: 'owner'
       });
       saveUsers(users);
-      setUserSaldo('putzx', 0);
-    } else {
-      let changed = false;
-      users = users.map(u => {
-        if (u.role && u.role !== u.role.toLowerCase()) {
-          u.role = u.role.toLowerCase();
-          changed = true;
-        }
-        return u;
-      });
-      if (changed) saveUsers(users);
+      setUserSaldo(OWNER_USERNAME, 0);
+    }
+    // Pastikan semua user punya saldo
+    users.forEach(u => {
+      if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0);
+    });
+  }
+
+  // ============================================================
+  // PRODUK DEFAULT
+  // ============================================================
+  function initDefaultProducts() {
+    let products = getProducts();
+    if (products.length === 0) {
+      products = [
+        { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
+        { id: 2, name: 'Mug Custom Own', price: 65000, stock: 20, image: '' },
+        { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '' },
+        { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '' },
+        { id: 5, name: 'Tas Ransel Premium', price: 320000, stock: 5, image: '' },
+        { id: 6, name: 'Dompet Kulit Asli', price: 150000, stock: 15, image: '' }
+      ];
+      saveProducts(products);
     }
   }
 
+  // ============================================================
+  // AUTH FUNCTIONS
+  // ============================================================
   function login(username, password) {
     const users = getUsers();
     const found = users.find(u => u.username === username && u.password === password);
     if (found) {
-      setCurrentUser({
-        name: found.name,
-        username: found.username,
-        phone: found.phone,
-        role: (found.role || 'member').toLowerCase()
-      });
+      setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role });
       return true;
     }
     return false;
@@ -530,7 +468,45 @@
     return { success: true };
   }
 
-  // ---------- ELEMEN ----------
+  // ============================================================
+  // DEPOSIT FUNCTIONS
+  // ============================================================
+  function createDepositRequest(username, amount) {
+    const reqs = getDepositRequests();
+    const newReq = {
+      id: Date.now(),
+      username: username,
+      amount: amount,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    reqs.push(newReq);
+    saveDepositRequests(reqs);
+    return newReq;
+  }
+
+  function updateDepositRequest(id, status) {
+    const reqs = getDepositRequests();
+    const idx = reqs.findIndex(r => r.id === id);
+    if (idx !== -1) {
+      reqs[idx].status = status;
+      saveDepositRequests(reqs);
+      return true;
+    }
+    return false;
+  }
+
+  function getPendingDeposits() {
+    return getDepositRequests().filter(r => r.status === 'pending');
+  }
+
+  function getUserDeposits(username) {
+    return getDepositRequests().filter(r => r.username === username).sort((a,b) => b.id - a.id);
+  }
+
+  // ============================================================
+  // ELEMEN DOM
+  // ============================================================
   const authPage = document.getElementById('authPage');
   const appMain = document.getElementById('appMain');
   const mainContent = document.getElementById('mainContent');
@@ -538,6 +514,7 @@
   const searchInput = document.getElementById('searchInput');
   const panelNav = document.getElementById('panelNav');
 
+  // Auth
   const loginForm = document.getElementById('loginForm');
   const signupForm = document.getElementById('signupForm');
   const authTabs = document.querySelectorAll('.auth-tab');
@@ -560,7 +537,12 @@
   const roleText = document.getElementById('roleText');
   const logoutBtn = document.getElementById('logoutBtn');
 
-  // Modal deposit
+  // Stats
+  const totalUserStat = document.getElementById('totalUserStat');
+  const totalProductStat = document.getElementById('totalProductStat');
+  const pendingDepositStat = document.getElementById('pendingDepositStat');
+
+  // Deposit Modal
   const depositModal = document.getElementById('depositModal');
   const depositAmount = document.getElementById('depositAmount');
   const depositConfirmBtn = document.getElementById('depositConfirm');
@@ -578,9 +560,11 @@
   const reqStatus = document.getElementById('reqStatus');
 
   let pendingAmount = 0;
-  let lastRequestId = null;
+  let currentPage = 'produk';
 
-  // ---------- FUNGSI TAMPILAN ----------
+  // ============================================================
+  // FUNGSI TAMPILAN
+  // ============================================================
   function showApp(user) {
     authPage.style.display = 'none';
     appMain.style.display = 'block';
@@ -591,17 +575,20 @@
     const badge = document.getElementById('roleBadge');
     if (user.role === 'owner') {
       badge.style.background = '#00a86b';
+      panelNav.classList.remove('hidden');
     } else {
       badge.style.background = '#6b7280';
+      panelNav.classList.add('hidden');
     }
-    panelNav.classList.remove('hidden');
+    updateStats();
     updateSaldoDisplay();
-    updateTotalUserStat();
     navigateTo('produk');
+    // Polling status deposit
     if (window._depositPoll) clearInterval(window._depositPoll);
     window._depositPoll = setInterval(() => {
-      checkUserRequestStatus();
-    }, 5000);
+      checkDepositStatus();
+      updateStats();
+    }, 3000);
   }
 
   function showAuth() {
@@ -620,23 +607,52 @@
     signupConfirm.value = '';
   }
 
-  function switchTab(tab) {
-    authTabs.forEach(t => t.classList.remove('active'));
-    document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('active');
-    if (tab === 'login') {
-      loginForm.classList.add('active');
-      signupForm.classList.remove('active');
-      loginError.style.display = 'none';
-    } else {
-      signupForm.classList.add('active');
-      loginForm.classList.remove('active');
-      signupError.style.display = 'none';
+  function updateSaldoDisplay() {
+    const user = getCurrentUser();
+    if (user) {
+      const saldo = getUserSaldo(user.username);
+      document.getElementById('saldoDisplay').textContent = 'Rp ' + saldo.toLocaleString('id-ID');
     }
   }
 
-  function updateTotalUserStat() {
+  function updateStats() {
     const users = getUsers();
-    document.getElementById('totalUserStat').textContent = users.length;
+    const products = getProducts();
+    const pending = getPendingDeposits();
+    totalUserStat.textContent = users.length;
+    totalProductStat.textContent = products.length;
+    pendingDepositStat.textContent = pending.length;
+  }
+
+  function checkDepositStatus() {
+    const user = getCurrentUser();
+    if (!user) return;
+    const deposits = getUserDeposits(user.username);
+    if (deposits.length === 0) return;
+    const latest = deposits[0];
+    if (latest.status === 'approved' && window._lastNotified !== latest.id) {
+      window._lastNotified = latest.id;
+      updateSaldoDisplay();
+      showToast('Deposit Rp ' + latest.amount.toLocaleString('id-ID') + ' telah disetujui!', 'success');
+      // Jika modal deposit masih terbuka, update status
+      if (!depositStep3.classList.contains('hidden')) {
+        updateRequestStatusDisplay(latest);
+      }
+      // Refresh riwayat jika sedang di halaman riwayat
+      if (currentPage === 'riwayat') renderPage('riwayat');
+    } else if (latest.status === 'rejected' && window._lastNotified !== latest.id) {
+      window._lastNotified = latest.id;
+      showToast('Deposit Anda ditolak oleh admin.', 'error');
+      if (!depositStep3.classList.contains('hidden')) {
+        updateRequestStatusDisplay(latest);
+      }
+    }
+  }
+
+  function updateRequestStatusDisplay(request) {
+    reqStatus.textContent = request.status === 'pending' ? 'Menunggu Konfirmasi' :
+                           request.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+    reqStatus.className = 'status-badge ' + request.status;
   }
 
   function showToast(message, type = 'info') {
@@ -649,52 +665,25 @@
     setTimeout(() => div.remove(), 4000);
   }
 
-  function checkUserRequestStatus() {
-    const user = getCurrentUser();
-    if (!user) return;
-    const requests = getRequestByUser(user.username);
-    if (requests.length === 0) return;
-    const latest = requests[0];
-    if (latest.status === 'approved') {
-      updateSaldoDisplay();
-      if (document.getElementById('depositStep3').classList.contains('hidden') === false) {
-        updateRequestStatusDisplay(latest);
-      }
-      if (window._lastNotified !== latest.id) {
-        window._lastNotified = latest.id;
-        showToast('Deposit Rp ' + latest.amount.toLocaleString('id-ID') + ' telah disetujui!', 'success');
-      }
-    } else if (latest.status === 'rejected') {
-      if (window._lastNotified !== latest.id) {
-        window._lastNotified = latest.id;
-        showToast('Deposit Anda ditolak oleh admin.', 'error');
-        if (document.getElementById('depositStep3').classList.contains('hidden') === false) {
-          updateRequestStatusDisplay(latest);
-        }
-      }
-    }
-  }
-
-  function updateRequestStatusDisplay(request) {
-    reqStatus.textContent = request.status === 'pending' ? 'Menunggu Konfirmasi' :
-                           request.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-    reqStatus.className = 'status-badge ' + request.status;
-  }
-
-  // ---------- RENDER KONTEN ----------
+  // ============================================================
+  // RENDER KONTEN
+  // ============================================================
   function renderProductGrid(productList) {
     if (!productList || productList.length === 0) {
-      return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk tidak ditemukan</h3><p>Ubah kata kunci pencarian Anda.</p></div>`;
+      return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk kosong</h3><p>Belum ada produk yang tersedia.</p></div>`;
     }
+    const user = getCurrentUser();
     let html = `<div class="product-grid">`;
     productList.forEach(p => {
       const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}" />` : `<i class="fas fa-image"></i>`;
+      const inStock = p.stock > 0;
       html += `
         <div class="product-card">
           <div class="product-image">${imgHtml}</div>
           <div class="product-name">${p.name}</div>
           <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
           <div class="product-stock">Stok: ${p.stock}</div>
+          ${user && user.role !== 'owner' ? `<button class="btn-beli" data-id="${p.id}" ${!inStock ? 'disabled' : ''}>${inStock ? 'Beli' : 'Habis'}</button>` : ''}
         </div>
       `;
     });
@@ -713,16 +702,18 @@
       const isSelf = current && u.username === current.username;
       const saldo = getUserSaldo(u.username);
       html += `
-        <div class="user-item">
+        <div class="user-item" data-username="${u.username}">
           <div class="user-info">
             <div class="uname">${u.name} (${u.username})</div>
             <div class="detail"><i class="fas fa-phone"></i> ${u.phone} &nbsp;|&nbsp; <i class="fas fa-lock"></i> ${u.password}</div>
-            <div class="detail" style="font-size:13px; color:#00a86b;"><i class="fas fa-coins"></i> Saldo: Rp ${saldo.toLocaleString('id-ID')}</div>
-            <div class="detail" style="font-size:11px; color:#6b7280;">Role: ${(u.role || 'member').toUpperCase()}</div>
+            <div class="detail" style="font-size:13px; color:#00a86b;"><i class="fas fa-coins"></i> Saldo: Rp <span class="saldo-text">${saldo.toLocaleString('id-ID')}</span></div>
+            <div class="detail" style="font-size:11px; color:#6b7280;">Role: ${u.role.toUpperCase()}</div>
           </div>
           <div class="user-actions">
-            <button class="btn-del-user" data-username="${u.username}" ${isSelf ? 'disabled' : ''}>
-              <i class="fas fa-trash"></i> ${isSelf ? 'Diri sendiri' : 'Hapus'}
+            <input type="number" class="saldo-input" placeholder="Rp" min="0" step="1000" />
+            <button class="btn-saldo btn-sm" data-username="${u.username}"><i class="fas fa-edit"></i> Ubah</button>
+            <button class="btn-del-user btn-sm" data-username="${u.username}" ${isSelf ? 'disabled' : ''}>
+              <i class="fas fa-trash"></i> ${isSelf ? 'Diri' : 'Hapus'}
             </button>
           </div>
         </div>
@@ -733,7 +724,7 @@
   }
 
   function renderPendingRequests() {
-    const requests = getPendingRequests();
+    const requests = getPendingDeposits();
     if (requests.length === 0) {
       return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
     }
@@ -759,449 +750,212 @@
     return html;
   }
 
-  function renderPage(page) {
+  function renderRiwayat() {
     const user = getCurrentUser();
-    const adminConfig = getAdminConfig();
-    let content = '';
-
-    switch (page) {
-      case 'produk': {
-        const products = getProducts();
-        content = `
-          <div class="page-content">
-            <div class="section-title"><span>Produk Own</span><small id="lihatSemuaBtn">Lihat semua <i class="fas fa-arrow-right"></i></small></div>
-            ${renderProductGrid(products)}
-          </div>
-        `;
-        break;
-      }
-      case 'keranjang': {
-        const qrHtml = adminConfig.paymentQr ? `<img src="${adminConfig.paymentQr}" style="max-width:200px; border-radius:8px; border:1px solid #e5e7eb; padding:8px; background:white;" />` : '<p style="color:#6b7280;">QR pembayaran belum diatur oleh OWN.</p>';
-        content = `
-          <div class="page-content">
-            <div class="section-title"><span>Keranjang Belanja</span></div>
-            <div class="empty-state">
-              <i class="fas fa-shopping-cart"></i>
-              <h3>Keranjang kosong</h3>
-              <p>Belum ada produk yang ditambahkan.</p>
-            </div>
-            <div style="margin-top:20px; padding:16px; background:#f8fafc; border-radius:12px; border:1px solid #e9edf2; text-align:center;">
-              <h4 style="margin-bottom:8px;">QR Pembayaran</h4>
-              ${qrHtml}
+    if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
+    const deposits = getUserDeposits(user.username);
+    let html = `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div>`;
+    if (deposits.length === 0) {
+      html += `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
+    } else {
+      html += `<div class="user-list">`;
+      deposits.forEach(r => {
+        const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+        html += `
+          <div class="user-item">
+            <div class="user-info">
+              <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
+              <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
+              <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
             </div>
           </div>
         `;
-        break;
-      }
-      case 'special': {
-        content = `
-          <div class="page-content">
-            <div class="section-title"><span>Special Offer</span> <small>Hanya untuk OWN</small></div>
-            <div class="product-grid">
-              <div class="product-card"><div class="product-image"><i class="fas fa-gem"></i></div><div class="product-name">Paket Hemat OWN</div><div class="product-price">Rp 399.000</div><div class="product-stock">Stok: 3</div></div>
-              <div class="product-card"><div class="product-image"><i class="fas fa-gift"></i></div><div class="product-name">Bonus Eksklusif</div><div class="product-price">Rp 99.000</div><div class="product-stock">Stok: 10</div></div>
-            </div>
-          </div>
-        `;
-        break;
-      }
-      case 'riwayat': {
-        const userReqs = user ? getRequestByUser(user.username) : [];
-        let reqHtml = '';
-        if (userReqs.length === 0) {
-          reqHtml = `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
-        } else {
-          reqHtml = `<div class="user-list">`;
-          userReqs.forEach(r => {
-            const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-            const statusClass = r.status;
-            reqHtml += `
-              <div class="user-item">
-                <div class="user-info">
-                  <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
-                  <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
-                  <div class="detail"><span class="status-badge ${statusClass}">${statusText}</span></div>
-                </div>
-              </div>
-            `;
-          });
-          reqHtml += `</div>`;
-        }
-        content = `
-          <div class="page-content">
-            <div class="section-title"><span>Riwayat Deposit</span></div>
-            ${reqHtml}
-          </div>
-        `;
-        break;
-      }
-      case 'info': {
-        const wa = adminConfig.waNumber || 'Belum diatur';
-        const sl = adminConfig.slLink || 'Belum diatur';
-        const qr = adminConfig.paymentQr ? `<img src="${adminConfig.paymentQr}" style="max-width:150px; border-radius:8px; border:1px solid #e5e7eb; padding:8px; background:white; margin-top:8px;" />` : '<p style="color:#6b7280;">QR belum diatur.</p>';
-        content = `
-          <div class="page-content">
-            <div class="section-title"><span>Informasi Toko</span></div>
-            <div style="background:#f8fafc; border-radius:12px; padding:16px; border:1px solid #e9edf2;">
-              <p style="margin-bottom:8px;"><i class="fas fa-store" style="color:#00a86b; width:24px;"></i> <strong>PutzxStore</strong></p>
-              <p style="margin-bottom:8px;"><i class="fas fa-crown" style="color:#00a86b; width:24px;"></i> Toko Own (Produk Sendiri)</p>
-              <p style="margin-bottom:8px;"><i class="fas fa-shield-alt" style="color:#00a86b; width:24px;"></i> 100% Amanah & Terpercaya</p>
-              <p style="margin-bottom:8px;"><i class="fas fa-phone" style="color:#00a86b; width:24px;"></i> Admin WA: <strong>${wa}</strong></p>
-              <p style="margin-bottom:8px;"><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran WhatsApp: <a href="${sl}" target="_blank">PUTZX MARKET</a></p>
-              <hr style="margin:12px 0; border:0; border-top:1px solid #e5e7eb;">
-              <p style="font-size:13px; color:#6b7280;"><i class="fas fa-user"></i> Login sebagai: <strong>${user ? user.name : '-'}</strong> (${user ? user.role.toUpperCase() : '-'})</p>
-              <div style="margin-top:12px; text-align:center;">
-                <p style="font-weight:600; margin-bottom:4px;">QR Pembayaran</p>
-                ${qr}
-              </div>
-            </div>
-          </div>
-        `;
-        break;
-      }
-      case 'panel': {
-        const isOwner = user && user.role === 'owner';
-        if (!isOwner) {
-          content = `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya pemilik toko (OWN) yang dapat mengakses panel ini.</p></div>`;
-          break;
-        }
-        const products = getProducts();
-        let productListHtml = products.map(p => `
-          <div class="product-item" data-id="${p.id}">
-            <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:#9ca3af;"></i>'}</div>
-            <div class="info">
-              <div class="name">${p.name}</div>
-              <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
-              <div class="stock">Stok: ${p.stock}</div>
-            </div>
-            <div class="actions">
-              <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti Gambar</label>
-              <input type="file" id="img-${p.id}" accept="image/*" />
-              <button class="btn-del" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
-            </div>
-          </div>
-        `).join('');
-
-        const userListHtml = renderUserList();
-        const pendingHtml = renderPendingRequests();
-
-        content = `
-          <div class="page-content">
-            <div class="section-title"><span><i class="fas fa-user-cog"></i> Panel OWN</span></div>
-            <div class="own-panel">
-              <div class="panel-tabs">
-                <button class="panel-tab active" data-panel-tab="produk">Produk</button>
-                <button class="panel-tab" data-panel-tab="akun">Akun</button>
-                <button class="panel-tab" data-panel-tab="deposit">Permintaan Deposit</button>
-              </div>
-
-              <!-- Tab Produk -->
-              <div id="panelTabProduk" class="panel-tab-content active">
-                <h3><i class="fas fa-boxes"></i> Daftar Produk</h3>
-                ${productListHtml}
-                <hr style="margin:20px 0; border:0; border-top:1px solid #e5e7eb;">
-                <h3><i class="fas fa-plus-circle"></i> Tambah Produk Baru</h3>
-                <div class="form-group">
-                  <label>Nama Produk</label>
-                  <input type="text" id="newProductName" placeholder="Nama produk" />
-                </div>
-                <div class="form-group">
-                  <label>Harga (Rp)</label>
-                  <input type="number" id="newProductPrice" placeholder="Harga" />
-                </div>
-                <div class="form-group">
-                  <label>Stok</label>
-                  <input type="number" id="newProductStock" placeholder="Stok" />
-                </div>
-                <div class="form-group">
-                  <label>Gambar Produk</label>
-                  <input type="file" id="newProductImage" accept="image/*" />
-                </div>
-                <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah Produk</button>
-                <div id="panelAlert" class="alert"></div>
-
-                <div class="qr-upload">
-                  <h3><i class="fas fa-qrcode"></i> QR Pembayaran (untuk deposit)</h3>
-                  <div class="form-group">
-                    <label>Upload QR Code (statis milik OWN)</label>
-                    <input type="file" id="qrUpload" accept="image/*" />
-                  </div>
-                  ${adminConfig.paymentQr ? `<div class="qr-preview"><img src="${adminConfig.paymentQr}" /></div>` : '<p style="color:#6b7280;">Belum ada QR.</p>'}
-                  <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
-                  <div id="qrAlert" class="alert"></div>
-                </div>
-              </div>
-
-              <!-- Tab Akun -->
-              <div id="panelTabAkun" class="panel-tab-content">
-                <h3><i class="fas fa-users"></i> Daftar Akun Pengguna</h3>
-                <p style="font-size:13px; color:#6b7280; margin-bottom:12px;">Username, Password, No HP, dan Saldo Deposit.</p>
-                ${userListHtml}
-                <div id="userAlert" class="alert"></div>
-              </div>
-
-              <!-- Tab Permintaan Deposit -->
-              <div id="panelTabDeposit" class="panel-tab-content">
-                <h3><i class="fas fa-hand-holding-usd"></i> Permintaan Deposit</h3>
-                <p style="font-size:13px; color:#6b7280; margin-bottom:12px;">Daftar permintaan deposit yang menunggu konfirmasi.</p>
-                ${pendingHtml}
-                <div id="depositAlert" class="alert"></div>
-              </div>
-            </div>
-          </div>
-        `;
-        break;
-      }
-      default:
-        content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
+      });
+      html += `</div>`;
     }
-    mainContent.innerHTML = content;
-
-    // ---------- EVENT LISTENER UNTUK PANEL ----------
-    if (page === 'panel' && user && user.role === 'owner') {
-      // Tab switching
-      const panelTabs = document.querySelectorAll('.panel-tab');
-      const tabContents = {
-        produk: document.getElementById('panelTabProduk'),
-        akun: document.getElementById('panelTabAkun'),
-        deposit: document.getElementById('panelTabDeposit')
-      };
-
-      panelTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          panelTabs.forEach(t => t.classList.remove('active'));
-          this.classList.add('active');
-          const target = this.dataset.panelTab;
-          Object.keys(tabContents).forEach(key => {
-            tabContents[key].classList.toggle('active', key === target);
-          });
-          if (target === 'akun') {
-            const userListHtml = renderUserList();
-            const container = tabContents.akun.querySelector('div:not(.panel-tab-content)');
-            if (container) {
-              container.innerHTML = userListHtml;
-            }
-            attachUserDeleteEvents();
-          }
-          if (target === 'deposit') {
-            const pendingHtml = renderPendingRequests();
-            const container = tabContents.deposit.querySelector('div:not(.panel-tab-content)');
-            if (container) {
-              container.innerHTML = pendingHtml;
-            }
-            attachDepositEvents();
-          }
-        });
-      });
-
-      // Upload gambar produk
-      document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
-        input.addEventListener('change', function(e) {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            const base64 = ev.target.result;
-            const productId = parseInt(this.closest('.product-item').dataset.id);
-            let products = getProducts();
-            const idx = products.findIndex(p => p.id === productId);
-            if (idx !== -1) {
-              products[idx].image = base64;
-              saveProducts(products);
-              showAlert('panelAlert', 'Gambar produk berhasil diperbarui!', 'success');
-              renderPage('panel');
-            }
-          }.bind(this);
-          reader.readAsDataURL(file);
-        });
-      });
-
-      // Hapus produk
-      document.querySelectorAll('.product-item .btn-del').forEach(btn => {
-        btn.addEventListener('click', function() {
-          if (!confirm('Yakin hapus produk ini?')) return;
-          const productId = parseInt(this.dataset.id);
-          let products = getProducts();
-          products = products.filter(p => p.id !== productId);
-          saveProducts(products);
-          showAlert('panelAlert', 'Produk dihapus!', 'success');
-          renderPage('panel');
-        });
-      });
-
-      // Tambah produk
-      document.getElementById('addProductBtn').addEventListener('click', function() {
-        const name = document.getElementById('newProductName').value.trim();
-        const price = parseInt(document.getElementById('newProductPrice').value);
-        const stock = parseInt(document.getElementById('newProductStock').value);
-        const fileInput = document.getElementById('newProductImage');
-        if (!name || isNaN(price) || isNaN(stock)) {
-          showAlert('panelAlert', 'Isi semua field dengan benar.', 'error');
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const image = e.target.result;
-          let products = getProducts();
-          const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-          products.push({ id: newId, name, price, stock, image: image || '' });
-          saveProducts(products);
-          showAlert('panelAlert', 'Produk berhasil ditambahkan!', 'success');
-          renderPage('panel');
-        };
-        if (fileInput.files && fileInput.files[0]) {
-          reader.readAsDataURL(fileInput.files[0]);
-        } else {
-          let products = getProducts();
-          const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-          products.push({ id: newId, name, price, stock, image: '' });
-          saveProducts(products);
-          showAlert('panelAlert', 'Produk berhasil ditambahkan!', 'success');
-          renderPage('panel');
-        }
-      });
-
-      // Upload QR
-      document.getElementById('saveQrBtn').addEventListener('click', function() {
-        const fileInput = document.getElementById('qrUpload');
-        if (!fileInput.files || !fileInput.files[0]) {
-          showAlert('qrAlert', 'Pilih file QR terlebih dahulu.', 'error');
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const config = getAdminConfig();
-          config.paymentQr = e.target.result;
-          setAdminConfig(config);
-          showAlert('qrAlert', 'QR pembayaran berhasil disimpan!', 'success');
-          renderPage('panel');
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      });
-
-      function attachUserDeleteEvents() {
-        document.querySelectorAll('.btn-del-user').forEach(btn => {
-          btn.addEventListener('click', function() {
-            if (this.disabled) return;
-            const username = this.dataset.username;
-            if (!confirm(`Yakin hapus akun "${username}"?`)) return;
-            let users = getUsers();
-            users = users.filter(u => u.username !== username);
-            saveUsers(users);
-            const saldoMap = JSON.parse(localStorage.getItem('userSaldo') || '{}');
-            delete saldoMap[username];
-            localStorage.setItem('userSaldo', JSON.stringify(saldoMap));
-            updateTotalUserStat();
-            showAlert('userAlert', 'Akun berhasil dihapus.', 'success');
-            const tabAkun = document.getElementById('panelTabAkun');
-            if (tabAkun) {
-              const userListHtml = renderUserList();
-              const container = tabAkun.querySelector('div:not(.panel-tab-content)');
-              if (container) {
-                container.innerHTML = userListHtml;
-              }
-              attachUserDeleteEvents();
-            }
-          });
-        });
-      }
-      attachUserDeleteEvents();
-
-      function attachDepositEvents() {
-        document.querySelectorAll('.request-item .btn-approve').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const id = parseInt(this.dataset.id);
-            if (confirm('Setujui permintaan deposit ini?')) {
-              const requests = getDepositRequests();
-              const req = requests.find(r => r.id === id);
-              if (req) {
-                addUserSaldo(req.username, req.amount);
-                updateDepositRequest(id, 'approved');
-                showAlert('depositAlert', 'Deposit disetujui! Saldo user bertambah.', 'success');
-                const tabDeposit = document.getElementById('panelTabDeposit');
-                if (tabDeposit) {
-                  const pendingHtml = renderPendingRequests();
-                  const container = tabDeposit.querySelector('div:not(.panel-tab-content)');
-                  if (container) {
-                    container.innerHTML = pendingHtml;
-                  }
-                  attachDepositEvents();
-                }
-                updateTotalUserStat();
-                updateSaldoDisplay();
-              }
-            }
-          });
-        });
-
-        document.querySelectorAll('.request-item .btn-reject').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const id = parseInt(this.dataset.id);
-            if (confirm('Tolak permintaan deposit ini?')) {
-              updateDepositRequest(id, 'rejected');
-              showAlert('depositAlert', 'Deposit ditolak.', 'error');
-              const tabDeposit = document.getElementById('panelTabDeposit');
-              if (tabDeposit) {
-                const pendingHtml = renderPendingRequests();
-                const container = tabDeposit.querySelector('div:not(.panel-tab-content)');
-                if (container) {
-                  container.innerHTML = pendingHtml;
-                }
-                attachDepositEvents();
-              }
-            }
-          });
-        });
-      }
-      attachDepositEvents();
-    }
-
-    // Event "Lihat semua" produk
-    const lihatSemua = document.getElementById('lihatSemuaBtn');
-    if (lihatSemua) {
-      lihatSemua.addEventListener('click', function() {
-        alert('Semua produk ditampilkan.');
-      });
-    }
+    html += `</div>`;
+    return html;
   }
 
-  function showAlert(id, message, type) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = message;
-    el.className = 'alert ' + type;
-    setTimeout(() => { el.className = 'alert'; }, 4000);
+  function renderInfo() {
+    const config = getAdminConfig();
+    const wa = config.waNumber || 'Belum diatur';
+    const sl = config.slLink || 'Belum diatur';
+    const info = config.storeInfo || 'PutzxStore - Toko Online Terpercaya';
+    const qr = config.paymentQr ? `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid #e5e7eb; padding:12px; background:white;" />` : '<p style="color:#6b7280;">QR belum diatur.</p>';
+    return `
+      <div class="page-content">
+        <div class="section-title"><span>Informasi Toko</span></div>
+        <div style="background:#f8fafc; border-radius:12px; padding:16px; border:1px solid #e9edf2;">
+          <p style="margin-bottom:8px;"><i class="fas fa-store" style="color:#00a86b; width:24px;"></i> <strong>${info}</strong></p>
+          <p style="margin-bottom:8px;"><i class="fas fa-crown" style="color:#00a86b; width:24px;"></i> Toko Own (Produk Sendiri)</p>
+          <p style="margin-bottom:8px;"><i class="fas fa-shield-alt" style="color:#00a86b; width:24px;"></i> 100% Amanah & Terpercaya</p>
+          <p style="margin-bottom:8px;"><i class="fas fa-phone" style="color:#00a86b; width:24px;"></i> Admin WA: <strong>${wa}</strong></p>
+          <p style="margin-bottom:8px;"><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran: <a href="${sl}" target="_blank">PUTZX MARKET</a></p>
+          <hr style="margin:12px 0; border:0; border-top:1px solid #e5e7eb;">
+          <div style="text-align:center;">
+            <p style="font-weight:600; margin-bottom:4px;">QR Pembayaran</p>
+            ${qr}
+          </div>
+        </div>
+      </div>
+    `;
   }
 
-  // ---------- NAVIGASI ----------
+  function renderPanel() {
+    const user = getCurrentUser();
+    if (!user || user.role !== 'owner') {
+      return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya pemilik toko (OWN) yang dapat mengakses panel ini.</p></div>`;
+    }
+
+    const products = getProducts();
+    const config = getAdminConfig();
+
+    let productListHtml = products.map(p => `
+      <div class="product-item" data-id="${p.id}">
+        <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:#9ca3af;"></i>'}</div>
+        <div class="info">
+          <div class="name">${p.name}</div>
+          <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+          <div class="stock">Stok: ${p.stock}</div>
+        </div>
+        <div class="actions">
+          <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti Gambar</label>
+          <input type="file" id="img-${p.id}" accept="image/*" />
+          <button class="btn-del btn-sm" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
+        </div>
+      </div>
+    `).join('');
+
+    const userListHtml = renderUserList();
+    const pendingHtml = renderPendingRequests();
+
+    return `
+      <div class="page-content">
+        <div class="section-title"><span><i class="fas fa-user-cog"></i> Panel OWN</span></div>
+        <div class="own-panel">
+          <div class="panel-tabs">
+            <button class="panel-tab active" data-panel-tab="produk">Produk</button>
+            <button class="panel-tab" data-panel-tab="akun">Akun</button>
+            <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
+            <button class="panel-tab" data-panel-tab="info">Info</button>
+          </div>
+
+          <!-- Tab Produk -->
+          <div id="panelTabProduk" class="panel-tab-content active">
+            <h3><i class="fas fa-boxes"></i> Daftar Produk</h3>
+            ${productListHtml}
+            <hr style="margin:20px 0; border:0; border-top:1px solid #e5e7eb;">
+            <h3><i class="fas fa-plus-circle"></i> Tambah Produk</h3>
+            <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama produk" /></div>
+            <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
+            <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
+            <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
+            <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah Produk</button>
+            <div id="panelAlert" class="alert"></div>
+
+            <div class="qr-upload">
+              <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
+              <div class="form-group"><label>Upload QR Code</label><input type="file" id="qrUpload" accept="image/*" /></div>
+              ${config.paymentQr ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:#6b7280;">Belum ada QR.</p>'}
+              <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
+              <div id="qrAlert" class="alert"></div>
+            </div>
+          </div>
+
+          <!-- Tab Akun -->
+          <div id="panelTabAkun" class="panel-tab-content">
+            <h3><i class="fas fa-users"></i> Daftar Akun</h3>
+            <p style="font-size:13px; color:#6b7280; margin-bottom:12px;">Username, Password, No HP, dan Saldo. OWN bisa ubah saldo langsung.</p>
+            ${userListHtml}
+            <div id="userAlert" class="alert"></div>
+          </div>
+
+          <!-- Tab Deposit -->
+          <div id="panelTabDeposit" class="panel-tab-content">
+            <h3><i class="fas fa-hand-holding-usd"></i> Permintaan Deposit</h3>
+            <p style="font-size:13px; color:#6b7280; margin-bottom:12px;">Setujui atau tolak permintaan deposit member.</p>
+            ${pendingHtml}
+            <div id="depositAlert" class="alert"></div>
+          </div>
+
+          <!-- Tab Info -->
+          <div id="panelTabInfo" class="panel-tab-content">
+            <h3><i class="fas fa-edit"></i> Edit Info Toko</h3>
+            <div class="form-group"><label>Nama Toko / Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
+            <div class="form-group"><label>Nomor WhatsApp Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
+            <div class="form-group"><label>Link Saluran WhatsApp</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
+            <button class="btn-save" id="saveInfoBtn"><i class="fas fa-save"></i> Simpan Info</button>
+            <div id="infoAlert" class="alert"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // NAVIGASI
+  // ============================================================
   function navigateTo(page) {
+    currentPage = page;
     navItems.forEach(item => {
       item.classList.remove('active');
       if (item.dataset.page === page) item.classList.add('active');
     });
-    renderPage(page);
-    searchInput.value = '';
-  }
-
-  // ---------- CEK SESSION ----------
-  function checkSession() {
-    initOwnerAccount();
     const user = getCurrentUser();
-    if (user) {
-      showApp(user);
-    } else {
-      showAuth();
+    let content = '';
+    switch (page) {
+      case 'produk':
+        const products = getProducts();
+        content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(products)}</div>`;
+        break;
+      case 'riwayat':
+        content = renderRiwayat();
+        break;
+      case 'info':
+        content = renderInfo();
+        break;
+      case 'panel':
+        content = renderPanel();
+        break;
+      default:
+        content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
     }
+    mainContent.innerHTML = content;
+    searchInput.value = '';
+
+    // Attach event listeners
+    attachProductEvents();
+    attachPanelEvents();
+    attachPurchaseEvents();
+    attachUserEvents();
+    attachDepositEvents();
+    attachInfoEvents();
   }
 
-  // ---------- EVENT LISTENERS ----------
+  // ============================================================
+  // EVENT LISTENERS
+  // ============================================================
+
+  // --- AUTH ---
   authTabs.forEach(tab => {
     tab.addEventListener('click', function() {
-      switchTab(this.dataset.tab);
+      authTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      const tabName = this.dataset.tab;
+      if (tabName === 'login') {
+        loginForm.classList.add('active');
+        signupForm.classList.remove('active');
+        loginError.style.display = 'none';
+      } else {
+        signupForm.classList.add('active');
+        loginForm.classList.remove('active');
+        signupError.style.display = 'none';
+      }
     });
   });
-  switchToSignup.addEventListener('click', e => { e.preventDefault(); switchTab('signup'); });
-  switchToLogin.addEventListener('click', e => { e.preventDefault(); switchTab('login'); });
+  switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
+  switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
 
   loginBtn.addEventListener('click', function() {
     const username = loginUsername.value.trim();
@@ -1213,8 +967,7 @@
     }
     if (login(username, password)) {
       loginError.style.display = 'none';
-      const user = getCurrentUser();
-      showApp(user);
+      showApp(getCurrentUser());
     } else {
       loginError.textContent = 'Username atau password salah.';
       loginError.style.display = 'block';
@@ -1242,8 +995,7 @@
     const result = signup(name, username, phone, password);
     if (result.success) {
       signupError.style.display = 'none';
-      const user = getCurrentUser();
-      showApp(user);
+      showApp(getCurrentUser());
     } else {
       signupError.textContent = result.message;
       signupError.style.display = 'block';
@@ -1256,9 +1008,10 @@
   signupConfirm.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
 
   logoutBtn.addEventListener('click', function() {
-    showAuth();
+    if (confirm('Yakin ingin logout?')) showAuth();
   });
 
+  // --- NAVIGASI ---
   navItems.forEach(item => {
     item.addEventListener('click', function() {
       const page = this.dataset.page;
@@ -1275,37 +1028,330 @@
     });
   });
 
+  // --- SEARCH ---
   searchInput.addEventListener('input', function() {
     const keyword = this.value.toLowerCase().trim();
-    const activeNav = document.querySelector('.nav-item.active');
-    if (activeNav && activeNav.dataset.page === 'produk') {
+    if (currentPage === 'produk') {
       const products = getProducts();
       const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
-      const gridHtml = renderProductGrid(filtered);
-      const sectionTitle = mainContent.querySelector('.section-title');
-      if (sectionTitle) {
-        mainContent.innerHTML = `
-          <div class="page-content">
-            <div class="section-title"><span>Produk Own</span><small id="lihatSemuaBtn">Lihat semua <i class="fas fa-arrow-right"></i></small></div>
-            ${gridHtml}
-          </div>
-        `;
-        const btn = document.getElementById('lihatSemuaBtn');
-        if (btn) {
-          btn.addEventListener('click', function() {
-            alert('Semua produk ditampilkan.');
-          });
-        }
-      } else {
-        renderPage('produk');
-      }
+      const content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(filtered)}</div>`;
+      mainContent.innerHTML = content;
+      attachProductEvents();
+      attachPurchaseEvents();
     }
   });
 
-  // ---------- DEPOSIT FLOW ----------
+  // --- ATTACH: PRODUCT EVENTS ---
+  function attachProductEvents() {
+    // Tidak perlu khusus, sudah di render
+  }
+
+  // --- ATTACH: PURCHASE EVENTS ---
+  function attachPurchaseEvents() {
+    document.querySelectorAll('.btn-beli').forEach(btn => {
+      btn.removeEventListener('click', handlePurchase);
+      btn.addEventListener('click', handlePurchase);
+    });
+  }
+
+  function handlePurchase(e) {
+    const btn = e.currentTarget;
+    const productId = parseInt(btn.dataset.id);
+    const user = getCurrentUser();
+    if (!user) { alert('Silakan login terlebih dahulu.'); return; }
+    if (user.role === 'owner') { alert('Anda adalah OWN, tidak bisa membeli.'); return; }
+
+    const products = getProducts();
+    const product = products.find(p => p.id === productId);
+    if (!product) { alert('Produk tidak ditemukan.'); return; }
+    if (product.stock <= 0) { alert('Stok habis.'); return; }
+
+    const saldo = getUserSaldo(user.username);
+    if (saldo < product.price) {
+      alert('Saldo tidak cukup! Silakan deposit terlebih dahulu.\nSaldo: Rp ' + saldo.toLocaleString('id-ID') + '\nHarga: Rp ' + product.price.toLocaleString('id-ID'));
+      return;
+    }
+
+    if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
+      // Kurangi saldo
+      addUserSaldo(user.username, -product.price);
+      // Kurangi stok
+      const idx = products.findIndex(p => p.id === productId);
+      products[idx].stock -= 1;
+      saveProducts(products);
+      updateSaldoDisplay();
+      showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
+      // Refresh
+      navigateTo(currentPage);
+      // Update stats
+      updateStats();
+    }
+  }
+
+  // --- ATTACH: PANEL EVENTS ---
+  function attachPanelEvents() {
+    // Tab switching
+    document.querySelectorAll('.panel-tab').forEach(tab => {
+      tab.removeEventListener('click', handlePanelTab);
+      tab.addEventListener('click', handlePanelTab);
+    });
+
+    // Hapus produk
+    document.querySelectorAll('.product-item .btn-del').forEach(btn => {
+      btn.removeEventListener('click', handleDeleteProduct);
+      btn.addEventListener('click', handleDeleteProduct);
+    });
+
+    // Upload gambar produk
+    document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
+      input.removeEventListener('change', handleProductImageUpload);
+      input.addEventListener('change', handleProductImageUpload);
+    });
+
+    // Tambah produk
+    const addBtn = document.getElementById('addProductBtn');
+    if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
+
+    // Simpan QR
+    const saveQrBtn = document.getElementById('saveQrBtn');
+    if (saveQrBtn) { saveQrBtn.removeEventListener('click', handleSaveQr); saveQrBtn.addEventListener('click', handleSaveQr); }
+
+    // Simpan info
+    const saveInfoBtn = document.getElementById('saveInfoBtn');
+    if (saveInfoBtn) { saveInfoBtn.removeEventListener('click', handleSaveInfo); saveInfoBtn.addEventListener('click', handleSaveInfo); }
+
+    // User: ubah saldo
+    document.querySelectorAll('.btn-saldo').forEach(btn => {
+      btn.removeEventListener('click', handleUserSaldo);
+      btn.addEventListener('click', handleUserSaldo);
+    });
+
+    // User: hapus
+    document.querySelectorAll('.btn-del-user').forEach(btn => {
+      btn.removeEventListener('click', handleDeleteUser);
+      btn.addEventListener('click', handleDeleteUser);
+    });
+
+    // Deposit: approve/reject
+    document.querySelectorAll('.btn-approve').forEach(btn => {
+      btn.removeEventListener('click', handleApproveDeposit);
+      btn.addEventListener('click', handleApproveDeposit);
+    });
+    document.querySelectorAll('.btn-reject').forEach(btn => {
+      btn.removeEventListener('click', handleRejectDeposit);
+      btn.addEventListener('click', handleRejectDeposit);
+    });
+  }
+
+  function handlePanelTab(e) {
+    document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    const target = this.dataset.panelTab;
+    document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
+    const contentMap = {
+      produk: document.getElementById('panelTabProduk'),
+      akun: document.getElementById('panelTabAkun'),
+      deposit: document.getElementById('panelTabDeposit'),
+      info: document.getElementById('panelTabInfo')
+    };
+    if (contentMap[target]) contentMap[target].classList.add('active');
+    if (target === 'akun') {
+      const container = document.getElementById('panelTabAkun');
+      const list = container.querySelector('.user-list');
+      if (list) { list.outerHTML = renderUserList(); attachPanelEvents(); }
+    }
+    if (target === 'deposit') {
+      const container = document.getElementById('panelTabDeposit');
+      const list = container.querySelector('.user-list');
+      if (list) { list.outerHTML = renderPendingRequests(); attachPanelEvents(); }
+    }
+  }
+
+  function handleDeleteProduct(e) {
+    if (!confirm('Yakin hapus produk ini?')) return;
+    const id = parseInt(this.dataset.id);
+    let products = getProducts();
+    products = products.filter(p => p.id !== id);
+    saveProducts(products);
+    showToast('Produk dihapus!', 'success');
+    navigateTo('panel');
+    updateStats();
+  }
+
+  function handleProductImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const base64 = ev.target.result;
+      const productId = parseInt(this.closest('.product-item').dataset.id);
+      let products = getProducts();
+      const idx = products.findIndex(p => p.id === productId);
+      if (idx !== -1) {
+        products[idx].image = base64;
+        saveProducts(products);
+        showToast('Gambar produk diperbarui!', 'success');
+        navigateTo('panel');
+      }
+    }.bind(this);
+    reader.readAsDataURL(file);
+  }
+
+  function handleAddProduct() {
+    const name = document.getElementById('newProductName').value.trim();
+    const price = parseInt(document.getElementById('newProductPrice').value);
+    const stock = parseInt(document.getElementById('newProductStock').value);
+    const fileInput = document.getElementById('newProductImage');
+    if (!name || isNaN(price) || isNaN(stock)) {
+      showAlert('panelAlert', 'Isi semua field dengan benar.', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      let products = getProducts();
+      const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+      products.push({ id: newId, name, price, stock, image: e.target.result || '' });
+      saveProducts(products);
+      showAlert('panelAlert', 'Produk berhasil ditambahkan!', 'success');
+      navigateTo('panel');
+      updateStats();
+    };
+    if (fileInput.files && fileInput.files[0]) {
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      let products = getProducts();
+      const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+      products.push({ id: newId, name, price, stock, image: '' });
+      saveProducts(products);
+      showAlert('panelAlert', 'Produk berhasil ditambahkan!', 'success');
+      navigateTo('panel');
+      updateStats();
+    }
+  }
+
+  function handleSaveQr() {
+    const fileInput = document.getElementById('qrUpload');
+    if (!fileInput.files || !fileInput.files[0]) {
+      showAlert('qrAlert', 'Pilih file QR terlebih dahulu.', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const config = getAdminConfig();
+      config.paymentQr = e.target.result;
+      setAdminConfig(config);
+      showAlert('qrAlert', 'QR berhasil disimpan!', 'success');
+      navigateTo('panel');
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  }
+
+  function handleSaveInfo() {
+    const info = document.getElementById('editStoreInfo').value.trim();
+    const wa = document.getElementById('editWaNumber').value.trim();
+    const sl = document.getElementById('editSlLink').value.trim();
+    const config = getAdminConfig();
+    config.storeInfo = info || 'PutzxStore - Toko Online Terpercaya';
+    config.waNumber = wa || DEFAULT_WA_NUMBER;
+    config.slLink = sl || DEFAULT_WA_LINK;
+    setAdminConfig(config);
+    showAlert('infoAlert', 'Info toko berhasil disimpan!', 'success');
+    navigateTo('panel');
+  }
+
+  function handleUserSaldo(e) {
+    const btn = this;
+    const username = btn.dataset.username;
+    const item = btn.closest('.user-item');
+    const input = item.querySelector('.saldo-input');
+    const amount = parseInt(input.value);
+    if (isNaN(amount) || amount < 0) {
+      alert('Masukkan nominal yang valid (minimal 0).');
+      return;
+    }
+    if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
+    setUserSaldo(username, amount);
+    const saldoText = item.querySelector('.saldo-text');
+    if (saldoText) saldoText.textContent = amount.toLocaleString('id-ID');
+    input.value = '';
+    showToast('Saldo ' + username + ' diubah!', 'success');
+    updateStats();
+    // Jika yang diubah adalah diri sendiri, update tampilan saldo
+    const user = getCurrentUser();
+    if (user && user.username === username) updateSaldoDisplay();
+  }
+
+  function handleDeleteUser(e) {
+    if (this.disabled) return;
+    const username = this.dataset.username;
+    if (!confirm('Yakin hapus akun "' + username + '"?')) return;
+    let users = getUsers();
+    users = users.filter(u => u.username !== username);
+    saveUsers(users);
+    const saldoMap = JSON.parse(localStorage.getItem('userSaldo') || '{}');
+    delete saldoMap[username];
+    localStorage.setItem('userSaldo', JSON.stringify(saldoMap));
+    showToast('Akun dihapus!', 'success');
+    navigateTo('panel');
+    updateStats();
+  }
+
+  function handleApproveDeposit() {
+    const id = parseInt(this.dataset.id);
+    if (!confirm('Setujui deposit ini?')) return;
+    const reqs = getDepositRequests();
+    const req = reqs.find(r => r.id === id);
+    if (req) {
+      addUserSaldo(req.username, req.amount);
+      updateDepositRequest(id, 'approved');
+      showToast('Deposit disetujui! Saldo ' + req.username + ' bertambah.', 'success');
+      // Update notifikasi untuk user bersangkutan
+      if (getCurrentUser() && getCurrentUser().username === req.username) {
+        updateSaldoDisplay();
+      }
+      navigateTo('panel');
+      updateStats();
+    }
+  }
+
+  function handleRejectDeposit() {
+    const id = parseInt(this.dataset.id);
+    if (!confirm('Tolak deposit ini?')) return;
+    updateDepositRequest(id, 'rejected');
+    showToast('Deposit ditolak.', 'error');
+    navigateTo('panel');
+    updateStats();
+  }
+
+  function showAlert(id, message, type) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = message;
+    el.className = 'alert ' + type;
+    setTimeout(() => { el.className = 'alert'; }, 4000);
+  }
+
+  // --- ATTACH: USER EVENTS ---
+  function attachUserEvents() {
+    // sudah di handle di attachPanelEvents
+  }
+
+  // --- ATTACH: DEPOSIT EVENTS ---
+  function attachDepositEvents() {
+    // sudah di handle di attachPanelEvents
+  }
+
+  // --- ATTACH: INFO EVENTS ---
+  function attachInfoEvents() {
+    // sudah di handle di attachPanelEvents
+  }
+
+  // ============================================================
+  // DEPOSIT MODAL
+  // ============================================================
   document.getElementById('depositBtn').addEventListener('click', function() {
-    const adminConfig = getAdminConfig();
-    if (!adminConfig.paymentQr) {
+    const config = getAdminConfig();
+    if (!config.paymentQr) {
       alert('QR pembayaran belum diatur oleh OWN. Silakan hubungi admin.');
       return;
     }
@@ -1334,26 +1380,23 @@
     depositStep1.classList.add('hidden');
     depositStep2.classList.remove('hidden');
     qrNominal.textContent = 'Rp ' + amount.toLocaleString('id-ID');
-    const adminConfig = getAdminConfig();
-    qrContainer.innerHTML = `<img src="${adminConfig.paymentQr}" alt="QR Pembayaran" />`;
+    const config = getAdminConfig();
+    qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR Pembayaran" />`;
     requestDepositBtn.disabled = false;
   });
 
   requestDepositBtn.addEventListener('click', function() {
     const user = getCurrentUser();
-    if (!user) {
-      alert('Silakan login terlebih dahulu.');
-      return;
-    }
+    if (!user) { alert('Silakan login terlebih dahulu.'); return; }
     if (pendingAmount <= 0) return;
     const req = createDepositRequest(user.username, pendingAmount);
-    lastRequestId = req.id;
     depositStep2.classList.add('hidden');
     depositStep3.classList.remove('hidden');
     reqNominal.textContent = 'Rp ' + pendingAmount.toLocaleString('id-ID');
     updateRequestStatusDisplay(req);
     requestDepositBtn.disabled = true;
     showToast('Permintaan deposit terkirim, tunggu konfirmasi admin.', 'info');
+    updateStats();
   });
 
   depositBack.addEventListener('click', function() {
@@ -1366,33 +1409,40 @@
   depositClose.addEventListener('click', function() {
     depositModal.classList.remove('active');
     updateSaldoDisplay();
-    const activeNav = document.querySelector('.nav-item.active');
-    if (activeNav && activeNav.dataset.page === 'riwayat') {
-      renderPage('riwayat');
-    }
+    if (currentPage === 'riwayat') navigateTo('riwayat');
+    updateStats();
   });
 
   depositModal.addEventListener('click', function(e) {
     if (e.target === this) depositModal.classList.remove('active');
   });
 
-  // ---------- CHAT ADMIN ----------
+  // ============================================================
+  // CHAT & CHANNEL
+  // ============================================================
   document.getElementById('chatAdminBtn').addEventListener('click', function() {
     const config = getAdminConfig();
     const wa = config.waNumber || DEFAULT_WA_NUMBER;
-    const clean = wa.replace(/\D/g, '');
-    window.open('https://wa.me/' + clean, '_blank');
+    window.open('https://wa.me/' + wa.replace(/\D/g, ''), '_blank');
   });
 
-  // ---------- GABUNG SALURAN WHATSAPP ----------
   document.getElementById('channelBtn').addEventListener('click', function() {
     const config = getAdminConfig();
     const link = config.slLink || DEFAULT_WA_LINK;
     window.open(link, '_blank');
   });
 
-  // ---------- START ----------
-  checkSession();
+  // ============================================================
+  // INIT
+  // ============================================================
+  initOwnerAccount();
+  initDefaultProducts();
+  const user = getCurrentUser();
+  if (user) {
+    showApp(user);
+  } else {
+    showAuth();
+  }
 })();
 </script>
 </body>

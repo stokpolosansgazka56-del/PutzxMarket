@@ -1,1167 +1,1197 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PutzxStore</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background: #f5f7fa; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 12px 0 80px 0; }
-    .app-container { max-width: 420px; width: 100%; background: white; border-radius: 24px; padding: 16px 16px 80px; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>PutzxStore - Dark</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* DARK THEME */
+        :root {
+            --bg-primary: #0f0f13;
+            --bg-secondary: #1a1a24;
+            --bg-card: #23232e;
+            --bg-input: #2a2a36;
+            --bg-hover: #2f2f3e;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6a6a7e;
+            --accent: #00c853;
+            --accent-hover: #00e676;
+            --danger: #ef5350;
+            --danger-hover: #e53935;
+            --warning: #ffb300;
+            --border: #2f2f3e;
+            --shadow: 0 4px 20px rgba(0,0,0,0.6);
+            --radius: 16px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
+        body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
+        .app-container { max-width:420px; width:100%; background:var(--bg-secondary); border-radius:var(--radius); padding:16px 16px 80px; box-shadow:var(--shadow); position:relative; }
 
-    /* AUTH */
-    .auth-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-    .auth-page .logo { font-size: 28px; font-weight: 700; color: #00a86b; margin-bottom: 4px; }
-    .auth-page .subtitle { color: #6b7280; margin-bottom: 24px; font-size: 14px; }
-    .auth-tabs { display: flex; width: 100%; max-width: 340px; background: #f0f2f5; border-radius: 30px; padding: 4px; margin-bottom: 20px; }
-    .auth-tab { flex: 1; padding: 10px 0; text-align: center; font-weight: 600; font-size: 14px; border: none; border-radius: 30px; background: transparent; color: #6b7280; cursor: pointer; transition: all 0.2s; }
-    .auth-tab.active { background: white; color: #1f2937; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .auth-form { width: 100%; max-width: 340px; display: none; }
-    .auth-form.active { display: block; }
-    .auth-form label { font-weight: 600; font-size: 14px; color: #1f2937; display: block; margin-top: 14px; margin-bottom: 4px; }
-    .auth-form input { width: 100%; padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: 30px; font-size: 15px; outline: none; transition: border 0.2s; background: #f9fafb; }
-    .auth-form input:focus { border-color: #00a86b; background: white; }
-    .auth-form .btn-auth { width: 100%; padding: 14px; margin-top: 20px; background: linear-gradient(135deg, #00a86b, #008c5a); color: white; border: none; border-radius: 30px; font-weight: 700; font-size: 16px; cursor: pointer; transition: background 0.2s; }
-    .auth-form .btn-auth:hover { background: #008c5a; }
-    .auth-error { color: #ef4444; font-size: 13px; margin-top: 8px; text-align: center; display: none; }
-    .auth-switch { margin-top: 16px; text-align: center; font-size: 14px; color: #6b7280; }
-    .auth-switch a { color: #00a86b; font-weight: 600; cursor: pointer; text-decoration: none; }
+        /* AUTH */
+        .auth-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; background:var(--bg-primary); border-radius:var(--radius); }
+        .auth-page .logo { font-size:28px; font-weight:700; color:var(--accent); margin-bottom:4px; }
+        .auth-page .subtitle { color:var(--text-secondary); margin-bottom:24px; font-size:14px; }
+        .auth-tabs { display:flex; width:100%; max-width:340px; background:var(--bg-card); border-radius:30px; padding:4px; margin-bottom:20px; }
+        .auth-tab { flex:1; padding:10px 0; text-align:center; font-weight:600; font-size:14px; border:none; border-radius:30px; background:transparent; color:var(--text-secondary); cursor:pointer; transition:all .2s; }
+        .auth-tab.active { background:var(--accent); color:#fff; box-shadow:0 2px 12px rgba(0,200,83,0.3); }
+        .auth-form { width:100%; max-width:340px; display:none; }
+        .auth-form.active { display:block; }
+        .auth-form label { font-weight:600; font-size:14px; color:var(--text-primary); display:block; margin-top:14px; margin-bottom:4px; }
+        .auth-form input { width:100%; padding:12px 16px; border:1px solid var(--border); border-radius:30px; font-size:15px; outline:none; background:var(--bg-input); color:var(--text-primary); transition:border .2s; }
+        .auth-form input:focus { border-color:var(--accent); }
+        .auth-form .btn-auth { width:100%; padding:14px; margin-top:20px; background:linear-gradient(135deg,var(--accent),#009624); color:#fff; border:none; border-radius:30px; font-weight:700; font-size:16px; cursor:pointer; transition:background .2s; }
+        .auth-form .btn-auth:hover { background:var(--accent-hover); }
+        .auth-error { color:var(--danger); font-size:13px; margin-top:8px; text-align:center; display:none; }
+        .auth-switch { margin-top:16px; text-align:center; font-size:14px; color:var(--text-secondary); }
+        .auth-switch a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
 
-    /* APP */
-    .app-main { display: none; }
-    .saldo-card { background: linear-gradient(135deg, #00a86b, #008c5a); border-radius: 16px; padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .saldo-left { display: flex; flex-direction: column; }
-    .saldo-label { font-size: 12px; opacity: 0.9; }
-    .saldo-nominal { font-size: 28px; font-weight: 700; margin-top: 2px; }
-    .btn-deposit { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 18px; border-radius: 30px; font-weight: 600; font-size: 14px; cursor: pointer; backdrop-filter: blur(4px); transition: background 0.2s; }
-    .btn-deposit:hover { background: rgba(255,255,255,0.35); }
+        /* APP */
+        .app-main { display:none; }
+        .saldo-card { background:linear-gradient(135deg,var(--accent),#009624); border-radius:var(--radius); padding:18px 20px; color:#fff; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+        .saldo-left { display:flex; flex-direction:column; }
+        .saldo-label { font-size:12px; opacity:0.9; }
+        .saldo-nominal { font-size:28px; font-weight:700; margin-top:2px; }
+        .btn-deposit { background:rgba(255,255,255,0.2); border:none; color:#fff; padding:8px 18px; border-radius:30px; font-weight:600; font-size:14px; cursor:pointer; backdrop-filter:blur(4px); transition:background .2s; }
+        .btn-deposit:hover { background:rgba(255,255,255,0.35); }
 
-    .login-info { background: #f0f2f5; border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 14px; }
-    .login-detail { display: flex; flex-direction: column; gap: 2px; }
-    .login-detail .label { color: #6b7280; font-size: 11px; font-weight: 500; }
-    .login-detail .value { font-weight: 600; color: #1f2937; }
-    .role-badge { background: #00a86b; color: white; padding: 4px 14px; border-radius: 30px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-    .role-badge .logout-btn { background: transparent; border: none; color: white; font-size: 12px; cursor: pointer; margin-left: 4px; padding: 2px 6px; border-radius: 20px; transition: background 0.2s; }
-    .role-badge .logout-btn:hover { background: rgba(255,255,255,0.2); }
+        .login-info { background:var(--bg-card); border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border:1px solid var(--border); }
+        .login-detail { display:flex; flex-direction:column; gap:2px; }
+        .login-detail .label { color:var(--text-muted); font-size:11px; font-weight:500; }
+        .login-detail .value { font-weight:600; color:var(--text-primary); }
+        .role-badge { background:var(--accent); color:#fff; padding:4px 14px; border-radius:30px; font-size:12px; font-weight:600; display:flex; align-items:center; gap:6px; }
+        .role-badge .logout-btn { background:transparent; border:none; color:#fff; font-size:12px; cursor:pointer; margin-left:4px; padding:2px 6px; border-radius:20px; transition:background .2s; }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
-    .stat-item { background: #f8fafc; border-radius: 12px; padding: 12px 8px; text-align: center; border: 1px solid #e9edf2; }
-    .stat-number { font-size: 20px; font-weight: 700; color: #1f2937; }
-    .stat-label { font-size: 11px; color: #6b7280; margin-top: 4px; font-weight: 500; }
+        .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+        .stat-item { background:var(--bg-card); border-radius:12px; padding:12px 8px; text-align:center; border:1px solid var(--border); }
+        .stat-number { font-size:20px; font-weight:700; color:var(--text-primary); }
+        .stat-label { font-size:11px; color:var(--text-muted); margin-top:4px; font-weight:500; }
 
-    .status-loading { background: #f0f2f5; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: #4b5563; }
-    .status-loading i { color: #00a86b; font-size: 16px; }
-    .spinner { animation: spin 1s linear infinite; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+        .status-loading { background:var(--bg-card); border-radius:10px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--text-secondary); border:1px solid var(--border); }
+        .spinner { animation:spin 1s linear infinite; }
+        @keyframes spin { 100% { transform:rotate(360deg); } }
 
-    .action-buttons { display: flex; gap: 10px; margin-bottom: 16px; }
-    .action-btn { flex: 1; background: #f0f2f5; border: none; border-radius: 30px; padding: 12px 0; font-weight: 600; font-size: 13px; color: #1f2937; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: background 0.2s; }
-    .action-btn i { color: #00a86b; }
-    .action-btn:hover { background: #e5e7eb; }
-    .action-btn.admin { background: #00a86b; color: white; }
-    .action-btn.admin i { color: white; }
-    .action-btn.admin:hover { background: #008c5a; }
+        .action-buttons { display:flex; gap:10px; margin-bottom:16px; }
+        .action-btn { flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:30px; padding:12px 0; font-weight:600; font-size:13px; color:var(--text-primary); display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:background .2s; }
+        .action-btn i { color:var(--accent); }
+        .action-btn:hover { background:var(--bg-hover); }
+        .action-btn.admin { background:var(--accent); color:#fff; border-color:var(--accent); }
+        .action-btn.admin i { color:#fff; }
+        .action-btn.admin:hover { background:var(--accent-hover); }
 
-    .trust-badge { display: flex; justify-content: center; gap: 18px; background: #f8fafc; border-radius: 30px; padding: 10px 16px; margin-bottom: 20px; border: 1px solid #e9edf2; font-size: 13px; font-weight: 500; color: #1f2937; }
-    .trust-badge span { display: flex; align-items: center; gap: 6px; }
-    .trust-badge i { color: #00a86b; }
+        .trust-badge { display:flex; justify-content:center; gap:18px; background:var(--bg-card); border-radius:30px; padding:10px 16px; margin-bottom:20px; border:1px solid var(--border); font-size:13px; font-weight:500; color:var(--text-secondary); }
+        .trust-badge i { color:var(--accent); }
 
-    .search-box { display: flex; align-items: center; background: #f0f2f5; border-radius: 30px; padding: 0 16px; margin-bottom: 20px; border: 1px solid transparent; transition: border 0.2s; }
-    .search-box:focus-within { border-color: #00a86b; background: white; }
-    .search-box i { color: #9ca3af; font-size: 16px; }
-    .search-box input { border: none; background: transparent; padding: 12px 12px; width: 100%; outline: none; font-size: 14px; color: #1f2937; }
-    .search-box input::placeholder { color: #9ca3af; }
+        .search-box { display:flex; align-items:center; background:var(--bg-input); border-radius:30px; padding:0 16px; margin-bottom:20px; border:1px solid var(--border); transition:border .2s; }
+        .search-box:focus-within { border-color:var(--accent); }
+        .search-box input { border:none; background:transparent; padding:12px 12px; width:100%; outline:none; font-size:14px; color:var(--text-primary); }
+        .search-box input::placeholder { color:var(--text-muted); }
 
-    .main-content { margin-top: 8px; min-height: 200px; }
-    .section-title { font-weight: 700; font-size: 16px; color: #1f2937; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .main-content { margin-top:8px; min-height:200px; }
+        .section-title { font-weight:700; font-size:16px; color:var(--text-primary); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
 
-    .product-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-    .product-card { background: #f8fafc; border-radius: 12px; padding: 12px; border: 1px solid #e9edf2; transition: transform 0.1s; position: relative; }
-    .product-card:hover { transform: translateY(-2px); }
-    .product-image { width: 100%; aspect-ratio: 1/1; background: #e5e7eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 28px; margin-bottom: 8px; overflow: hidden; }
-    .product-image img { width: 100%; height: 100%; object-fit: cover; }
-    .product-name { font-weight: 600; font-size: 13px; color: #1f2937; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .product-price { font-weight: 700; color: #00a86b; font-size: 14px; margin-top: 2px; }
-    .product-stock { font-size: 11px; color: #6b7280; }
-    .btn-beli { background: #00a86b; color: white; border: none; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; margin-top: 8px; width: 100%; transition: background 0.2s; }
-    .btn-beli:hover { background: #008c5a; }
-    .btn-beli:disabled { background: #9ca3af; cursor: not-allowed; }
+        .product-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+        .product-card { background:var(--bg-card); border-radius:12px; padding:12px; border:1px solid var(--border); transition:transform .1s; display:flex; flex-direction:column; }
+        .product-card:hover { transform:translateY(-2px); }
+        .product-image { width:100%; aspect-ratio:1/1; background:var(--bg-input); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:28px; margin-bottom:8px; overflow:hidden; }
+        .product-image img { width:100%; height:100%; object-fit:cover; }
+        .product-name { font-weight:600; font-size:13px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .product-price { font-weight:700; color:var(--accent); font-size:14px; margin-top:2px; }
+        .product-stock { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
+        .btn-beli { background:var(--accent); color:#fff; border:none; padding:8px 0; border-radius:20px; font-weight:600; font-size:13px; cursor:pointer; width:100%; transition:background .2s; margin-top:auto; }
+        .btn-beli:hover { background:var(--accent-hover); }
+        .btn-beli:disabled { background:var(--text-muted); cursor:not-allowed; opacity:0.5; }
 
-    .page-content { padding: 8px 0; }
-    .empty-state { text-align: center; padding: 40px 20px; color: #6b7280; }
-    .empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 12px; }
-    .empty-state h3 { font-weight: 600; color: #1f2937; margin-bottom: 6px; }
-    .empty-state p { font-size: 14px; }
+        .page-content { padding:8px 0; }
+        .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
+        .empty-state i { font-size:48px; color:var(--text-muted); margin-bottom:12px; }
+        .empty-state h3 { font-weight:600; color:var(--text-primary); margin-bottom:6px; }
 
-    /* PANEL OWN */
-    .own-panel { background: #f8fafc; border-radius: 16px; padding: 20px; border: 1px solid #e9edf2; margin-top: 8px; }
-    .own-panel .panel-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; flex-wrap: wrap; }
-    .own-panel .panel-tab { padding: 8px 18px; border-radius: 30px; border: none; background: transparent; font-weight: 600; color: #6b7280; cursor: pointer; transition: all 0.2s; }
-    .own-panel .panel-tab.active { background: #00a86b; color: white; }
-    .own-panel .panel-tab:hover:not(.active) { background: #e5e7eb; }
-    .own-panel .panel-tab-content { display: none; }
-    .own-panel .panel-tab-content.active { display: block; }
-    .own-panel h3 { margin-bottom: 16px; color: #1f2937; display: flex; align-items: center; gap: 8px; }
-    .own-panel .form-group { margin-bottom: 16px; }
-    .own-panel label { font-weight: 600; font-size: 14px; color: #1f2937; display: block; margin-bottom: 4px; }
-    .own-panel input, .own-panel textarea { width: 100%; padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 30px; font-size: 14px; outline: none; background: white; }
-    .own-panel textarea { border-radius: 16px; resize: vertical; min-height: 60px; }
-    .own-panel input:focus, .own-panel textarea:focus { border-color: #00a86b; }
-    .own-panel .btn-save { margin-top: 8px; background: #00a86b; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; }
-    .own-panel .btn-save:hover { background: #008c5a; }
-    .own-panel .btn-danger { background: #ef4444; }
-    .own-panel .btn-danger:hover { background: #dc2626; }
-    .own-panel .btn-sm { padding: 6px 14px; border-radius: 20px; font-size: 12px; width: auto; display: inline-block; }
-    .own-panel .product-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .own-panel .product-item .thumb { width: 60px; height: 60px; background: #e5e7eb; border-radius: 8px; flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .own-panel .product-item .thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .own-panel .product-item .info { flex: 1; min-width: 100px; }
-    .own-panel .product-item .info .name { font-weight: 600; }
-    .own-panel .product-item .info .price { color: #00a86b; }
-    .own-panel .product-item .actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-    .own-panel .product-item .actions input[type="file"] { display: none; }
-    .own-panel .product-item .actions label { background: #e5e7eb; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-    .own-panel .product-item .actions label:hover { background: #d1d5db; }
-    .own-panel .product-item .actions .btn-del { background: #fee2e2; color: #991b1b; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-    .own-panel .product-item .actions .btn-del:hover { background: #fecaca; }
-    .own-panel .qr-upload { margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 20px; }
-    .own-panel .qr-preview { margin-top: 8px; max-width: 200px; border-radius: 8px; border: 1px solid #e5e7eb; padding: 8px; background: white; }
-    .own-panel .qr-preview img { width: 100%; height: auto; display: block; }
+        /* PANEL */
+        .own-panel { background:var(--bg-card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); margin-top:8px; }
+        .own-panel .panel-tabs { display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; flex-wrap:wrap; }
+        .own-panel .panel-tab { padding:8px 18px; border-radius:30px; border:none; background:transparent; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .2s; }
+        .own-panel .panel-tab.active { background:var(--accent); color:#fff; }
+        .own-panel .panel-tab:hover:not(.active) { background:var(--bg-hover); }
+        .own-panel .panel-tab-content { display:none; }
+        .own-panel .panel-tab-content.active { display:block; }
+        .own-panel h3 { margin-bottom:16px; color:var(--text-primary); display:flex; align-items:center; gap:8px; }
+        .own-panel .form-group { margin-bottom:16px; }
+        .own-panel label { font-weight:600; font-size:14px; color:var(--text-primary); display:block; margin-bottom:4px; }
+        .own-panel input, .own-panel textarea { width:100%; padding:10px 16px; border:1px solid var(--border); border-radius:30px; font-size:14px; outline:none; background:var(--bg-input); color:var(--text-primary); }
+        .own-panel textarea { border-radius:16px; resize:vertical; min-height:60px; }
+        .own-panel input:focus, .own-panel textarea:focus { border-color:var(--accent); }
+        .own-panel .btn-save { margin-top:8px; background:var(--accent); color:#fff; border:none; padding:12px; border-radius:30px; font-weight:700; cursor:pointer; width:100%; transition:background .2s; }
+        .own-panel .btn-save:hover { background:var(--accent-hover); }
+        .own-panel .btn-danger { background:var(--danger); }
+        .own-panel .btn-danger:hover { background:var(--danger-hover); }
+        .own-panel .btn-sm { padding:6px 14px; border-radius:20px; font-size:12px; width:auto; display:inline-block; }
+        .own-panel .product-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:12px; border:1px solid var(--border); display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .own-panel .product-item .thumb { width:60px; height:60px; background:var(--bg-input); border-radius:8px; flex-shrink:0; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+        .own-panel .product-item .thumb img { width:100%; height:100%; object-fit:cover; }
+        .own-panel .product-item .info { flex:1; min-width:100px; }
+        .own-panel .product-item .info .name { font-weight:600; color:var(--text-primary); }
+        .own-panel .product-item .info .price { color:var(--accent); }
+        .own-panel .product-item .actions { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+        .own-panel .product-item .actions input[type="file"] { display:none; }
+        .own-panel .product-item .actions label { background:var(--bg-input); padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--text-secondary); }
+        .own-panel .product-item .actions label:hover { background:var(--bg-hover); }
+        .own-panel .product-item .actions .btn-del { background:var(--danger); color:#fff; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
+        .own-panel .product-item .actions .btn-del:hover { background:var(--danger-hover); }
+        .own-panel .qr-upload { margin-top:20px; border-top:1px solid var(--border); padding-top:20px; }
+        .own-panel .qr-preview { margin-top:8px; max-width:200px; border-radius:8px; border:1px solid var(--border); padding:8px; background:var(--bg-input); }
+        .own-panel .qr-preview img { width:100%; height:auto; display:block; }
 
-    .user-list { margin-top: 8px; }
-    .user-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .user-item .user-info { flex: 1; min-width: 140px; }
-    .user-item .user-info .uname { font-weight: 600; }
-    .user-item .user-info .detail { font-size: 13px; color: #6b7280; }
-    .user-item .user-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-    .user-item .user-actions input { width: 80px; padding: 4px 8px; border: 1px solid #e5e7eb; border-radius: 20px; font-size: 12px; }
-    .user-item .user-actions .btn-saldo { background: #dbeafe; color: #1e40af; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-    .user-item .user-actions .btn-del-user { background: #fee2e2; color: #991b1b; border: none; padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-    .user-item .user-actions .btn-del-user:disabled { opacity: 0.5; cursor: not-allowed; }
+        .user-list { margin-top:8px; }
+        .user-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+        .user-item .user-info { flex:1; min-width:140px; }
+        .user-item .user-info .uname { font-weight:600; color:var(--text-primary); }
+        .user-item .user-info .detail { font-size:13px; color:var(--text-secondary); }
+        .user-item .user-actions { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+        .user-item .user-actions input { width:80px; padding:4px 8px; border:1px solid var(--border); border-radius:20px; font-size:12px; background:var(--bg-input); color:var(--text-primary); }
+        .user-item .user-actions .btn-saldo { background:var(--warning); color:#000; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
+        .user-item .user-actions .btn-del-user { background:var(--danger); color:#fff; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
+        .user-item .user-actions .btn-del-user:disabled { opacity:0.5; cursor:not-allowed; }
 
-    .request-item { background: white; border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid #e5e7eb; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .request-item .req-info { flex: 1; min-width: 140px; }
-    .request-item .req-actions { display: flex; gap: 8px; }
-    .request-item .req-actions button { padding: 6px 16px; border: none; border-radius: 20px; font-weight: 600; cursor: pointer; }
-    .request-item .req-actions .btn-approve { background: #d1fae5; color: #065f46; }
-    .request-item .req-actions .btn-approve:hover { background: #a7f3d0; }
-    .request-item .req-actions .btn-reject { background: #fee2e2; color: #991b1b; }
-    .request-item .req-actions .btn-reject:hover { background: #fecaca; }
-    .status-badge { padding: 4px 12px; border-radius: 30px; font-size: 12px; font-weight: 600; display: inline-block; }
-    .status-badge.pending { background: #fef3c7; color: #92400e; }
-    .status-badge.approved { background: #d1fae5; color: #065f46; }
-    .status-badge.rejected { background: #fee2e2; color: #991b1b; }
+        .request-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+        .request-item .req-info { flex:1; min-width:140px; }
+        .request-item .req-actions { display:flex; gap:8px; }
+        .request-item .req-actions button { padding:6px 16px; border:none; border-radius:20px; font-weight:600; cursor:pointer; }
+        .request-item .req-actions .btn-approve { background:var(--accent); color:#fff; }
+        .request-item .req-actions .btn-approve:hover { background:var(--accent-hover); }
+        .request-item .req-actions .btn-reject { background:var(--danger); color:#fff; }
+        .request-item .req-actions .btn-reject:hover { background:var(--danger-hover); }
+        .status-badge { padding:4px 12px; border-radius:30px; font-size:12px; font-weight:600; display:inline-block; }
+        .status-badge.pending { background:#fef3c7; color:#92400e; }
+        .status-badge.approved { background:var(--accent); color:#fff; }
+        .status-badge.rejected { background:var(--danger); color:#fff; }
 
-    .alert { margin-top: 12px; padding: 10px; border-radius: 10px; display: none; }
-    .alert.success { background: #d1fae5; color: #065f46; display: block; }
-    .alert.error { background: #fee2e2; color: #991b1b; display: block; }
-    .alert.info { background: #dbeafe; color: #1e40af; display: block; }
+        .alert { margin-top:12px; padding:10px; border-radius:10px; display:none; }
+        .alert.success { background:#1a3a2a; color:var(--accent); display:block; }
+        .alert.error { background:#3a1a1a; color:var(--danger); display:block; }
+        .alert.info { background:#1a2a3a; color:#64b5f6; display:block; }
 
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e9edf2; display: flex; justify-content: space-around; padding: 8px 0 12px 0; max-width: 420px; margin: 0 auto; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 10px rgba(0,0,0,0.03); z-index: 100; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #9ca3af; cursor: pointer; transition: color 0.2s; padding: 4px 8px; border: none; background: transparent; }
-    .nav-item i { font-size: 22px; margin-bottom: 2px; }
-    .nav-item.active { color: #00a86b; }
-    .nav-item:hover { color: #00a86b; }
-    .nav-item.hidden { display: none; }
+        .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--bg-secondary); border-top:1px solid var(--border); display:flex; justify-content:space-around; padding:8px 0 12px 0; max-width:420px; margin:0 auto; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.5); z-index:100; }
+        .nav-item { display:flex; flex-direction:column; align-items:center; font-size:10px; color:var(--text-muted); cursor:pointer; transition:color .2s; padding:4px 8px; border:none; background:transparent; }
+        .nav-item i { font-size:22px; margin-bottom:2px; }
+        .nav-item.active { color:var(--accent); }
+        .nav-item:hover { color:var(--accent); }
+        .nav-item.hidden { display:none; }
 
-    @media (max-width:420px) {
-      .app-container { padding: 12px 12px 80px; }
-      .saldo-nominal { font-size: 22px; }
-      .stats-grid { gap: 6px; }
-      .stat-item { padding: 10px 4px; }
-      .stat-number { font-size: 17px; }
-      .own-panel .product-item { flex-direction: column; align-items: stretch; }
-      .user-item { flex-direction: column; align-items: stretch; }
-    }
+        @media (max-width:420px) {
+            .app-container { padding:12px 12px 80px; }
+            .saldo-nominal { font-size:22px; }
+            .stats-grid { gap:6px; }
+            .stat-item { padding:10px 4px; }
+            .stat-number { font-size:17px; }
+            .own-panel .product-item { flex-direction:column; align-items:stretch; }
+            .user-item { flex-direction:column; align-items:stretch; }
+        }
 
-    /* MODAL */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 999; }
-    .modal-overlay.active { display: flex; }
-    .modal-box { background: white; max-width: 380px; width: 92%; border-radius: 24px; padding: 24px 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: fadeIn 0.3s ease; max-height: 95vh; overflow-y: auto; }
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    .modal-box h3 { margin-bottom: 8px; color: #1f2937; }
-    .modal-box p { color: #6b7280; margin-bottom: 16px; font-size: 14px; }
-    .modal-box input { width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 30px; margin-bottom: 16px; font-size: 16px; outline: none; }
-    .modal-box input:focus { border-color: #00a86b; }
-    .modal-box .modal-actions { display: flex; gap: 12px; }
-    .modal-box .modal-actions button { flex: 1; padding: 12px; border: none; border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .modal-box .modal-actions .btn-confirm { background: #00a86b; color: white; }
-    .modal-box .modal-actions .btn-confirm:hover { background: #008c5a; }
-    .modal-box .modal-actions .btn-cancel { background: #e5e7eb; color: #4b5563; }
-    .modal-box .btn-request { background: #00a86b; color: white; border: none; padding: 12px; border-radius: 30px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 12px; }
-    .modal-box .btn-request:disabled { opacity: 0.5; cursor: not-allowed; }
-    .qr-container { text-align: center; margin: 16px 0; }
-    .qr-container img { max-width: 220px; border-radius: 12px; border: 1px solid #e5e7eb; padding: 12px; background: white; }
-    .qr-container .qr-amount { font-size: 20px; color: #00a86b; font-weight: 700; }
-    .hidden { display: none; }
+        /* MODAL */
+        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; z-index:999; }
+        .modal-overlay.active { display:flex; }
+        .modal-box { background:var(--bg-secondary); max-width:380px; width:92%; border-radius:24px; padding:24px 20px; box-shadow:0 20px 60px rgba(0,0,0,0.8); animation:fadeIn .3s ease; max-height:95vh; overflow-y:auto; border:1px solid var(--border); }
+        @keyframes fadeIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
+        .modal-box h3 { margin-bottom:8px; color:var(--text-primary); }
+        .modal-box p { color:var(--text-secondary); margin-bottom:16px; font-size:14px; }
+        .modal-box input { width:100%; padding:12px; border:1px solid var(--border); border-radius:30px; margin-bottom:16px; font-size:16px; outline:none; background:var(--bg-input); color:var(--text-primary); }
+        .modal-box input:focus { border-color:var(--accent); }
+        .modal-box .modal-actions { display:flex; gap:12px; }
+        .modal-box .modal-actions button { flex:1; padding:12px; border:none; border-radius:30px; font-weight:600; cursor:pointer; transition:.2s; }
+        .modal-box .modal-actions .btn-confirm { background:var(--accent); color:#fff; }
+        .modal-box .modal-actions .btn-confirm:hover { background:var(--accent-hover); }
+        .modal-box .modal-actions .btn-cancel { background:var(--bg-input); color:var(--text-secondary); }
+        .modal-box .btn-request { background:var(--accent); color:#fff; border:none; padding:12px; border-radius:30px; font-weight:700; cursor:pointer; width:100%; transition:.2s; margin-top:12px; }
+        .modal-box .btn-request:disabled { opacity:0.5; cursor:not-allowed; }
+        .qr-container { text-align:center; margin:16px 0; }
+        .qr-container img { max-width:220px; border-radius:12px; border:1px solid var(--border); padding:12px; background:#fff; }
+        .hidden { display:none; }
 
-    .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 600; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: fadeIn 0.3s; }
-    .toast.success { background: #065f46; }
-    .toast.error { background: #991b1b; }
-    .toast.info { background: #1e40af; }
-  </style>
+        .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--bg-card); color:var(--text-primary); padding:12px 24px; border-radius:30px; font-weight:600; z-index:999; box-shadow:0 4px 20px rgba(0,0,0,0.6); border:1px solid var(--border); animation:fadeIn .3s; }
+        .toast.success { border-color:var(--accent); }
+        .toast.error { border-color:var(--danger); }
+    </style>
 </head>
 <body>
 
 <!-- AUTH PAGE -->
 <div id="authPage" class="auth-page">
-  <div class="logo">PutzxStore</div>
-  <div class="subtitle">Login atau daftar untuk berbelanja</div>
-  <div class="auth-tabs">
-    <button class="auth-tab active" data-tab="login">Login</button>
-    <button class="auth-tab" data-tab="signup">Daftar</button>
-  </div>
-  <div id="loginForm" class="auth-form active">
-    <label for="loginUsername">Username</label>
-    <input type="text" id="loginUsername" placeholder="Masukkan username" />
-    <label for="loginPassword">Password</label>
-    <input type="password" id="loginPassword" placeholder="Masukkan password" />
-    <button class="btn-auth" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
-    <div id="loginError" class="auth-error">Username atau password salah.</div>
-    <div class="auth-switch">Belum punya akun? <a id="switchToSignup">Daftar sekarang</a></div>
-  </div>
-  <div id="signupForm" class="auth-form">
-    <label for="signupName">Nama Lengkap</label>
-    <input type="text" id="signupName" placeholder="Nama Anda" />
-    <label for="signupUsername">Username</label>
-    <input type="text" id="signupUsername" placeholder="Pilih username" />
-    <label for="signupPhone">Nomor HP</label>
-    <input type="tel" id="signupPhone" placeholder="0812-3456-7890" />
-    <label for="signupPassword">Password</label>
-    <input type="password" id="signupPassword" placeholder="Minimal 6 karakter" />
-    <label for="signupConfirm">Konfirmasi Password</label>
-    <input type="password" id="signupConfirm" placeholder="Ulangi password" />
-    <button class="btn-auth" id="signupBtn"><i class="fas fa-user-plus"></i> Daftar</button>
-    <div id="signupError" class="auth-error"></div>
-    <div class="auth-switch">Sudah punya akun? <a id="switchToLogin">Login di sini</a></div>
-  </div>
+    <div class="logo">PutzxStore</div>
+    <div class="subtitle">Login atau daftar untuk berbelanja</div>
+    <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="signup">Daftar</button>
+    </div>
+    <div id="loginForm" class="auth-form active">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" placeholder="Masukkan username" />
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Masukkan password" />
+        <button class="btn-auth" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <div id="loginError" class="auth-error">Username atau password salah.</div>
+        <div class="auth-switch">Belum punya akun? <a id="switchToSignup">Daftar sekarang</a></div>
+    </div>
+    <div id="signupForm" class="auth-form">
+        <label for="signupName">Nama Lengkap</label>
+        <input type="text" id="signupName" placeholder="Nama Anda" />
+        <label for="signupUsername">Username</label>
+        <input type="text" id="signupUsername" placeholder="Pilih username" />
+        <label for="signupPhone">Nomor HP</label>
+        <input type="tel" id="signupPhone" placeholder="0812-3456-7890" />
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" placeholder="Minimal 6 karakter" />
+        <label for="signupConfirm">Konfirmasi Password</label>
+        <input type="password" id="signupConfirm" placeholder="Ulangi password" />
+        <button class="btn-auth" id="signupBtn"><i class="fas fa-user-plus"></i> Daftar</button>
+        <div id="signupError" class="auth-error"></div>
+        <div class="auth-switch">Sudah punya akun? <a id="switchToLogin">Login di sini</a></div>
+    </div>
 </div>
 
 <!-- APP MAIN -->
 <div id="appMain" class="app-container app-main">
-  <div class="saldo-card">
-    <div class="saldo-left"><span class="saldo-label">SALDO KAMU</span><span class="saldo-nominal" id="saldoDisplay">Rp 0</span></div>
-    <button class="btn-deposit" id="depositBtn"><i class="fas fa-plus-circle"></i> Deposit</button>
-  </div>
-  <div class="login-info" id="userInfo">
-    <div class="login-detail">
-      <span class="label">LOGIN SEBAGAI</span>
-      <span class="value" id="displayName">-</span>
-      <span style="font-size:12px; color:#6b7280;" id="displayPhone">-</span>
+    <div class="saldo-card">
+        <div class="saldo-left">
+            <span class="saldo-label">SALDO KAMU</span>
+            <span class="saldo-nominal" id="saldoDisplay">Rp 0</span>
+        </div>
+        <button class="btn-deposit" id="depositBtn"><i class="fas fa-plus-circle"></i> Deposit</button>
     </div>
-    <div class="role-badge" id="roleBadge">
-      <i class="fas fa-crown"></i> <span id="roleText">OWN</span>
-      <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+
+    <div class="login-info" id="userInfo">
+        <div class="login-detail">
+            <span class="label">LOGIN SEBAGAI</span>
+            <span class="value" id="displayName">-</span>
+            <span style="font-size:12px; color:var(--text-muted);" id="displayPhone">-</span>
+        </div>
+        <div class="role-badge" id="roleBadge">
+            <i class="fas fa-crown"></i> <span id="roleText">OWN</span>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
     </div>
-  </div>
-  <div class="stats-grid">
-    <div class="stat-item"><div class="stat-number" id="totalUserStat">0</div><div class="stat-label">TOTAL USER</div></div>
-    <div class="stat-item"><div class="stat-number" id="totalProductStat">0</div><div class="stat-label">TOTAL PRODUK</div></div>
-    <div class="stat-item"><div class="stat-number" id="pendingDepositStat">0</div><div class="stat-label">DEPOSIT PENDING</div></div>
-  </div>
-  <div class="status-loading"><i class="fas fa-circle-notch spinner"></i><span>Memuat...</span></div>
-  <div class="action-buttons">
-    <button class="action-btn" id="channelBtn"><i class="fab fa-whatsapp"></i> Saluran WhatsApp</button>
-    <button class="action-btn admin" id="chatAdminBtn"><i class="fas fa-headset"></i> Chat Admin</button>
-  </div>
-  <div class="trust-badge">
-    <span><i class="fas fa-shield-alt"></i> Transaksi Aman</span>
-    <span><i class="fas fa-handshake"></i> Amanah</span>
-    <span><i class="fas fa-check-circle"></i> Terpercaya</span>
-  </div>
-  <div class="search-box">
-    <i class="fas fa-search"></i>
-    <input type="text" id="searchInput" placeholder="Cari produk..." />
-  </div>
-  <div id="mainContent" class="main-content"></div>
-  <div class="bottom-nav" id="bottomNav">
-    <button class="nav-item active" data-page="produk"><i class="fas fa-store"></i> Produk</button>
-    <button class="nav-item" data-page="riwayat"><i class="fas fa-history"></i> Riwayat</button>
-    <button class="nav-item" data-page="info"><i class="fas fa-info-circle"></i> Info</button>
-    <button class="nav-item hidden" data-page="panel" id="panelNav"><i class="fas fa-user-cog"></i> Panel</button>
-  </div>
+
+    <div class="stats-grid">
+        <div class="stat-item"><div class="stat-number" id="totalUserStat">0</div><div class="stat-label">TOTAL USER</div></div>
+        <div class="stat-item"><div class="stat-number" id="totalProductStat">0</div><div class="stat-label">TOTAL PRODUK</div></div>
+        <div class="stat-item"><div class="stat-number" id="pendingDepositStat">0</div><div class="stat-label">DEPOSIT PENDING</div></div>
+    </div>
+
+    <div class="status-loading"><i class="fas fa-circle-notch spinner"></i><span>Memuat...</span></div>
+
+    <div class="action-buttons">
+        <button class="action-btn" id="channelBtn"><i class="fab fa-whatsapp"></i> Saluran WhatsApp</button>
+        <button class="action-btn admin" id="chatAdminBtn"><i class="fas fa-headset"></i> Chat Admin</button>
+    </div>
+
+    <div class="trust-badge">
+        <span><i class="fas fa-shield-alt"></i> Transaksi Aman</span>
+        <span><i class="fas fa-handshake"></i> Amanah</span>
+        <span><i class="fas fa-check-circle"></i> Terpercaya</span>
+    </div>
+
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari produk..." />
+    </div>
+
+    <div id="mainContent" class="main-content"></div>
+
+    <div class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" data-page="produk"><i class="fas fa-store"></i> Produk</button>
+        <button class="nav-item" data-page="riwayat"><i class="fas fa-history"></i> Riwayat</button>
+        <button class="nav-item" data-page="info"><i class="fas fa-info-circle"></i> Info</button>
+        <button class="nav-item hidden" data-page="panel" id="panelNav"><i class="fas fa-user-cog"></i> Panel</button>
+    </div>
 </div>
 
 <!-- MODAL DEPOSIT -->
 <div class="modal-overlay" id="depositModal">
-  <div class="modal-box">
-    <div id="depositStep1">
-      <h3>Isi Saldo</h3>
-      <p>Masukkan nominal deposit (Rp)</p>
-      <input type="number" id="depositAmount" placeholder="Contoh: 100000" min="1" />
-      <div class="modal-actions">
-        <button class="btn-cancel" id="depositCancel">Batal</button>
-        <button class="btn-confirm" id="depositConfirm">Lanjut</button>
-      </div>
-      <div id="depositError" style="color:#ef4444; font-size:13px; margin-top:8px; display:none;">Masukkan nominal yang valid.</div>
+    <div class="modal-box">
+        <div id="depositStep1">
+            <h3>Isi Saldo</h3>
+            <p>Masukkan nominal deposit (Rp)</p>
+            <input type="number" id="depositAmount" placeholder="Contoh: 100000" min="1" />
+            <div class="modal-actions">
+                <button class="btn-cancel" id="depositCancel">Batal</button>
+                <button class="btn-confirm" id="depositConfirm">Lanjut</button>
+            </div>
+            <div id="depositError" style="color:var(--danger); font-size:13px; margin-top:8px; display:none;">Masukkan nominal yang valid.</div>
+        </div>
+        <div id="depositStep2" class="hidden">
+            <h3>Scan QR untuk Pembayaran</h3>
+            <p style="margin-bottom:4px;">Nominal deposit:</p>
+            <div class="qr-amount" id="qrNominal">Rp 0</div>
+            <div class="qr-container" id="qrContainer"></div>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:8px;">Scan QR di atas, lalu transfer sesuai nominal.</p>
+            <button class="btn-request" id="requestDepositBtn">Saya Sudah Bayar</button>
+            <button class="btn-cancel" id="depositBack" style="margin-top:8px; width:100%; padding:12px; border:none; border-radius:30px; background:var(--bg-input); color:var(--text-secondary); font-weight:600; cursor:pointer;">Kembali</button>
+        </div>
+        <div id="depositStep3" class="hidden">
+            <h3>Permintaan Terkirim</h3>
+            <p style="margin-bottom:8px;">Permintaan deposit Anda sudah dikirim ke admin. Tunggu konfirmasi.</p>
+            <div style="background:var(--bg-input); border-radius:12px; padding:12px; margin-bottom:12px; border:1px solid var(--border);">
+                <div><strong>Nominal:</strong> <span id="reqNominal">Rp 0</span></div>
+                <div><strong>Status:</strong> <span id="reqStatus" class="status-badge pending" style="display:inline-block;">Menunggu Konfirmasi</span></div>
+            </div>
+            <button class="btn-cancel" id="depositClose" style="width:100%; padding:12px; border:none; border-radius:30px; background:var(--bg-input); color:var(--text-secondary); font-weight:600; cursor:pointer;">Tutup</button>
+        </div>
     </div>
-    <div id="depositStep2" class="hidden">
-      <h3>Scan QR untuk Pembayaran</h3>
-      <p style="margin-bottom:4px;">Nominal deposit:</p>
-      <div class="qr-amount" id="qrNominal">Rp 0</div>
-      <div class="qr-container" id="qrContainer"></div>
-      <p style="font-size:13px; color:#6b7280; margin-top:8px;">Scan QR di atas, lalu transfer sesuai nominal.</p>
-      <button class="btn-request" id="requestDepositBtn">Saya Sudah Bayar</button>
-      <button class="btn-cancel" id="depositBack" style="margin-top:8px; width:100%; padding:12px; border:none; border-radius:30px; background:#e5e7eb; color:#4b5563; font-weight:600; cursor:pointer;">Kembali</button>
-    </div>
-    <div id="depositStep3" class="hidden">
-      <h3>Permintaan Terkirim</h3>
-      <p style="margin-bottom:8px;">Permintaan deposit Anda sudah dikirim ke admin. Tunggu konfirmasi.</p>
-      <div style="background:#f0f2f5; border-radius:12px; padding:12px; margin-bottom:12px;">
-        <div><strong>Nominal:</strong> <span id="reqNominal">Rp 0</span></div>
-        <div><strong>Status:</strong> <span id="reqStatus" class="status-badge pending" style="display:inline-block;">Menunggu Konfirmasi</span></div>
-      </div>
-      <button class="btn-cancel" id="depositClose" style="width:100%; padding:12px; border:none; border-radius:30px; background:#e5e7eb; color:#4b5563; font-weight:600; cursor:pointer;">Tutup</button>
-    </div>
-  </div>
 </div>
 
 <script>
 (function() {
-  // ============================================================
-  // KONFIGURASI
-  // ============================================================
-  const WA_LINK = 'https://whatsapp.com/channel/0029VbCcuGlLdQegM83dGq3B';
-  const WA_NUMBER = '08139196934';
-  const OWNER_USER = 'putzx';
-  const OWNER_PASS = 'putzx123';
+    // ============================================================
+    // KONFIGURASI
+    // ============================================================
+    const WA_LINK = 'https://whatsapp.com/channel/0029VbCcuGlLdQegM83dGq3B';
+    const WA_NUMBER = '08139196934';
+    const OWNER_USER = 'putzx';
+    const OWNER_PASS = 'putzx123';
 
-  // ============================================================
-  // STORAGE HELPERS
-  // ============================================================
-  const get = key => { try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; } };
-  const set = (key, val) => localStorage.setItem(key, JSON.stringify(val));
-
-  function getUsers() { return get('users') || []; }
-  function saveUsers(u) { set('users', u); }
-  function getCurrentUser() { return get('currentUser'); }
-  function setCurrentUser(u) { set('currentUser', u); }
-  function clearCurrentUser() { localStorage.removeItem('currentUser'); }
-
-  function getUserSaldo(username) {
-    const map = get('userSaldo') || {};
-    return map[username] || 0;
-  }
-  function setUserSaldo(username, amount) {
-    const map = get('userSaldo') || {};
-    map[username] = amount;
-    set('userSaldo', map);
-  }
-  function addUserSaldo(username, amount) {
-    setUserSaldo(username, getUserSaldo(username) + amount);
-  }
-
-  function getProducts() { return get('products') || []; }
-  function saveProducts(p) { set('products', p); }
-
-  function getDepositRequests() { return get('depositRequests') || []; }
-  function saveDepositRequests(r) { set('depositRequests', r); }
-
-  function getAdminConfig() {
-    const def = { waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' };
-    const data = get('adminConfig');
-    return data ? { ...def, ...data } : def;
-  }
-  function setAdminConfig(c) { set('adminConfig', c); }
-
-  // ============================================================
-  // INISIALISASI
-  // ============================================================
-  function init() {
-    // Buat akun OWN jika belum ada
-    let users = getUsers();
-    if (!users.some(u => u.role === 'owner')) {
-      users.push({ name: 'Putzx', username: OWNER_USER, phone: WA_NUMBER, password: OWNER_PASS, role: 'owner' });
-      saveUsers(users);
-      setUserSaldo(OWNER_USER, 0);
+    // ============================================================
+    // STORAGE
+    // ============================================================
+    function get(key) {
+        try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
     }
-    // Pastikan semua user punya saldo
-    users.forEach(u => { if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0); });
-
-    // Produk default jika kosong
-    if (getProducts().length === 0) {
-      saveProducts([
-        { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
-        { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '' },
-        { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '' },
-        { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '' },
-        { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
-        { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' }
-      ]);
+    function set(key, val) {
+        localStorage.setItem(key, JSON.stringify(val));
     }
-  }
-  init();
 
-  // ============================================================
-  // AUTH
-  // ============================================================
-  function login(username, password) {
-    const found = getUsers().find(u => u.username === username && u.password === password);
-    if (found) { setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role }); return true; }
-    return false;
-  }
+    function getUsers() { return get('users') || []; }
+    function saveUsers(u) { set('users', u); }
+    function getCurrentUser() { return get('currentUser'); }
+    function setCurrentUser(u) { set('currentUser', u); }
+    function clearCurrentUser() { localStorage.removeItem('currentUser'); }
 
-  function signup(name, username, phone, password) {
-    const users = getUsers();
-    if (users.find(u => u.username === username)) return { success: false, message: 'Username sudah digunakan.' };
-    if (password.length < 6) return { success: false, message: 'Password minimal 6 karakter.' };
-    users.push({ name, username, phone, password, role: 'member' });
-    saveUsers(users);
-    setUserSaldo(username, 0);
-    setCurrentUser({ name, username, phone, role: 'member' });
-    return { success: true };
-  }
-
-  // ============================================================
-  // DEPOSIT
-  // ============================================================
-  function createDepositRequest(username, amount) {
-    const reqs = getDepositRequests();
-    const newReq = { id: Date.now(), username, amount, status: 'pending', createdAt: new Date().toISOString() };
-    reqs.push(newReq);
-    saveDepositRequests(reqs);
-    return newReq;
-  }
-  function updateDepositRequest(id, status) {
-    const reqs = getDepositRequests();
-    const idx = reqs.findIndex(r => r.id === id);
-    if (idx !== -1) { reqs[idx].status = status; saveDepositRequests(reqs); return true; }
-    return false;
-  }
-  function getPendingDeposits() { return getDepositRequests().filter(r => r.status === 'pending'); }
-  function getUserDeposits(username) { return getDepositRequests().filter(r => r.username === username).sort((a,b) => b.id - a.id); }
-
-  // ============================================================
-  // DOM ELEMENTS
-  // ============================================================
-  const $ = id => document.getElementById(id);
-  const authPage = $('authPage'), appMain = $('appMain'), mainContent = $('mainContent');
-  const navItems = document.querySelectorAll('.nav-item'), panelNav = $('panelNav');
-  const loginForm = $('loginForm'), signupForm = $('signupForm');
-  const authTabs = document.querySelectorAll('.auth-tab');
-  const loginUsername = $('loginUsername'), loginPassword = $('loginPassword'), loginBtn = $('loginBtn'), loginError = $('loginError');
-  const signupName = $('signupName'), signupUsername = $('signupUsername'), signupPhone = $('signupPhone');
-  const signupPassword = $('signupPassword'), signupConfirm = $('signupConfirm'), signupBtn = $('signupBtn'), signupError = $('signupError');
-  const switchToSignup = $('switchToSignup'), switchToLogin = $('switchToLogin');
-  const displayName = $('displayName'), displayPhone = $('displayPhone'), roleText = $('roleText'), logoutBtn = $('logoutBtn');
-  const totalUserStat = $('totalUserStat'), totalProductStat = $('totalProductStat'), pendingDepositStat = $('pendingDepositStat');
-  const searchInput = $('searchInput'), depositBtn = $('depositBtn');
-  const depositModal = $('depositModal'), depositAmount = $('depositAmount'), depositConfirmBtn = $('depositConfirm'), depositCancelBtn = $('depositCancel');
-  const depositError = $('depositError'), depositStep1 = $('depositStep1'), depositStep2 = $('depositStep2'), depositStep3 = $('depositStep3');
-  const qrNominal = $('qrNominal'), qrContainer = $('qrContainer'), requestDepositBtn = $('requestDepositBtn');
-  const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNominal = $('reqNominal'), reqStatus = $('reqStatus');
-
-  let currentPage = 'produk', pendingAmount = 0;
-
-  // ============================================================
-  // UI FUNCTIONS
-  // ============================================================
-  function updateSaldoDisplay() {
-    const user = getCurrentUser();
-    if (user) $('saldoDisplay').textContent = 'Rp ' + getUserSaldo(user.username).toLocaleString('id-ID');
-  }
-
-  function updateStats() {
-    const users = getUsers(), products = getProducts(), pending = getPendingDeposits();
-    totalUserStat.textContent = users.length;
-    totalProductStat.textContent = products.length;
-    pendingDepositStat.textContent = pending.length;
-  }
-
-  function showToast(msg, type = 'info') {
-    const old = document.querySelector('.toast');
-    if (old) old.remove();
-    const div = document.createElement('div');
-    div.className = 'toast ' + type;
-    div.textContent = msg;
-    document.body.appendChild(div);
-    setTimeout(() => div.remove(), 4000);
-  }
-
-  function showAlert(id, msg, type) {
-    const el = $(id);
-    if (!el) return;
-    el.textContent = msg;
-    el.className = 'alert ' + type;
-    setTimeout(() => el.className = 'alert', 4000);
-  }
-
-  function showApp(user) {
-    authPage.style.display = 'none';
-    appMain.style.display = 'block';
-    displayName.textContent = user.name;
-    displayPhone.textContent = user.phone;
-    roleText.textContent = user.role === 'owner' ? 'OWNER' : user.role.toUpperCase();
-    const badge = document.getElementById('roleBadge');
-    badge.style.background = user.role === 'owner' ? '#00a86b' : '#6b7280';
-    panelNav.classList.toggle('hidden', user.role !== 'owner');
-    updateStats();
-    updateSaldoDisplay();
-    navigateTo('produk');
-    if (window._depositPoll) clearInterval(window._depositPoll);
-    window._depositPoll = setInterval(() => {
-      const u = getCurrentUser();
-      if (!u) return;
-      const deposits = getUserDeposits(u.username);
-      if (deposits.length === 0) return;
-      const latest = deposits[0];
-      if (latest.status === 'approved' && window._lastNotified !== latest.id) {
-        window._lastNotified = latest.id;
-        updateSaldoDisplay();
-        showToast('Deposit Rp ' + latest.amount.toLocaleString('id-ID') + ' disetujui!', 'success');
-        if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
-        if (currentPage === 'riwayat') navigateTo('riwayat');
-      } else if (latest.status === 'rejected' && window._lastNotified !== latest.id) {
-        window._lastNotified = latest.id;
-        showToast('Deposit ditolak admin.', 'error');
-        if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
-      }
-      updateStats();
-    }, 3000);
-  }
-
-  function showAuth() {
-    authPage.style.display = 'flex';
-    appMain.style.display = 'none';
-    clearCurrentUser();
-    if (window._depositPoll) clearInterval(window._depositPoll);
-    loginError.style.display = 'none';
-    signupError.style.display = 'none';
-    loginUsername.value = loginPassword.value = '';
-    signupName.value = signupUsername.value = signupPhone.value = signupPassword.value = signupConfirm.value = '';
-  }
-
-  function updateRequestStatusDisplay(req) {
-    reqStatus.textContent = req.status === 'pending' ? 'Menunggu Konfirmasi' : req.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-    reqStatus.className = 'status-badge ' + req.status;
-  }
-
-  // ============================================================
-  // RENDER FUNCTIONS
-  // ============================================================
-  function renderProductGrid(productList) {
-    const user = getCurrentUser();
-    if (!productList || productList.length === 0) return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk kosong</h3></div>`;
-    let html = '<div class="product-grid">';
-    productList.forEach(p => {
-      const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
-      const inStock = p.stock > 0;
-      const btnHtml = user && user.role !== 'owner' ?
-        `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>` : '';
-      html += `
-        <div class="product-card">
-          <div class="product-image">${img}</div>
-          <div class="product-name">${p.name}</div>
-          <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
-          <div class="product-stock">Stok: ${p.stock}</div>
-          ${btnHtml}
-        </div>
-      `;
-    });
-    html += '</div>';
-    return html;
-  }
-
-  function renderUserList() {
-    const users = getUsers(), current = getCurrentUser();
-    if (users.length === 0) return `<div class="empty-state"><i class="fas fa-users"></i><h3>Belum ada pengguna</h3></div>`;
-    let html = '<div class="user-list">';
-    users.forEach(u => {
-      const isSelf = current && u.username === current.username;
-      const saldo = getUserSaldo(u.username);
-      html += `
-        <div class="user-item" data-username="${u.username}">
-          <div class="user-info">
-            <div class="uname">${u.name} (${u.username})</div>
-            <div class="detail"><i class="fas fa-phone"></i> ${u.phone} &nbsp;|&nbsp; <i class="fas fa-lock"></i> ${u.password}</div>
-            <div class="detail" style="font-size:13px; color:#00a86b;"><i class="fas fa-coins"></i> Saldo: Rp <span class="saldo-text">${saldo.toLocaleString('id-ID')}</span></div>
-            <div class="detail" style="font-size:11px; color:#6b7280;">Role: ${u.role.toUpperCase()}</div>
-          </div>
-          <div class="user-actions">
-            <input type="number" class="saldo-input" placeholder="Rp" min="0" step="1000" />
-            <button class="btn-saldo btn-sm" data-username="${u.username}"><i class="fas fa-edit"></i> Ubah</button>
-            <button class="btn-del-user btn-sm" data-username="${u.username}" ${isSelf ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isSelf ? 'Diri' : 'Hapus'}</button>
-          </div>
-        </div>
-      `;
-    });
-    html += '</div>';
-    return html;
-  }
-
-  function renderPendingRequests() {
-    const reqs = getPendingDeposits();
-    if (reqs.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
-    let html = '<div class="user-list">';
-    reqs.forEach(r => {
-      const user = getUsers().find(u => u.username === r.username);
-      const name = user ? user.name : r.username;
-      html += `
-        <div class="request-item">
-          <div class="req-info">
-            <div class="uname">${name} (${r.username})</div>
-            <div class="detail">Nominal: Rp ${r.amount.toLocaleString('id-ID')}</div>
-            <div class="detail" style="font-size:12px; color:#6b7280;">Diajukan: ${new Date(r.createdAt).toLocaleString()}</div>
-          </div>
-          <div class="req-actions">
-            <button class="btn-approve" data-id="${r.id}"><i class="fas fa-check"></i> Setuju</button>
-            <button class="btn-reject" data-id="${r.id}"><i class="fas fa-times"></i> Tolak</button>
-          </div>
-        </div>
-      `;
-    });
-    html += '</div>';
-    return html;
-  }
-
-  function renderRiwayat() {
-    const user = getCurrentUser();
-    if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
-    const deposits = getUserDeposits(user.username);
-    if (deposits.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
-    let html = `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div><div class="user-list">`;
-    deposits.forEach(r => {
-      const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-      html += `
-        <div class="user-item">
-          <div class="user-info">
-            <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
-            <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
-            <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
-          </div>
-        </div>
-      `;
-    });
-    html += '</div></div>';
-    return html;
-  }
-
-  function renderInfo() {
-    const config = getAdminConfig();
-    const qr = config.paymentQr ? `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid #e5e7eb; padding:12px; background:white;" />` : '<p style="color:#6b7280;">QR belum diatur.</p>';
-    return `
-      <div class="page-content">
-        <div class="section-title"><span>Informasi Toko</span></div>
-        <div style="background:#f8fafc; border-radius:12px; padding:16px; border:1px solid #e9edf2;">
-          <p><i class="fas fa-store" style="color:#00a86b; width:24px;"></i> <strong>${config.storeInfo}</strong></p>
-          <p><i class="fas fa-phone" style="color:#00a86b; width:24px;"></i> Admin WA: <strong>${config.waNumber}</strong></p>
-          <p><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran: <a href="${config.slLink}" target="_blank">PUTZX MARKET</a></p>
-          <hr style="margin:12px 0; border:0; border-top:1px solid #e5e7eb;">
-          <div style="text-align:center;"><p style="font-weight:600;">QR Pembayaran</p>${qr}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderPanel() {
-    const user = getCurrentUser();
-    if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
-    const products = getProducts(), config = getAdminConfig();
-    let productListHtml = products.map(p => `
-      <div class="product-item" data-id="${p.id}">
-        <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:#9ca3af;"></i>'}</div>
-        <div class="info"><div class="name">${p.name}</div><div class="price">Rp ${p.price.toLocaleString('id-ID')}</div><div class="stock">Stok: ${p.stock}</div></div>
-        <div class="actions">
-          <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti</label>
-          <input type="file" id="img-${p.id}" accept="image/*" />
-          <button class="btn-del btn-sm" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
-        </div>
-      </div>
-    `).join('');
-
-    return `
-      <div class="page-content">
-        <div class="section-title"><span><i class="fas fa-user-cog"></i> Panel OWN</span></div>
-        <div class="own-panel">
-          <div class="panel-tabs">
-            <button class="panel-tab active" data-panel-tab="produk">Produk</button>
-            <button class="panel-tab" data-panel-tab="akun">Akun</button>
-            <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
-            <button class="panel-tab" data-panel-tab="info">Info</button>
-          </div>
-          <div id="panelTabProduk" class="panel-tab-content active">
-            <h3>Daftar Produk</h3>${productListHtml}
-            <hr><h3>Tambah Produk</h3>
-            <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama" /></div>
-            <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
-            <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
-            <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
-            <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah</button>
-            <div id="panelAlert" class="alert"></div>
-            <div class="qr-upload">
-              <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
-              <div class="form-group"><label>Upload QR</label><input type="file" id="qrUpload" accept="image/*" /></div>
-              ${config.paymentQr ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:#6b7280;">Belum ada QR.</p>'}
-              <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
-              <div id="qrAlert" class="alert"></div>
-            </div>
-          </div>
-          <div id="panelTabAkun" class="panel-tab-content">
-            <h3>Daftar Akun</h3><p style="font-size:13px; color:#6b7280;">Username, Password, No HP, Saldo.</p>
-            ${renderUserList()}
-            <div id="userAlert" class="alert"></div>
-          </div>
-          <div id="panelTabDeposit" class="panel-tab-content">
-            <h3>Permintaan Deposit</h3>
-            ${renderPendingRequests()}
-            <div id="depositAlert" class="alert"></div>
-          </div>
-          <div id="panelTabInfo" class="panel-tab-content">
-            <h3>Edit Info Toko</h3>
-            <div class="form-group"><label>Nama/Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
-            <div class="form-group"><label>Nomor WA Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
-            <div class="form-group"><label>Link Saluran</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
-            <button class="btn-save" id="saveInfoBtn"><i class="fas fa-save"></i> Simpan Info</button>
-            <div id="infoAlert" class="alert"></div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  // ============================================================
-  // NAVIGASI
-  // ============================================================
-  function navigateTo(page) {
-    currentPage = page;
-    navItems.forEach(item => {
-      item.classList.toggle('active', item.dataset.page === page);
-    });
-    const user = getCurrentUser();
-    let content = '';
-    switch (page) {
-      case 'produk': content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(getProducts())}</div>`; break;
-      case 'riwayat': content = renderRiwayat(); break;
-      case 'info': content = renderInfo(); break;
-      case 'panel': content = renderPanel(); break;
-      default: content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
+    function getUserSaldo(username) {
+        const map = get('userSaldo') || {};
+        return map[username] || 0;
     }
-    mainContent.innerHTML = content;
-    searchInput.value = '';
-    attachEvents();
-  }
-
-  // ============================================================
-  // EVENT DELEGATION & ATTACH
-  // ============================================================
-  function attachEvents() {
-    // === PEMBELIAN (delegasi) ===
-    mainContent.removeEventListener('click', handlePurchase);
-    mainContent.addEventListener('click', handlePurchase);
-
-    // === PANEL TABS ===
-    document.querySelectorAll('.panel-tab').forEach(tab => {
-      tab.removeEventListener('click', handlePanelTab);
-      tab.addEventListener('click', handlePanelTab);
-    });
-
-    // === HAPUS PRODUK ===
-    document.querySelectorAll('.product-item .btn-del').forEach(btn => {
-      btn.removeEventListener('click', handleDeleteProduct);
-      btn.addEventListener('click', handleDeleteProduct);
-    });
-
-    // === UPLOAD GAMBAR PRODUK ===
-    document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
-      input.removeEventListener('change', handleProductImage);
-      input.addEventListener('change', handleProductImage);
-    });
-
-    // === TAMBAH PRODUK ===
-    const addBtn = document.getElementById('addProductBtn');
-    if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
-
-    // === SIMPAN QR ===
-    const saveQr = document.getElementById('saveQrBtn');
-    if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
-
-    // === SIMPAN INFO ===
-    const saveInfo = document.getElementById('saveInfoBtn');
-    if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
-
-    // === UBAH SALDO USER ===
-    document.querySelectorAll('.btn-saldo').forEach(btn => {
-      btn.removeEventListener('click', handleUserSaldo);
-      btn.addEventListener('click', handleUserSaldo);
-    });
-
-    // === HAPUS USER ===
-    document.querySelectorAll('.btn-del-user').forEach(btn => {
-      btn.removeEventListener('click', handleDeleteUser);
-      btn.addEventListener('click', handleDeleteUser);
-    });
-
-    // === APPROVE/REJECT DEPOSIT ===
-    document.querySelectorAll('.btn-approve').forEach(btn => {
-      btn.removeEventListener('click', handleApprove);
-      btn.addEventListener('click', handleApprove);
-    });
-    document.querySelectorAll('.btn-reject').forEach(btn => {
-      btn.removeEventListener('click', handleReject);
-      btn.addEventListener('click', handleReject);
-    });
-  }
-
-  // ============================================================
-  // HANDLER FUNCTIONS
-  // ============================================================
-  function handlePurchase(e) {
-    const btn = e.target.closest('.btn-beli');
-    if (!btn) return;
-    const productId = parseInt(btn.dataset.id);
-    const user = getCurrentUser();
-    if (!user) { alert('Silakan login.'); return; }
-    if (user.role === 'owner') { alert('OWN tidak bisa membeli.'); return; }
-    const products = getProducts();
-    const product = products.find(p => p.id === productId);
-    if (!product) { alert('Produk tidak ditemukan.'); return; }
-    if (product.stock <= 0) { alert('Stok habis.'); return; }
-    const saldo = getUserSaldo(user.username);
-    if (saldo < product.price) {
-      alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
-      return;
+    function setUserSaldo(username, amount) {
+        const map = get('userSaldo') || {};
+        map[username] = amount;
+        set('userSaldo', map);
     }
-    if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
-      addUserSaldo(user.username, -product.price);
-      const idx = products.findIndex(p => p.id === productId);
-      products[idx].stock -= 1;
-      saveProducts(products);
-      updateSaldoDisplay();
-      showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
-      navigateTo(currentPage);
-      updateStats();
+    function addUserSaldo(username, amount) {
+        setUserSaldo(username, getUserSaldo(username) + amount);
     }
-  }
 
-  function handlePanelTab(e) {
-    document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-    const target = this.dataset.panelTab;
-    document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
-    const map = { produk: 'panelTabProduk', akun: 'panelTabAkun', deposit: 'panelTabDeposit', info: 'panelTabInfo' };
-    const el = document.getElementById(map[target]);
-    if (el) {
-      el.classList.add('active');
-      if (target === 'akun') { const c = document.getElementById('panelTabAkun'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderUserList(); attachEvents(); } }
-      if (target === 'deposit') { const c = document.getElementById('panelTabDeposit'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderPendingRequests(); attachEvents(); } }
+    function getProducts() { return get('products') || []; }
+    function saveProducts(p) { set('products', p); }
+
+    function getDepositRequests() { return get('depositRequests') || []; }
+    function saveDepositRequests(r) { set('depositRequests', r); }
+
+    function getAdminConfig() {
+        const def = { waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' };
+        const data = get('adminConfig');
+        return data ? { ...def, ...data } : def;
     }
-  }
+    function setAdminConfig(c) { set('adminConfig', c); }
 
-  function handleDeleteProduct(e) {
-    if (!confirm('Hapus produk ini?')) return;
-    const id = parseInt(this.dataset.id);
-    let products = getProducts();
-    products = products.filter(p => p.id !== id);
-    saveProducts(products);
-    showToast('Produk dihapus!', 'success');
-    navigateTo('panel');
-    updateStats();
-  }
-
-  function handleProductImage(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const base64 = ev.target.result;
-      const productId = parseInt(this.closest('.product-item').dataset.id);
-      let products = getProducts();
-      const idx = products.findIndex(p => p.id === productId);
-      if (idx !== -1) { products[idx].image = base64; saveProducts(products); showToast('Gambar diperbarui!', 'success'); navigateTo('panel'); }
-    }.bind(this);
-    reader.readAsDataURL(file);
-  }
-
-  function handleAddProduct() {
-    const name = document.getElementById('newProductName').value.trim();
-    const price = parseInt(document.getElementById('newProductPrice').value);
-    const stock = parseInt(document.getElementById('newProductStock').value);
-    const fileInput = document.getElementById('newProductImage');
-    if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      let products = getProducts();
-      const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-      products.push({ id: newId, name, price, stock, image: e.target.result || '' });
-      saveProducts(products);
-      showAlert('panelAlert', 'Produk ditambahkan!', 'success');
-      navigateTo('panel');
-      updateStats();
-    };
-    if (fileInput.files && fileInput.files[0]) {
-      reader.readAsDataURL(fileInput.files[0]);
-    } else {
-      let products = getProducts();
-      const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-      products.push({ id: newId, name, price, stock, image: '' });
-      saveProducts(products);
-      showAlert('panelAlert', 'Produk ditambahkan!', 'success');
-      navigateTo('panel');
-      updateStats();
+    // ============================================================
+    // INISIALISASI
+    // ============================================================
+    function init() {
+        let users = getUsers();
+        if (!users.some(u => u.role === 'owner')) {
+            users.push({ name: 'Putzx', username: OWNER_USER, phone: WA_NUMBER, password: OWNER_PASS, role: 'owner' });
+            saveUsers(users);
+            setUserSaldo(OWNER_USER, 0);
+        }
+        users.forEach(u => { if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0); });
+        if (getProducts().length === 0) {
+            saveProducts([
+                { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
+                { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '' },
+                { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '' },
+                { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '' },
+                { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
+                { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' }
+            ]);
+        }
     }
-  }
+    init();
 
-  function handleSaveQr() {
-    const fileInput = document.getElementById('qrUpload');
-    if (!fileInput.files || !fileInput.files[0]) { showAlert('qrAlert', 'Pilih file QR.', 'error'); return; }
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const config = getAdminConfig();
-      config.paymentQr = e.target.result;
-      setAdminConfig(config);
-      showAlert('qrAlert', 'QR disimpan!', 'success');
-      navigateTo('panel');
-    };
-    reader.readAsDataURL(fileInput.files[0]);
-  }
-
-  function handleSaveInfo() {
-    const info = document.getElementById('editStoreInfo').value.trim();
-    const wa = document.getElementById('editWaNumber').value.trim();
-    const sl = document.getElementById('editSlLink').value.trim();
-    const config = getAdminConfig();
-    config.storeInfo = info || 'PutzxStore - Toko Online';
-    config.waNumber = wa || WA_NUMBER;
-    config.slLink = sl || WA_LINK;
-    setAdminConfig(config);
-    showAlert('infoAlert', 'Info disimpan!', 'success');
-    navigateTo('panel');
-  }
-
-  function handleUserSaldo(e) {
-    const btn = this;
-    const username = btn.dataset.username;
-    const item = btn.closest('.user-item');
-    const input = item.querySelector('.saldo-input');
-    const amount = parseInt(input.value);
-    if (isNaN(amount) || amount < 0) { alert('Nominal valid (min 0).'); return; }
-    if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
-    setUserSaldo(username, amount);
-    const saldoText = item.querySelector('.saldo-text');
-    if (saldoText) saldoText.textContent = amount.toLocaleString('id-ID');
-    input.value = '';
-    showToast('Saldo ' + username + ' diubah!', 'success');
-    updateStats();
-    if (getCurrentUser() && getCurrentUser().username === username) updateSaldoDisplay();
-  }
-
-  function handleDeleteUser(e) {
-    if (this.disabled) return;
-    const username = this.dataset.username;
-    if (!confirm('Hapus akun "' + username + '"?')) return;
-    let users = getUsers();
-    users = users.filter(u => u.username !== username);
-    saveUsers(users);
-    const map = get('userSaldo') || {};
-    delete map[username];
-    set('userSaldo', map);
-    showToast('Akun dihapus!', 'success');
-    navigateTo('panel');
-    updateStats();
-  }
-
-  function handleApprove(e) {
-    const id = parseInt(this.dataset.id);
-    if (!confirm('Setujui deposit ini?')) return;
-    const reqs = getDepositRequests();
-    const req = reqs.find(r => r.id === id);
-    if (req) {
-      addUserSaldo(req.username, req.amount);
-      updateDepositRequest(id, 'approved');
-      showToast('Deposit disetujui! Saldo ' + req.username + ' bertambah.', 'success');
-      if (getCurrentUser() && getCurrentUser().username === req.username) updateSaldoDisplay();
-      navigateTo('panel');
-      updateStats();
+    // ============================================================
+    // AUTH
+    // ============================================================
+    function login(username, password) {
+        const found = getUsers().find(u => u.username === username && u.password === password);
+        if (found) { setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role }); return true; }
+        return false;
     }
-  }
 
-  function handleReject(e) {
-    const id = parseInt(this.dataset.id);
-    if (!confirm('Tolak deposit ini?')) return;
-    updateDepositRequest(id, 'rejected');
-    showToast('Deposit ditolak.', 'error');
-    navigateTo('panel');
-    updateStats();
-  }
-
-  // ============================================================
-  // DEPOSIT MODAL
-  // ============================================================
-  depositBtn.addEventListener('click', function() {
-    const config = getAdminConfig();
-    if (!config.paymentQr) { alert('QR belum diatur oleh OWN.'); return; }
-    depositModal.classList.add('active');
-    depositStep1.classList.remove('hidden');
-    depositStep2.classList.add('hidden');
-    depositStep3.classList.add('hidden');
-    depositAmount.value = '';
-    depositError.style.display = 'none';
-    depositAmount.focus();
-    pendingAmount = 0;
-  });
-
-  depositCancelBtn.addEventListener('click', () => depositModal.classList.remove('active'));
-
-  depositConfirmBtn.addEventListener('click', function() {
-    const amount = parseInt(depositAmount.value);
-    if (isNaN(amount) || amount <= 0) { depositError.style.display = 'block'; return; }
-    depositError.style.display = 'none';
-    pendingAmount = amount;
-    depositStep1.classList.add('hidden');
-    depositStep2.classList.remove('hidden');
-    qrNominal.textContent = 'Rp ' + amount.toLocaleString('id-ID');
-    const config = getAdminConfig();
-    qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR" />`;
-    requestDepositBtn.disabled = false;
-  });
-
-  requestDepositBtn.addEventListener('click', function() {
-    const user = getCurrentUser();
-    if (!user) { alert('Login dulu.'); return; }
-    if (pendingAmount <= 0) return;
-    const req = createDepositRequest(user.username, pendingAmount);
-    depositStep2.classList.add('hidden');
-    depositStep3.classList.remove('hidden');
-    reqNominal.textContent = 'Rp ' + pendingAmount.toLocaleString('id-ID');
-    updateRequestStatusDisplay(req);
-    requestDepositBtn.disabled = true;
-    showToast('Permintaan deposit terkirim, tunggu konfirmasi admin.', 'info');
-    updateStats();
-  });
-
-  depositBack.addEventListener('click', function() {
-    depositStep2.classList.add('hidden');
-    depositStep1.classList.remove('hidden');
-    depositAmount.value = '';
-    depositError.style.display = 'none';
-  });
-
-  depositClose.addEventListener('click', function() {
-    depositModal.classList.remove('active');
-    updateSaldoDisplay();
-    if (currentPage === 'riwayat') navigateTo('riwayat');
-    updateStats();
-  });
-
-  depositModal.addEventListener('click', function(e) {
-    if (e.target === this) depositModal.classList.remove('active');
-  });
-
-  // ============================================================
-  // CHAT & CHANNEL
-  // ============================================================
-  document.getElementById('chatAdminBtn').addEventListener('click', function() {
-    const config = getAdminConfig();
-    window.open('https://wa.me/' + (config.waNumber || WA_NUMBER).replace(/\D/g, ''), '_blank');
-  });
-  document.getElementById('channelBtn').addEventListener('click', function() {
-    const config = getAdminConfig();
-    window.open(config.slLink || WA_LINK, '_blank');
-  });
-
-  // ============================================================
-  // SEARCH
-  // ============================================================
-  searchInput.addEventListener('input', function() {
-    const keyword = this.value.toLowerCase().trim();
-    if (currentPage === 'produk') {
-      const filtered = getProducts().filter(p => p.name.toLowerCase().includes(keyword));
-      const content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(filtered)}</div>`;
-      mainContent.innerHTML = content;
-      attachEvents();
+    function signup(name, username, phone, password) {
+        const users = getUsers();
+        if (users.find(u => u.username === username)) return { success: false, message: 'Username sudah digunakan.' };
+        if (password.length < 6) return { success: false, message: 'Password minimal 6 karakter.' };
+        users.push({ name, username, phone, password, role: 'member' });
+        saveUsers(users);
+        setUserSaldo(username, 0);
+        setCurrentUser({ name, username, phone, role: 'member' });
+        return { success: true };
     }
-  });
 
-  // ============================================================
-  // NAVIGASI ITEMS
-  // ============================================================
-  navItems.forEach(item => {
-    item.addEventListener('click', function() {
-      const page = this.dataset.page;
-      if (page === 'panel') {
+    // ============================================================
+    // DEPOSIT
+    // ============================================================
+    function createDepositRequest(username, amount) {
+        const reqs = getDepositRequests();
+        const newReq = { id: Date.now(), username, amount, status: 'pending', createdAt: new Date().toISOString() };
+        reqs.push(newReq);
+        saveDepositRequests(reqs);
+        return newReq;
+    }
+    function updateDepositRequest(id, status) {
+        const reqs = getDepositRequests();
+        const idx = reqs.findIndex(r => r.id === id);
+        if (idx !== -1) { reqs[idx].status = status; saveDepositRequests(reqs); return true; }
+        return false;
+    }
+    function getPendingDeposits() { return getDepositRequests().filter(r => r.status === 'pending'); }
+    function getUserDeposits(username) { return getDepositRequests().filter(r => r.username === username).sort((a,b) => b.id - a.id); }
+
+    // ============================================================
+    // DOM REFS
+    // ============================================================
+    const $ = id => document.getElementById(id);
+    const authPage = $('authPage'), appMain = $('appMain'), mainContent = $('mainContent');
+    const navItems = document.querySelectorAll('.nav-item'), panelNav = $('panelNav');
+    const loginForm = $('loginForm'), signupForm = $('signupForm');
+    const authTabs = document.querySelectorAll('.auth-tab');
+    const loginUsername = $('loginUsername'), loginPassword = $('loginPassword'), loginBtn = $('loginBtn'), loginError = $('loginError');
+    const signupName = $('signupName'), signupUsername = $('signupUsername'), signupPhone = $('signupPhone');
+    const signupPassword = $('signupPassword'), signupConfirm = $('signupConfirm'), signupBtn = $('signupBtn'), signupError = $('signupError');
+    const switchToSignup = $('switchToSignup'), switchToLogin = $('switchToLogin');
+    const displayName = $('displayName'), displayPhone = $('displayPhone'), roleText = $('roleText'), logoutBtn = $('logoutBtn');
+    const totalUserStat = $('totalUserStat'), totalProductStat = $('totalProductStat'), pendingDepositStat = $('pendingDepositStat');
+    const searchInput = $('searchInput'), depositBtn = $('depositBtn');
+    const depositModal = $('depositModal'), depositAmount = $('depositAmount'), depositConfirmBtn = $('depositConfirm'), depositCancelBtn = $('depositCancel');
+    const depositError = $('depositError'), depositStep1 = $('depositStep1'), depositStep2 = $('depositStep2'), depositStep3 = $('depositStep3');
+    const qrNominal = $('qrNominal'), qrContainer = $('qrContainer'), requestDepositBtn = $('requestDepositBtn');
+    const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNominal = $('reqNominal'), reqStatus = $('reqStatus');
+
+    let currentPage = 'produk', pendingAmount = 0;
+
+    // ============================================================
+    // UI FUNCTIONS
+    // ============================================================
+    function updateSaldoDisplay() {
         const user = getCurrentUser();
-        if (user && user.role === 'owner') navigateTo('panel');
-        else alert('Akses ditolak. Hanya OWN.');
-        return;
-      }
-      navigateTo(page);
+        if (user) $('saldoDisplay').textContent = 'Rp ' + getUserSaldo(user.username).toLocaleString('id-ID');
+    }
+
+    function updateStats() {
+        const users = getUsers(), products = getProducts(), pending = getPendingDeposits();
+        totalUserStat.textContent = users.length;
+        totalProductStat.textContent = products.length;
+        pendingDepositStat.textContent = pending.length;
+    }
+
+    function showToast(msg, type = 'info') {
+        const old = document.querySelector('.toast');
+        if (old) old.remove();
+        const div = document.createElement('div');
+        div.className = 'toast ' + type;
+        div.textContent = msg;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 4000);
+    }
+
+    function showAlert(id, msg, type) {
+        const el = $(id);
+        if (!el) return;
+        el.textContent = msg;
+        el.className = 'alert ' + type;
+        setTimeout(() => el.className = 'alert', 4000);
+    }
+
+    function showApp(user) {
+        authPage.style.display = 'none';
+        appMain.style.display = 'block';
+        displayName.textContent = user.name;
+        displayPhone.textContent = user.phone;
+        roleText.textContent = user.role === 'owner' ? 'OWNER' : user.role.toUpperCase();
+        const badge = document.getElementById('roleBadge');
+        badge.style.background = user.role === 'owner' ? '#00c853' : '#6a6a7e';
+        panelNav.classList.toggle('hidden', user.role !== 'owner');
+        updateStats();
+        updateSaldoDisplay();
+        navigateTo('produk');
+        if (window._depositPoll) clearInterval(window._depositPoll);
+        window._depositPoll = setInterval(() => {
+            const u = getCurrentUser();
+            if (!u) return;
+            const deposits = getUserDeposits(u.username);
+            if (deposits.length === 0) return;
+            const latest = deposits[0];
+            if (latest.status === 'approved' && window._lastNotified !== latest.id) {
+                window._lastNotified = latest.id;
+                updateSaldoDisplay();
+                showToast('Deposit Rp ' + latest.amount.toLocaleString('id-ID') + ' disetujui!', 'success');
+                if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
+                if (currentPage === 'riwayat') navigateTo('riwayat');
+            } else if (latest.status === 'rejected' && window._lastNotified !== latest.id) {
+                window._lastNotified = latest.id;
+                showToast('Deposit ditolak admin.', 'error');
+                if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
+            }
+            updateStats();
+        }, 3000);
+    }
+
+    function showAuth() {
+        authPage.style.display = 'flex';
+        appMain.style.display = 'none';
+        clearCurrentUser();
+        if (window._depositPoll) clearInterval(window._depositPoll);
+        loginError.style.display = 'none';
+        signupError.style.display = 'none';
+        loginUsername.value = loginPassword.value = '';
+        signupName.value = signupUsername.value = signupPhone.value = signupPassword.value = signupConfirm.value = '';
+    }
+
+    function updateRequestStatusDisplay(req) {
+        reqStatus.textContent = req.status === 'pending' ? 'Menunggu Konfirmasi' : req.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+        reqStatus.className = 'status-badge ' + req.status;
+    }
+
+    // ============================================================
+    // RENDER
+    // ============================================================
+    function renderProductGrid(productList) {
+        const user = getCurrentUser();
+        if (!productList || productList.length === 0) return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk kosong</h3></div>`;
+        let html = '<div class="product-grid">';
+        productList.forEach(p => {
+            const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
+            const inStock = p.stock > 0;
+            // TOMBOL BELI - hanya untuk member (bukan owner)
+            const btnHtml = (user && user.role !== 'owner') ?
+                `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>` :
+                (user && user.role === 'owner' ? `<div style="font-size:11px; color:var(--text-muted); margin-top:8px; text-align:center;">OWN tidak bisa membeli</div>` : '');
+            html += `
+                <div class="product-card">
+                    <div class="product-image">${img}</div>
+                    <div class="product-name">${p.name}</div>
+                    <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
+                    <div class="product-stock">Stok: ${p.stock}</div>
+                    ${btnHtml}
+                </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderUserList() {
+        const users = getUsers(), current = getCurrentUser();
+        if (users.length === 0) return `<div class="empty-state"><i class="fas fa-users"></i><h3>Belum ada pengguna</h3></div>`;
+        let html = '<div class="user-list">';
+        users.forEach(u => {
+            const isSelf = current && u.username === current.username;
+            const saldo = getUserSaldo(u.username);
+            html += `
+                <div class="user-item" data-username="${u.username}">
+                    <div class="user-info">
+                        <div class="uname">${u.name} (${u.username})</div>
+                        <div class="detail"><i class="fas fa-phone"></i> ${u.phone} &nbsp;|&nbsp; <i class="fas fa-lock"></i> ${u.password}</div>
+                        <div class="detail" style="font-size:13px; color:var(--accent);"><i class="fas fa-coins"></i> Saldo: Rp <span class="saldo-text">${saldo.toLocaleString('id-ID')}</span></div>
+                        <div class="detail" style="font-size:11px; color:var(--text-muted);">Role: ${u.role.toUpperCase()}</div>
+                    </div>
+                    <div class="user-actions">
+                        <input type="number" class="saldo-input" placeholder="Rp" min="0" step="1000" />
+                        <button class="btn-saldo btn-sm" data-username="${u.username}"><i class="fas fa-edit"></i> Ubah</button>
+                        <button class="btn-del-user btn-sm" data-username="${u.username}" ${isSelf ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isSelf ? 'Diri' : 'Hapus'}</button>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderPendingRequests() {
+        const reqs = getPendingDeposits();
+        if (reqs.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
+        let html = '<div class="user-list">';
+        reqs.forEach(r => {
+            const user = getUsers().find(u => u.username === r.username);
+            const name = user ? user.name : r.username;
+            html += `
+                <div class="request-item">
+                    <div class="req-info">
+                        <div class="uname">${name} (${r.username})</div>
+                        <div class="detail">Nominal: Rp ${r.amount.toLocaleString('id-ID')}</div>
+                        <div class="detail" style="font-size:12px; color:var(--text-muted);">Diajukan: ${new Date(r.createdAt).toLocaleString()}</div>
+                    </div>
+                    <div class="req-actions">
+                        <button class="btn-approve" data-id="${r.id}"><i class="fas fa-check"></i> Setuju</button>
+                        <button class="btn-reject" data-id="${r.id}"><i class="fas fa-times"></i> Tolak</button>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderRiwayat() {
+        const user = getCurrentUser();
+        if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
+        const deposits = getUserDeposits(user.username);
+        if (deposits.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
+        let html = `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div><div class="user-list">`;
+        deposits.forEach(r => {
+            const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+            html += `
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
+                        <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
+                        <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div></div>';
+        return html;
+    }
+
+    function renderInfo() {
+        const config = getAdminConfig();
+        const qr = config.paymentQr ? `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid var(--border); padding:12px; background:#fff;" />` : '<p style="color:var(--text-muted);">QR belum diatur.</p>';
+        return `
+            <div class="page-content">
+                <div class="section-title"><span>Informasi Toko</span></div>
+                <div style="background:var(--bg-card); border-radius:12px; padding:16px; border:1px solid var(--border);">
+                    <p><i class="fas fa-store" style="color:var(--accent); width:24px;"></i> <strong>${config.storeInfo}</strong></p>
+                    <p><i class="fas fa-phone" style="color:var(--accent); width:24px;"></i> Admin WA: <strong>${config.waNumber}</strong></p>
+                    <p><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran: <a href="${config.slLink}" target="_blank" style="color:var(--accent);">PUTZX MARKET</a></p>
+                    <hr style="margin:12px 0; border:0; border-top:1px solid var(--border);">
+                    <div style="text-align:center;"><p style="font-weight:600;">QR Pembayaran</p>${qr}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderPanel() {
+        const user = getCurrentUser();
+        if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
+        const products = getProducts(), config = getAdminConfig();
+        let productListHtml = products.map(p => `
+            <div class="product-item" data-id="${p.id}">
+                <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:var(--text-muted);"></i>'}</div>
+                <div class="info">
+                    <div class="name">${p.name}</div>
+                    <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+                    <div class="stock">Stok: ${p.stock}</div>
+                </div>
+                <div class="actions">
+                    <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti</label>
+                    <input type="file" id="img-${p.id}" accept="image/*" />
+                    <button class="btn-del btn-sm" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
+                </div>
+            </div>
+        `).join('');
+
+        return `
+            <div class="page-content">
+                <div class="section-title"><span><i class="fas fa-user-cog"></i> Panel OWN</span></div>
+                <div class="own-panel">
+                    <div class="panel-tabs">
+                        <button class="panel-tab active" data-panel-tab="produk">Produk</button>
+                        <button class="panel-tab" data-panel-tab="akun">Akun</button>
+                        <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
+                        <button class="panel-tab" data-panel-tab="info">Info</button>
+                    </div>
+                    <div id="panelTabProduk" class="panel-tab-content active">
+                        <h3>Daftar Produk</h3>${productListHtml}
+                        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                        <h3>Tambah Produk</h3>
+                        <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama" /></div>
+                        <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
+                        <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
+                        <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
+                        <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah</button>
+                        <div id="panelAlert" class="alert"></div>
+                        <div class="qr-upload">
+                            <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
+                            <div class="form-group"><label>Upload QR</label><input type="file" id="qrUpload" accept="image/*" /></div>
+                            ${config.paymentQr ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:var(--text-muted);">Belum ada QR.</p>'}
+                            <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
+                            <div id="qrAlert" class="alert"></div>
+                        </div>
+                    </div>
+                    <div id="panelTabAkun" class="panel-tab-content">
+                        <h3>Daftar Akun</h3><p style="font-size:13px; color:var(--text-muted);">Username, Password, No HP, Saldo.</p>
+                        ${renderUserList()}
+                        <div id="userAlert" class="alert"></div>
+                    </div>
+                    <div id="panelTabDeposit" class="panel-tab-content">
+                        <h3>Permintaan Deposit</h3>
+                        ${renderPendingRequests()}
+                        <div id="depositAlert" class="alert"></div>
+                    </div>
+                    <div id="panelTabInfo" class="panel-tab-content">
+                        <h3>Edit Info Toko</h3>
+                        <div class="form-group"><label>Nama/Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
+                        <div class="form-group"><label>Nomor WA Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
+                        <div class="form-group"><label>Link Saluran</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
+                        <button class="btn-save" id="saveInfoBtn"><i class="fas fa-save"></i> Simpan Info</button>
+                        <div id="infoAlert" class="alert"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // NAVIGASI
+    // ============================================================
+    function navigateTo(page) {
+        currentPage = page;
+        navItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.page === page);
+        });
+        const user = getCurrentUser();
+        let content = '';
+        switch (page) {
+            case 'produk': content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(getProducts())}</div>`; break;
+            case 'riwayat': content = renderRiwayat(); break;
+            case 'info': content = renderInfo(); break;
+            case 'panel': content = renderPanel(); break;
+            default: content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
+        }
+        mainContent.innerHTML = content;
+        searchInput.value = '';
+        attachEvents();
+    }
+
+    // ============================================================
+    // EVENT ATTACH
+    // ============================================================
+    function attachEvents() {
+        // PEMBELIAN
+        mainContent.removeEventListener('click', handlePurchase);
+        mainContent.addEventListener('click', handlePurchase);
+
+        // PANEL TABS
+        document.querySelectorAll('.panel-tab').forEach(tab => {
+            tab.removeEventListener('click', handlePanelTab);
+            tab.addEventListener('click', handlePanelTab);
+        });
+
+        // HAPUS PRODUK
+        document.querySelectorAll('.product-item .btn-del').forEach(btn => {
+            btn.removeEventListener('click', handleDeleteProduct);
+            btn.addEventListener('click', handleDeleteProduct);
+        });
+
+        // UPLOAD GAMBAR PRODUK
+        document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
+            input.removeEventListener('change', handleProductImage);
+            input.addEventListener('change', handleProductImage);
+        });
+
+        // TAMBAH PRODUK
+        const addBtn = document.getElementById('addProductBtn');
+        if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
+
+        // SIMPAN QR
+        const saveQr = document.getElementById('saveQrBtn');
+        if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
+
+        // SIMPAN INFO
+        const saveInfo = document.getElementById('saveInfoBtn');
+        if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
+
+        // UBAH SALDO USER
+        document.querySelectorAll('.btn-saldo').forEach(btn => {
+            btn.removeEventListener('click', handleUserSaldo);
+            btn.addEventListener('click', handleUserSaldo);
+        });
+
+        // HAPUS USER
+        document.querySelectorAll('.btn-del-user').forEach(btn => {
+            btn.removeEventListener('click', handleDeleteUser);
+            btn.addEventListener('click', handleDeleteUser);
+        });
+
+        // APPROVE/REJECT DEPOSIT
+        document.querySelectorAll('.btn-approve').forEach(btn => {
+            btn.removeEventListener('click', handleApprove);
+            btn.addEventListener('click', handleApprove);
+        });
+        document.querySelectorAll('.btn-reject').forEach(btn => {
+            btn.removeEventListener('click', handleReject);
+            btn.addEventListener('click', handleReject);
+        });
+    }
+
+    // ============================================================
+    // HANDLERS
+    // ============================================================
+    function handlePurchase(e) {
+        const btn = e.target.closest('.btn-beli');
+        if (!btn) return;
+        const productId = parseInt(btn.dataset.id);
+        const user = getCurrentUser();
+        if (!user) { alert('Silakan login.'); return; }
+        if (user.role === 'owner') { alert('OWN tidak bisa membeli.'); return; }
+        const products = getProducts();
+        const product = products.find(p => p.id === productId);
+        if (!product) { alert('Produk tidak ditemukan.'); return; }
+        if (product.stock <= 0) { alert('Stok habis.'); return; }
+        const saldo = getUserSaldo(user.username);
+        if (saldo < product.price) {
+            alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
+            return;
+        }
+        if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
+            addUserSaldo(user.username, -product.price);
+            const idx = products.findIndex(p => p.id === productId);
+            products[idx].stock -= 1;
+            saveProducts(products);
+            updateSaldoDisplay();
+            showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
+            navigateTo(currentPage);
+            updateStats();
+        }
+    }
+
+    function handlePanelTab(e) {
+        document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const target = this.dataset.panelTab;
+        document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
+        const map = { produk: 'panelTabProduk', akun: 'panelTabAkun', deposit: 'panelTabDeposit', info: 'panelTabInfo' };
+        const el = document.getElementById(map[target]);
+        if (el) {
+            el.classList.add('active');
+            if (target === 'akun') { const c = document.getElementById('panelTabAkun'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderUserList(); attachEvents(); } }
+            if (target === 'deposit') { const c = document.getElementById('panelTabDeposit'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderPendingRequests(); attachEvents(); } }
+        }
+    }
+
+    function handleDeleteProduct(e) {
+        if (!confirm('Hapus produk ini?')) return;
+        const id = parseInt(this.dataset.id);
+        let products = getProducts();
+        products = products.filter(p => p.id !== id);
+        saveProducts(products);
+        showToast('Produk dihapus!', 'success');
+        navigateTo('panel');
+        updateStats();
+    }
+
+    function handleProductImage(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const base64 = ev.target.result;
+            const productId = parseInt(this.closest('.product-item').dataset.id);
+            let products = getProducts();
+            const idx = products.findIndex(p => p.id === productId);
+            if (idx !== -1) { products[idx].image = base64; saveProducts(products); showToast('Gambar diperbarui!', 'success'); navigateTo('panel'); }
+        }.bind(this);
+        reader.readAsDataURL(file);
+    }
+
+    function handleAddProduct() {
+        const name = document.getElementById('newProductName').value.trim();
+        const price = parseInt(document.getElementById('newProductPrice').value);
+        const stock = parseInt(document.getElementById('newProductStock').value);
+        const fileInput = document.getElementById('newProductImage');
+        if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let products = getProducts();
+            const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+            products.push({ id: newId, name, price, stock, image: e.target.result || '' });
+            saveProducts(products);
+            showAlert('panelAlert', 'Produk ditambahkan!', 'success');
+            navigateTo('panel');
+            updateStats();
+        };
+        if (fileInput.files && fileInput.files[0]) {
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            let products = getProducts();
+            const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+            products.push({ id: newId, name, price, stock, image: '' });
+            saveProducts(products);
+            showAlert('panelAlert', 'Produk ditambahkan!', 'success');
+            navigateTo('panel');
+            updateStats();
+        }
+    }
+
+    function handleSaveQr() {
+        const fileInput = document.getElementById('qrUpload');
+        if (!fileInput.files || !fileInput.files[0]) { showAlert('qrAlert', 'Pilih file QR.', 'error'); return; }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const config = getAdminConfig();
+            config.paymentQr = e.target.result;
+            setAdminConfig(config);
+            showAlert('qrAlert', 'QR disimpan!', 'success');
+            navigateTo('panel');
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+
+    function handleSaveInfo() {
+        const info = document.getElementById('editStoreInfo').value.trim();
+        const wa = document.getElementById('editWaNumber').value.trim();
+        const sl = document.getElementById('editSlLink').value.trim();
+        const config = getAdminConfig();
+        config.storeInfo = info || 'PutzxStore - Toko Online';
+        config.waNumber = wa || WA_NUMBER;
+        config.slLink = sl || WA_LINK;
+        setAdminConfig(config);
+        showAlert('infoAlert', 'Info disimpan!', 'success');
+        navigateTo('panel');
+    }
+
+    function handleUserSaldo(e) {
+        const btn = this;
+        const username = btn.dataset.username;
+        const item = btn.closest('.user-item');
+        const input = item.querySelector('.saldo-input');
+        const amount = parseInt(input.value);
+        if (isNaN(amount) || amount < 0) { alert('Nominal valid (min 0).'); return; }
+        if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
+        setUserSaldo(username, amount);
+        const saldoText = item.querySelector('.saldo-text');
+        if (saldoText) saldoText.textContent = amount.toLocaleString('id-ID');
+        input.value = '';
+        showToast('Saldo ' + username + ' diubah!', 'success');
+        updateStats();
+        if (getCurrentUser() && getCurrentUser().username === username) updateSaldoDisplay();
+    }
+
+    function handleDeleteUser(e) {
+        if (this.disabled) return;
+        const username = this.dataset.username;
+        if (!confirm('Hapus akun "' + username + '"?')) return;
+        let users = getUsers();
+        users = users.filter(u => u.username !== username);
+        saveUsers(users);
+        const map = get('userSaldo') || {};
+        delete map[username];
+        set('userSaldo', map);
+        showToast('Akun dihapus!', 'success');
+        navigateTo('panel');
+        updateStats();
+    }
+
+    function handleApprove(e) {
+        const id = parseInt(this.dataset.id);
+        if (!confirm('Setujui deposit ini?')) return;
+        const reqs = getDepositRequests();
+        const req = reqs.find(r => r.id === id);
+        if (req) {
+            addUserSaldo(req.username, req.amount);
+            updateDepositRequest(id, 'approved');
+            showToast('Deposit disetujui! Saldo ' + req.username + ' bertambah.', 'success');
+            if (getCurrentUser() && getCurrentUser().username === req.username) updateSaldoDisplay();
+            navigateTo('panel');
+            updateStats();
+        }
+    }
+
+    function handleReject(e) {
+        const id = parseInt(this.dataset.id);
+        if (!confirm('Tolak deposit ini?')) return;
+        updateDepositRequest(id, 'rejected');
+        showToast('Deposit ditolak.', 'error');
+        navigateTo('panel');
+        updateStats();
+    }
+
+    // ============================================================
+    // DEPOSIT MODAL
+    // ============================================================
+    depositBtn.addEventListener('click', function() {
+        const config = getAdminConfig();
+        if (!config.paymentQr) { alert('QR belum diatur oleh OWN.'); return; }
+        depositModal.classList.add('active');
+        depositStep1.classList.remove('hidden');
+        depositStep2.classList.add('hidden');
+        depositStep3.classList.add('hidden');
+        depositAmount.value = '';
+        depositError.style.display = 'none';
+        depositAmount.focus();
+        pendingAmount = 0;
     });
-  });
 
-  // ============================================================
-  // AUTH EVENTS
-  // ============================================================
-  authTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      authTabs.forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-      const tabName = this.dataset.tab;
-      loginForm.classList.toggle('active', tabName === 'login');
-      signupForm.classList.toggle('active', tabName === 'signup');
-      loginError.style.display = 'none';
-      signupError.style.display = 'none';
+    depositCancelBtn.addEventListener('click', () => depositModal.classList.remove('active'));
+
+    depositConfirmBtn.addEventListener('click', function() {
+        const amount = parseInt(depositAmount.value);
+        if (isNaN(amount) || amount <= 0) { depositError.style.display = 'block'; return; }
+        depositError.style.display = 'none';
+        pendingAmount = amount;
+        depositStep1.classList.add('hidden');
+        depositStep2.classList.remove('hidden');
+        qrNominal.textContent = 'Rp ' + amount.toLocaleString('id-ID');
+        const config = getAdminConfig();
+        qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR" />`;
+        requestDepositBtn.disabled = false;
     });
-  });
 
-  switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
-  switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
+    requestDepositBtn.addEventListener('click', function() {
+        const user = getCurrentUser();
+        if (!user) { alert('Login dulu.'); return; }
+        if (pendingAmount <= 0) return;
+        const req = createDepositRequest(user.username, pendingAmount);
+        depositStep2.classList.add('hidden');
+        depositStep3.classList.remove('hidden');
+        reqNominal.textContent = 'Rp ' + pendingAmount.toLocaleString('id-ID');
+        updateRequestStatusDisplay(req);
+        requestDepositBtn.disabled = true;
+        showToast('Permintaan deposit terkirim, tunggu konfirmasi admin.', 'info');
+        updateStats();
+    });
 
-  loginBtn.addEventListener('click', function() {
-    const username = loginUsername.value.trim();
-    const password = loginPassword.value.trim();
-    if (!username || !password) { loginError.textContent = 'Isi semua field.'; loginError.style.display = 'block'; return; }
-    if (login(username, password)) {
-      loginError.style.display = 'none';
-      showApp(getCurrentUser());
+    depositBack.addEventListener('click', function() {
+        depositStep2.classList.add('hidden');
+        depositStep1.classList.remove('hidden');
+        depositAmount.value = '';
+        depositError.style.display = 'none';
+    });
+
+    depositClose.addEventListener('click', function() {
+        depositModal.classList.remove('active');
+        updateSaldoDisplay();
+        if (currentPage === 'riwayat') navigateTo('riwayat');
+        updateStats();
+    });
+
+    depositModal.addEventListener('click', function(e) {
+        if (e.target === this) depositModal.classList.remove('active');
+    });
+
+    // ============================================================
+    // CHAT & CHANNEL
+    // ============================================================
+    document.getElementById('chatAdminBtn').addEventListener('click', function() {
+        const config = getAdminConfig();
+        window.open('https://wa.me/' + (config.waNumber || WA_NUMBER).replace(/\D/g, ''), '_blank');
+    });
+    document.getElementById('channelBtn').addEventListener('click', function() {
+        const config = getAdminConfig();
+        window.open(config.slLink || WA_LINK, '_blank');
+    });
+
+    // ============================================================
+    // SEARCH
+    // ============================================================
+    searchInput.addEventListener('input', function() {
+        const keyword = this.value.toLowerCase().trim();
+        if (currentPage === 'produk') {
+            const filtered = getProducts().filter(p => p.name.toLowerCase().includes(keyword));
+            const content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(filtered)}</div>`;
+            mainContent.innerHTML = content;
+            attachEvents();
+        }
+    });
+
+    // ============================================================
+    // NAV ITEMS
+    // ============================================================
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const page = this.dataset.page;
+            if (page === 'panel') {
+                const user = getCurrentUser();
+                if (user && user.role === 'owner') navigateTo('panel');
+                else alert('Akses ditolak. Hanya OWN.');
+                return;
+            }
+            navigateTo(page);
+        });
+    });
+
+    // ============================================================
+    // AUTH EVENTS
+    // ============================================================
+    authTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            authTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const tabName = this.dataset.tab;
+            loginForm.classList.toggle('active', tabName === 'login');
+            signupForm.classList.toggle('active', tabName === 'signup');
+            loginError.style.display = 'none';
+            signupError.style.display = 'none';
+        });
+    });
+
+    switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
+    switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
+
+    loginBtn.addEventListener('click', function() {
+        const username = loginUsername.value.trim();
+        const password = loginPassword.value.trim();
+        if (!username || !password) { loginError.textContent = 'Isi semua field.'; loginError.style.display = 'block'; return; }
+        if (login(username, password)) {
+            loginError.style.display = 'none';
+            showApp(getCurrentUser());
+        } else {
+            loginError.textContent = 'Username atau password salah.';
+            loginError.style.display = 'block';
+        }
+    });
+    loginUsername.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+    loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+
+    signupBtn.addEventListener('click', function() {
+        const name = signupName.value.trim();
+        const username = signupUsername.value.trim();
+        const phone = signupPhone.value.trim();
+        const password = signupPassword.value.trim();
+        const confirm = signupConfirm.value.trim();
+        if (!name || !username || !phone || !password || !confirm) {
+            signupError.textContent = 'Semua field wajib diisi.';
+            signupError.style.display = 'block';
+            return;
+        }
+        if (password !== confirm) { signupError.textContent = 'Password tidak cocok.'; signupError.style.display = 'block'; return; }
+        const result = signup(name, username, phone, password);
+        if (result.success) {
+            signupError.style.display = 'none';
+            showApp(getCurrentUser());
+        } else {
+            signupError.textContent = result.message;
+            signupError.style.display = 'block';
+        }
+    });
+    signupName.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+    signupUsername.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+    signupPhone.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+    signupPassword.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+    signupConfirm.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+
+    logoutBtn.addEventListener('click', function() {
+        if (confirm('Yakin logout?')) showAuth();
+    });
+
+    // ============================================================
+    // START
+    // ============================================================
+    const user = getCurrentUser();
+    if (user) {
+        showApp(user);
     } else {
-      loginError.textContent = 'Username atau password salah.';
-      loginError.style.display = 'block';
+        showAuth();
     }
-  });
-  loginUsername.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-  loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-
-  signupBtn.addEventListener('click', function() {
-    const name = signupName.value.trim();
-    const username = signupUsername.value.trim();
-    const phone = signupPhone.value.trim();
-    const password = signupPassword.value.trim();
-    const confirm = signupConfirm.value.trim();
-    if (!name || !username || !phone || !password || !confirm) {
-      signupError.textContent = 'Semua field wajib diisi.';
-      signupError.style.display = 'block';
-      return;
-    }
-    if (password !== confirm) { signupError.textContent = 'Password tidak cocok.'; signupError.style.display = 'block'; return; }
-    const result = signup(name, username, phone, password);
-    if (result.success) {
-      signupError.style.display = 'none';
-      showApp(getCurrentUser());
-    } else {
-      signupError.textContent = result.message;
-      signupError.style.display = 'block';
-    }
-  });
-  signupName.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupUsername.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupPhone.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupPassword.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-  signupConfirm.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-
-  logoutBtn.addEventListener('click', function() {
-    if (confirm('Yakin logout?')) showAuth();
-  });
-
-  // ============================================================
-  // START
-  // ============================================================
-  const user = getCurrentUser();
-  if (user) {
-    showApp(user);
-  } else {
-    showAuth();
-  }
 })();
 </script>
 </body>

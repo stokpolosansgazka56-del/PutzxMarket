@@ -488,8 +488,8 @@ function savePurchase(username, productId, productName, price, quantity, total, 
         timestamp: new Date().toISOString(),
         note: '',
         isNokos,
-        phone,              // untuk Nokos
-        verificationCode: '' // akan diisi oleh OWN
+        phone,
+        verificationCode: ''
     });
 }
 
@@ -656,7 +656,6 @@ function renderProductGrid(products) {
             if (isOwner) {
                 actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
             } else {
-                // Tampilkan input HP jika produk Nokos
                 if (isNokos) {
                     actionHtml = `
                         <input type="tel" class="nokos-input" id="phone-${p.id}" placeholder="Masukkan No. HP penerima" />

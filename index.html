@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PutzxStore - Dark</title>
+    <title>PutzxStore - Firebase</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Firebase SDK (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        /* ===== DARK THEME (sama seperti sebelumnya, tidak diubah) ===== */
+        /* ===== DARK THEME (sama seperti sebelumnya) ===== */
         :root {
             --bg-primary: #0f0f13;
             --bg-secondary: #1a1a24;
@@ -29,7 +32,6 @@
         body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
         .app-container { max-width:420px; width:100%; background:var(--bg-secondary); border-radius:var(--radius); padding:16px 16px 80px; box-shadow:var(--shadow); position:relative; }
 
-        /* AUTH */
         .auth-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; background:var(--bg-primary); border-radius:var(--radius); }
         .auth-page .logo { font-size:28px; font-weight:700; color:var(--accent); margin-bottom:4px; }
         .auth-page .subtitle { color:var(--text-secondary); margin-bottom:24px; font-size:14px; }
@@ -47,7 +49,6 @@
         .auth-switch { margin-top:16px; text-align:center; font-size:14px; color:var(--text-secondary); }
         .auth-switch a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
 
-        /* APP */
         .app-main { display:none; }
         .saldo-card { background:linear-gradient(135deg,var(--accent),#009624); border-radius:var(--radius); padding:18px 20px; color:#fff; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
         .saldo-left { display:flex; flex-direction:column; }
@@ -102,13 +103,13 @@
         .btn-beli { background:var(--accent); color:#fff; border:none; padding:8px 0; border-radius:20px; font-weight:600; font-size:13px; cursor:pointer; width:100%; transition:background .2s; margin-top:auto; }
         .btn-beli:hover { background:var(--accent-hover); }
         .btn-beli:disabled { background:var(--text-muted); cursor:not-allowed; opacity:0.5; }
+        .owner-text { font-size:11px; color:var(--text-muted); margin-top:8px; text-align:center; }
 
         .page-content { padding:8px 0; }
         .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
         .empty-state i { font-size:48px; color:var(--text-muted); margin-bottom:12px; }
         .empty-state h3 { font-weight:600; color:var(--text-primary); margin-bottom:6px; }
 
-        /* PANEL */
         .own-panel { background:var(--bg-card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); margin-top:8px; }
         .own-panel .panel-tabs { display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; flex-wrap:wrap; }
         .own-panel .panel-tab { padding:8px 18px; border-radius:30px; border:none; background:transparent; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .2s; }
@@ -189,7 +190,6 @@
             .user-item { flex-direction:column; align-items:stretch; }
         }
 
-        /* MODAL */
         .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; z-index:999; }
         .modal-overlay.active { display:flex; }
         .modal-box { background:var(--bg-secondary); max-width:380px; width:92%; border-radius:24px; padding:24px 20px; box-shadow:0 20px 60px rgba(0,0,0,0.8); animation:fadeIn .3s ease; max-height:95vh; overflow-y:auto; border:1px solid var(--border); }
@@ -216,7 +216,7 @@
 </head>
 <body>
 
-<!-- AUTH -->
+<!-- ========== AUTH PAGE ========== -->
 <div id="authPage" class="auth-page">
     <div class="logo">PutzxStore</div>
     <div class="subtitle">Login atau daftar untuk berbelanja</div>
@@ -250,7 +250,7 @@
     </div>
 </div>
 
-<!-- APP -->
+<!-- ========== APP MAIN ========== -->
 <div id="appMain" class="app-container app-main">
     <div class="saldo-card">
         <div class="saldo-left">
@@ -306,7 +306,7 @@
     </div>
 </div>
 
-<!-- MODAL DEPOSIT -->
+<!-- ========== MODAL DEPOSIT ========== -->
 <div class="modal-overlay" id="depositModal">
     <div class="modal-box">
         <div id="depositStep1">
@@ -341,392 +341,489 @@
 </div>
 
 <script>
-(function() {
-    // ============================================================
-    // KONFIGURASI
-    // ============================================================
-    const WA_LINK = 'https://whatsapp.com/channel/0029VbCcuGlLdQegM83dGq3B';
-    const WA_NUMBER = '08139196934';
-    const OWNER_USER = 'putzx';
-    const OWNER_PASS = 'putzx123';
+// ================================================================
+// 🔥 KONFIGURASI FIREBASE (SUDAH PAKAI PUNYA ANDA)
+// ================================================================
+const firebaseConfig = {
+    apiKey: "AIzaSyAUjNdfvGcJm4TtLPGP-5aogj2xTdfrmrE",
+    authDomain: "putzxmarket-4b5cc.firebaseapp.com",
+    databaseURL: "https://putzxmarket-4b5cc-default-rtdb.firebaseio.com",
+    projectId: "putzxmarket-4b5cc",
+    storageBucket: "putzxmarket-4b5cc.firebasestorage.app",
+    messagingSenderId: "108796843751",
+    appId: "1:108796843751:web:6d15254175d6c1ef9e7442",
+    measurementId: "G-1HW2HYMH4V"
+};
 
-    // ============================================================
-    // STORAGE HELPERS (dengan debugging log)
-    // ============================================================
-    function get(key) {
-        try {
-            const raw = localStorage.getItem(key);
-            return raw ? JSON.parse(raw) : null;
-        } catch(e) { console.error('Error get', key, e); return null; }
-    }
-    function set(key, val) {
-        try {
-            localStorage.setItem(key, JSON.stringify(val));
-        } catch(e) { console.error('Error set', key, e); }
-    }
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-    // ============================================================
-    // DATA ACCESSORS
-    // ============================================================
-    function getUsers() { return get('users') || []; }
-    function saveUsers(u) { set('users', u); }
+// ================================================================
+// KONSTANTA
+// ================================================================
+const WA_LINK = 'https://whatsapp.com/channel/0029VbCcuGlLdQegM83dGq3B';
+const WA_NUMBER = '08139196934';
+const OWNER_USER = 'putzx';
+const OWNER_PASS = 'putzx123';
 
-    function getCurrentUser() { return get('currentUser'); }
-    function setCurrentUser(u) { set('currentUser', u); }
-    function clearCurrentUser() { localStorage.removeItem('currentUser'); }
+// ================================================================
+// DATA REFERENCE
+// ================================================================
+const refs = {
+    users: db.ref('users'),
+    products: db.ref('products'),
+    saldo: db.ref('saldo'),
+    deposits: db.ref('deposits'),
+    config: db.ref('config')
+};
 
-    function getUserSaldo(username) {
-        const map = get('userSaldo') || {};
-        return map[username] || 0;
-    }
-    function setUserSaldo(username, amount) {
-        const map = get('userSaldo') || {};
-        map[username] = amount;
-        set('userSaldo', map);
-    }
-    function addUserSaldo(username, amount) {
-        setUserSaldo(username, getUserSaldo(username) + amount);
-    }
+// ================================================================
+// FUNGSI BANTU
+// ================================================================
+function getCurrentUser() {
+    try { return JSON.parse(localStorage.getItem('currentUser')); } catch(e) { return null; }
+}
+function setCurrentUser(u) { localStorage.setItem('currentUser', JSON.stringify(u)); }
+function clearCurrentUser() { localStorage.removeItem('currentUser'); }
 
-    function getProducts() { return get('products') || []; }
-    function saveProducts(p) { set('products', p); }
+function showToast(msg, type = 'info') {
+    const old = document.querySelector('.toast');
+    if (old) old.remove();
+    const div = document.createElement('div');
+    div.className = 'toast ' + type;
+    div.textContent = msg;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 4000);
+}
 
-    function getDepositRequests() { return get('depositRequests') || []; }
-    function saveDepositRequests(r) { set('depositRequests', r); }
+function showAlert(id, msg, type) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'alert ' + type;
+    setTimeout(() => el.className = 'alert', 4000);
+}
 
-    // === ADMIN CONFIG - PERBAIKAN ===
-    function getAdminConfig() {
-        const raw = get('adminConfig');
-        if (raw && typeof raw === 'object') {
-            // Pastikan paymentQr tetap ada
-            return raw;
+// ================================================================
+// INISIALISASI DATA DEFAULT
+// ================================================================
+function initData() {
+    // Cek apakah sudah ada owner di Firebase
+    refs.users.orderByChild('role').equalTo('owner').once('value', snap => {
+        if (!snap.exists()) {
+            // Buat akun owner
+            refs.users.child(OWNER_USER).set({
+                username: OWNER_USER,
+                password: OWNER_PASS,
+                name: 'Putzx',
+                phone: WA_NUMBER,
+                role: 'owner'
+            });
+            refs.saldo.child(OWNER_USER).set(0);
         }
-        // Default jika belum ada
-        return { waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' };
-    }
-    function setAdminConfig(config) {
-        set('adminConfig', config);
-        // Log untuk debugging
-        console.log('AdminConfig disimpan, paymentQr length:', (config.paymentQr || '').length);
-    }
+    });
 
-    // ============================================================
-    // INISIALISASI
-    // ============================================================
-    function init() {
-        let users = getUsers();
-        if (!users.some(u => u.role === 'owner')) {
-            users.push({ name: 'Putzx', username: OWNER_USER, phone: WA_NUMBER, password: OWNER_PASS, role: 'owner' });
-            saveUsers(users);
-            setUserSaldo(OWNER_USER, 0);
-        }
-        users.forEach(u => {
-            if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0);
-        });
-
-        if (getProducts().length === 0) {
-            saveProducts([
+    // Cek produk default
+    refs.products.once('value', snap => {
+        if (!snap.exists()) {
+            const defaultProducts = [
                 { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
                 { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '' },
                 { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '' },
                 { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '' },
                 { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
                 { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' }
-            ]);
+            ];
+            defaultProducts.forEach(p => {
+                refs.products.child(p.id).set(p);
+            });
         }
-        // Jika belum ada adminConfig, buat default
-        if (!get('adminConfig')) {
-            setAdminConfig({ waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' });
+    });
+
+    // Cek konfigurasi
+    refs.config.once('value', snap => {
+        if (!snap.exists()) {
+            refs.config.set({
+                waNumber: WA_NUMBER,
+                slLink: WA_LINK,
+                paymentQr: '',
+                storeInfo: 'PutzxStore - Toko Online'
+            });
         }
-    }
-    init();
+    });
+}
+initData();
 
-    // ============================================================
-    // AUTH
-    // ============================================================
-    function login(username, password) {
-        const found = getUsers().find(u => u.username === username && u.password === password);
-        if (found) {
-            setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role });
-            return true;
-        }
-        return false;
-    }
+// ================================================================
+// AUTH FUNGSI (dengan Firebase)
+// ================================================================
+function login(username, password) {
+    return new Promise((resolve, reject) => {
+        refs.users.child(username).once('value', snap => {
+            const user = snap.val();
+            if (user && user.password === password) {
+                setCurrentUser({ username, name: user.name, phone: user.phone, role: user.role });
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
+}
 
-    function signup(name, username, phone, password) {
-        const users = getUsers();
-        if (users.find(u => u.username === username)) return { success: false, message: 'Username sudah digunakan.' };
-        if (password.length < 6) return { success: false, message: 'Password minimal 6 karakter.' };
-        users.push({ name, username, phone, password, role: 'member' });
-        saveUsers(users);
-        setUserSaldo(username, 0);
-        setCurrentUser({ name, username, phone, role: 'member' });
-        return { success: true };
-    }
+function signup(name, username, phone, password) {
+    return new Promise((resolve, reject) => {
+        refs.users.child(username).once('value', snap => {
+            if (snap.exists()) {
+                resolve({ success: false, message: 'Username sudah digunakan.' });
+                return;
+            }
+            if (password.length < 6) {
+                resolve({ success: false, message: 'Password minimal 6 karakter.' });
+                return;
+            }
+            refs.users.child(username).set({
+                username, password, name, phone, role: 'member'
+            });
+            refs.saldo.child(username).set(0);
+            setCurrentUser({ username, name, phone, role: 'member' });
+            resolve({ success: true });
+        });
+    });
+}
 
-    // ============================================================
-    // DEPOSIT
-    // ============================================================
-    function createDepositRequest(username, amount) {
-        const reqs = getDepositRequests();
-        const newReq = { id: Date.now(), username, amount, status: 'pending', createdAt: new Date().toISOString() };
-        reqs.push(newReq);
-        saveDepositRequests(reqs);
-        return newReq;
-    }
-    function updateDepositRequest(id, status) {
-        const reqs = getDepositRequests();
-        const idx = reqs.findIndex(r => r.id === id);
-        if (idx !== -1) { reqs[idx].status = status; saveDepositRequests(reqs); return true; }
-        return false;
-    }
-    function getPendingDeposits() { return getDepositRequests().filter(r => r.status === 'pending'); }
-    function getUserDeposits(username) { return getDepositRequests().filter(r => r.username === username).sort((a,b) => b.id - a.id); }
+// ================================================================
+// DEPOSIT FUNGSI (Firebase)
+// ================================================================
+function createDepositRequest(username, amount) {
+    const id = Date.now();
+    return refs.deposits.child(id).set({
+        id, username, amount, status: 'pending', createdAt: new Date().toISOString()
+    });
+}
 
-    // ============================================================
-    // DOM REFS
-    // ============================================================
-    const $ = id => document.getElementById(id);
-    const authPage = $('authPage'), appMain = $('appMain'), mainContent = $('mainContent');
-    const navItems = document.querySelectorAll('.nav-item'), panelNav = $('panelNav');
-    const loginForm = $('loginForm'), signupForm = $('signupForm');
-    const authTabs = document.querySelectorAll('.auth-tab');
-    const loginUsername = $('loginUsername'), loginPassword = $('loginPassword'), loginBtn = $('loginBtn'), loginError = $('loginError');
-    const signupName = $('signupName'), signupUsername = $('signupUsername'), signupPhone = $('signupPhone');
-    const signupPassword = $('signupPassword'), signupConfirm = $('signupConfirm'), signupBtn = $('signupBtn'), signupError = $('signupError');
-    const switchToSignup = $('switchToSignup'), switchToLogin = $('switchToLogin');
-    const displayName = $('displayName'), displayPhone = $('displayPhone'), roleText = $('roleText'), logoutBtn = $('logoutBtn');
-    const totalUserStat = $('totalUserStat'), totalProductStat = $('totalProductStat'), pendingDepositStat = $('pendingDepositStat');
-    const searchInput = $('searchInput'), depositBtn = $('depositBtn');
-    const depositModal = $('depositModal'), depositAmount = $('depositAmount'), depositConfirmBtn = $('depositConfirm'), depositCancelBtn = $('depositCancel');
-    const depositError = $('depositError'), depositStep1 = $('depositStep1'), depositStep2 = $('depositStep2'), depositStep3 = $('depositStep3');
-    const qrNominal = $('qrNominal'), qrContainer = $('qrContainer'), requestDepositBtn = $('requestDepositBtn');
-    const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNominal = $('reqNominal'), reqStatus = $('reqStatus');
+function updateDepositRequest(id, status) {
+    return refs.deposits.child(id).update({ status });
+}
 
-    let currentPage = 'produk', pendingAmount = 0;
+function getPendingDeposits() {
+    return new Promise(resolve => {
+        refs.deposits.orderByChild('status').equalTo('pending').once('value', snap => {
+            const data = snap.val();
+            resolve(data ? Object.values(data) : []);
+        });
+    });
+}
 
-    // ============================================================
-    // UI FUNCTIONS
-    // ============================================================
-    function updateSaldoDisplay() {
-        const user = getCurrentUser();
-        if (user) $('saldoDisplay').textContent = 'Rp ' + getUserSaldo(user.username).toLocaleString('id-ID');
-    }
+function getUserDeposits(username) {
+    return new Promise(resolve => {
+        refs.deposits.orderByChild('username').equalTo(username).once('value', snap => {
+            const data = snap.val();
+            resolve(data ? Object.values(data).sort((a,b) => b.id - a.id) : []);
+        });
+    });
+}
 
-    function updateStats() {
-        const users = getUsers(), products = getProducts(), pending = getPendingDeposits();
-        totalUserStat.textContent = users.length;
-        totalProductStat.textContent = products.length;
+// ================================================================
+// DOM REFS
+// ================================================================
+const $ = id => document.getElementById(id);
+const authPage = $('authPage'), appMain = $('appMain'), mainContent = $('mainContent');
+const navItems = document.querySelectorAll('.nav-item'), panelNav = $('panelNav');
+const loginForm = $('loginForm'), signupForm = $('signupForm');
+const authTabs = document.querySelectorAll('.auth-tab');
+const loginUsername = $('loginUsername'), loginPassword = $('loginPassword'), loginBtn = $('loginBtn'), loginError = $('loginError');
+const signupName = $('signupName'), signupUsername = $('signupUsername'), signupPhone = $('signupPhone');
+const signupPassword = $('signupPassword'), signupConfirm = $('signupConfirm'), signupBtn = $('signupBtn'), signupError = $('signupError');
+const switchToSignup = $('switchToSignup'), switchToLogin = $('switchToLogin');
+const displayName = $('displayName'), displayPhone = $('displayPhone'), roleText = $('roleText'), logoutBtn = $('logoutBtn');
+const totalUserStat = $('totalUserStat'), totalProductStat = $('totalProductStat'), pendingDepositStat = $('pendingDepositStat');
+const searchInput = $('searchInput'), depositBtn = $('depositBtn');
+const depositModal = $('depositModal'), depositAmount = $('depositAmount'), depositConfirmBtn = $('depositConfirm'), depositCancelBtn = $('depositCancel');
+const depositError = $('depositError'), depositStep1 = $('depositStep1'), depositStep2 = $('depositStep2'), depositStep3 = $('depositStep3');
+const qrNominal = $('qrNominal'), qrContainer = $('qrContainer'), requestDepositBtn = $('requestDepositBtn');
+const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNominal = $('reqNominal'), reqStatus = $('reqStatus');
+
+let currentPage = 'produk', pendingAmount = 0;
+
+// ================================================================
+// UI FUNCTIONS
+// ================================================================
+function updateSaldoDisplay() {
+    const user = getCurrentUser();
+    if (!user) return;
+    refs.saldo.child(user.username).on('value', snap => {
+        const saldo = snap.val() || 0;
+        $('saldoDisplay').textContent = 'Rp ' + saldo.toLocaleString('id-ID');
+    });
+}
+
+function updateStats() {
+    refs.users.once('value', snap => {
+        totalUserStat.textContent = snap.numChildren();
+    });
+    refs.products.once('value', snap => {
+        totalProductStat.textContent = snap.numChildren();
+    });
+    getPendingDeposits().then(pending => {
         pendingDepositStat.textContent = pending.length;
-    }
+    });
+}
 
-    function showToast(msg, type = 'info') {
-        const old = document.querySelector('.toast');
-        if (old) old.remove();
-        const div = document.createElement('div');
-        div.className = 'toast ' + type;
-        div.textContent = msg;
-        document.body.appendChild(div);
-        setTimeout(() => div.remove(), 4000);
-    }
+function showApp(user) {
+    authPage.style.display = 'none';
+    appMain.style.display = 'block';
+    displayName.textContent = user.name;
+    displayPhone.textContent = user.phone;
+    const roleDisplay = user.role === 'owner' ? 'OWNER' : user.role.toUpperCase();
+    roleText.textContent = roleDisplay;
+    const badge = document.getElementById('roleBadge');
+    badge.style.background = user.role === 'owner' ? '#00c853' : '#6a6a7e';
+    panelNav.classList.toggle('hidden', user.role !== 'owner');
+    updateStats();
+    updateSaldoDisplay();
+    navigateTo('produk');
 
-    function showAlert(id, msg, type) {
-        const el = $(id);
-        if (!el) return;
-        el.textContent = msg;
-        el.className = 'alert ' + type;
-        setTimeout(() => el.className = 'alert', 4000);
-    }
-
-    function showApp(user) {
-        authPage.style.display = 'none';
-        appMain.style.display = 'block';
-        displayName.textContent = user.name;
-        displayPhone.textContent = user.phone;
-        roleText.textContent = user.role === 'owner' ? 'OWNER' : user.role.toUpperCase();
-        const badge = document.getElementById('roleBadge');
-        badge.style.background = user.role === 'owner' ? '#00c853' : '#6a6a7e';
-        panelNav.classList.toggle('hidden', user.role !== 'owner');
+    // Listener real-time untuk deposit status user ini
+    if (window._depositListener) window._depositListener();
+    window._depositListener = refs.deposits.orderByChild('username').equalTo(user.username).on('child_added', snap => {
+        const req = snap.val();
+        if (req.status === 'approved' && window._lastNotified !== req.id) {
+            window._lastNotified = req.id;
+            updateSaldoDisplay();
+            showToast('Deposit Rp ' + req.amount.toLocaleString('id-ID') + ' disetujui!', 'success');
+            if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(req);
+            if (currentPage === 'riwayat') navigateTo('riwayat');
+        } else if (req.status === 'rejected' && window._lastNotified !== req.id) {
+            window._lastNotified = req.id;
+            showToast('Deposit ditolak admin.', 'error');
+            if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(req);
+        }
         updateStats();
-        updateSaldoDisplay();
-        navigateTo('produk');
+    });
+}
 
-        // Storage event untuk sinkron antar tab
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'products' || e.key === 'adminConfig' || e.key === 'depositRequests' || e.key === 'userSaldo') {
-                if (currentPage === 'produk') navigateTo('produk');
-                else if (currentPage === 'panel' && user.role === 'owner') navigateTo('panel');
-                else if (currentPage === 'riwayat') navigateTo('riwayat');
-                else if (currentPage === 'info') navigateTo('info');
-                updateStats();
-                updateSaldoDisplay();
+function showAuth() {
+    authPage.style.display = 'flex';
+    appMain.style.display = 'none';
+    clearCurrentUser();
+    if (window._depositListener) window._depositListener();
+    loginError.style.display = 'none';
+    signupError.style.display = 'none';
+    loginUsername.value = loginPassword.value = '';
+    signupName.value = signupUsername.value = signupPhone.value = signupPassword.value = signupConfirm.value = '';
+}
+
+function updateRequestStatusDisplay(req) {
+    reqStatus.textContent = req.status === 'pending' ? 'Menunggu Konfirmasi' : req.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+    reqStatus.className = 'status-badge ' + req.status;
+}
+
+// ================================================================
+// RENDER FUNGSI
+// ================================================================
+function renderProductGrid(products) {
+    const user = getCurrentUser();
+    if (!products || Object.keys(products).length === 0) return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk kosong</h3></div>`;
+    let html = '<div class="product-grid">';
+    Object.values(products).forEach(p => {
+        const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
+        const inStock = p.stock > 0;
+        let actionHtml = '';
+        if (user) {
+            const isOwner = user.role && user.role.toLowerCase() === 'owner';
+            if (isOwner) {
+                actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
+            } else {
+                actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
             }
-        });
+        }
+        html += `
+            <div class="product-card">
+                <div class="product-image">${img}</div>
+                <div class="product-name">${p.name}</div>
+                <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
+                <div class="product-stock">Stok: ${p.stock}</div>
+                ${actionHtml}
+            </div>
+        `;
+    });
+    html += '</div>';
+    return html;
+}
 
-        // Polling status deposit
-        if (window._depositPoll) clearInterval(window._depositPoll);
-        window._depositPoll = setInterval(() => {
-            const u = getCurrentUser();
-            if (!u) return;
-            const deposits = getUserDeposits(u.username);
-            if (deposits.length === 0) return;
-            const latest = deposits[0];
-            if (latest.status === 'approved' && window._lastNotified !== latest.id) {
-                window._lastNotified = latest.id;
-                updateSaldoDisplay();
-                showToast('Deposit Rp ' + latest.amount.toLocaleString('id-ID') + ' disetujui!', 'success');
-                if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
-                if (currentPage === 'riwayat') navigateTo('riwayat');
-            } else if (latest.status === 'rejected' && window._lastNotified !== latest.id) {
-                window._lastNotified = latest.id;
-                showToast('Deposit ditolak admin.', 'error');
-                if (!depositStep3.classList.contains('hidden')) updateRequestStatusDisplay(latest);
-            }
-            updateStats();
-        }, 3000);
-    }
-
-    function showAuth() {
-        authPage.style.display = 'flex';
-        appMain.style.display = 'none';
-        clearCurrentUser();
-        if (window._depositPoll) clearInterval(window._depositPoll);
-        loginError.style.display = 'none';
-        signupError.style.display = 'none';
-        loginUsername.value = loginPassword.value = '';
-        signupName.value = signupUsername.value = signupPhone.value = signupPassword.value = signupConfirm.value = '';
-    }
-
-    function updateRequestStatusDisplay(req) {
-        reqStatus.textContent = req.status === 'pending' ? 'Menunggu Konfirmasi' : req.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-        reqStatus.className = 'status-badge ' + req.status;
-    }
-
-    // ============================================================
-    // RENDER
-    // ============================================================
-    function renderProductGrid(productList) {
-        const user = getCurrentUser();
-        if (!productList || productList.length === 0) return `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Produk kosong</h3></div>`;
-        let html = '<div class="product-grid">';
-        productList.forEach(p => {
-            const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
-            const inStock = p.stock > 0;
-            const btnHtml = (user && user.role !== 'owner') ?
-                `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>` :
-                (user && user.role === 'owner' ? `<div style="font-size:11px; color:var(--text-muted); margin-top:8px; text-align:center;">OWN tidak bisa membeli</div>` : '');
-            html += `
-                <div class="product-card">
-                    <div class="product-image">${img}</div>
-                    <div class="product-name">${p.name}</div>
-                    <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
-                    <div class="product-stock">Stok: ${p.stock}</div>
-                    ${btnHtml}
+function renderUserList(users) {
+    if (!users || Object.keys(users).length === 0) return `<div class="empty-state"><i class="fas fa-users"></i><h3>Belum ada pengguna</h3></div>`;
+    const current = getCurrentUser();
+    let html = '<div class="user-list">';
+    Object.values(users).forEach(u => {
+        const isSelf = current && u.username === current.username;
+        html += `
+            <div class="user-item" data-username="${u.username}">
+                <div class="user-info">
+                    <div class="uname">${u.name} (${u.username})</div>
+                    <div class="detail"><i class="fas fa-phone"></i> ${u.phone} &nbsp;|&nbsp; <i class="fas fa-lock"></i> ${u.password}</div>
+                    <div class="detail" style="font-size:13px; color:var(--accent);"><i class="fas fa-coins"></i> Saldo: Rp <span class="saldo-text" id="saldo-${u.username}">...</span></div>
+                    <div class="detail" style="font-size:11px; color:var(--text-muted);">Role: ${u.role.toUpperCase()}</div>
                 </div>
-            `;
-        });
-        html += '</div>';
-        return html;
-    }
-
-    function renderUserList() {
-        const users = getUsers(), current = getCurrentUser();
-        if (users.length === 0) return `<div class="empty-state"><i class="fas fa-users"></i><h3>Belum ada pengguna</h3></div>`;
-        let html = '<div class="user-list">';
-        users.forEach(u => {
-            const isSelf = current && u.username === current.username;
-            const saldo = getUserSaldo(u.username);
-            html += `
-                <div class="user-item" data-username="${u.username}">
-                    <div class="user-info">
-                        <div class="uname">${u.name} (${u.username})</div>
-                        <div class="detail"><i class="fas fa-phone"></i> ${u.phone} &nbsp;|&nbsp; <i class="fas fa-lock"></i> ${u.password}</div>
-                        <div class="detail" style="font-size:13px; color:var(--accent);"><i class="fas fa-coins"></i> Saldo: Rp <span class="saldo-text">${saldo.toLocaleString('id-ID')}</span></div>
-                        <div class="detail" style="font-size:11px; color:var(--text-muted);">Role: ${u.role.toUpperCase()}</div>
-                    </div>
-                    <div class="user-actions">
-                        <input type="number" class="saldo-input" placeholder="Rp" min="0" step="1000" />
-                        <button class="btn-saldo btn-sm" data-username="${u.username}"><i class="fas fa-edit"></i> Ubah</button>
-                        <button class="btn-del-user btn-sm" data-username="${u.username}" ${isSelf ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isSelf ? 'Diri' : 'Hapus'}</button>
-                    </div>
-                </div>
-            `;
-        });
-        html += '</div>';
-        return html;
-    }
-
-    function renderPendingRequests() {
-        const reqs = getPendingDeposits();
-        if (reqs.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
-        let html = '<div class="user-list">';
-        reqs.forEach(r => {
-            const user = getUsers().find(u => u.username === r.username);
-            const name = user ? user.name : r.username;
-            html += `
-                <div class="request-item">
-                    <div class="req-info">
-                        <div class="uname">${name} (${r.username})</div>
-                        <div class="detail">Nominal: Rp ${r.amount.toLocaleString('id-ID')}</div>
-                        <div class="detail" style="font-size:12px; color:var(--text-muted);">Diajukan: ${new Date(r.createdAt).toLocaleString()}</div>
-                    </div>
-                    <div class="req-actions">
-                        <button class="btn-approve" data-id="${r.id}"><i class="fas fa-check"></i> Setuju</button>
-                        <button class="btn-reject" data-id="${r.id}"><i class="fas fa-times"></i> Tolak</button>
-                    </div>
-                </div>
-            `;
-        });
-        html += '</div>';
-        return html;
-    }
-
-    function renderRiwayat() {
-        const user = getCurrentUser();
-        if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
-        const deposits = getUserDeposits(user.username);
-        if (deposits.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
-        let html = `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div><div class="user-list">`;
-        deposits.forEach(r => {
-            const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
-            html += `
-                <div class="user-item">
-                    <div class="user-info">
-                        <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
-                        <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
-                        <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
-                    </div>
-                </div>
-            `;
-        });
-        html += '</div></div>';
-        return html;
-    }
-
-    function renderInfo() {
-        const config = getAdminConfig();
-        const qr = config.paymentQr && config.paymentQr.length > 100 ?
-            `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid var(--border); padding:12px; background:#fff;" />` :
-            '<p style="color:var(--text-muted);">QR belum diatur oleh OWN.</p>';
-        return `
-            <div class="page-content">
-                <div class="section-title"><span>Informasi Toko</span></div>
-                <div style="background:var(--bg-card); border-radius:12px; padding:16px; border:1px solid var(--border);">
-                    <p><i class="fas fa-store" style="color:var(--accent); width:24px;"></i> <strong>${config.storeInfo}</strong></p>
-                    <p><i class="fas fa-phone" style="color:var(--accent); width:24px;"></i> Admin WA: <strong>${config.waNumber}</strong></p>
-                    <p><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran: <a href="${config.slLink}" target="_blank" style="color:var(--accent);">PUTZX MARKET</a></p>
-                    <hr style="margin:12px 0; border:0; border-top:1px solid var(--border);">
-                    <div style="text-align:center;"><p style="font-weight:600;">QR Pembayaran</p>${qr}</div>
+                <div class="user-actions">
+                    <input type="number" class="saldo-input" placeholder="Rp" min="0" step="1000" />
+                    <button class="btn-saldo btn-sm" data-username="${u.username}"><i class="fas fa-edit"></i> Ubah</button>
+                    <button class="btn-del-user btn-sm" data-username="${u.username}" ${isSelf ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isSelf ? 'Diri' : 'Hapus'}</button>
                 </div>
             </div>
         `;
-    }
+    });
+    html += '</div>';
+    // Subscribe saldo tiap user
+    Object.values(users).forEach(u => {
+        refs.saldo.child(u.username).on('value', snap => {
+            const el = document.getElementById('saldo-' + u.username);
+            if (el) el.textContent = (snap.val() || 0).toLocaleString('id-ID');
+        });
+    });
+    return html;
+}
 
-    function renderPanel() {
-        const user = getCurrentUser();
-        if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
-        const products = getProducts(), config = getAdminConfig();
-        let productListHtml = products.map(p => `
+function renderPendingRequests(reqs) {
+    if (!reqs || reqs.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
+    let html = '<div class="user-list">';
+    reqs.forEach(r => {
+        html += `
+            <div class="request-item">
+                <div class="req-info">
+                    <div class="uname">${r.username}</div>
+                    <div class="detail">Nominal: Rp ${r.amount.toLocaleString('id-ID')}</div>
+                    <div class="detail" style="font-size:12px; color:var(--text-muted);">Diajukan: ${new Date(r.createdAt).toLocaleString()}</div>
+                </div>
+                <div class="req-actions">
+                    <button class="btn-approve" data-id="${r.id}"><i class="fas fa-check"></i> Setuju</button>
+                    <button class="btn-reject" data-id="${r.id}"><i class="fas fa-times"></i> Tolak</button>
+                </div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderRiwayat() {
+    const user = getCurrentUser();
+    if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
+    return `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div><div id="riwayatList">Memuat...</div></div>`;
+}
+
+function renderInfo() {
+    return `<div class="page-content"><div class="section-title"><span>Informasi Toko</span></div><div id="infoContent">Memuat...</div></div>`;
+}
+
+function renderPanel() {
+    const user = getCurrentUser();
+    if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
+    return `<div class="page-content"><div class="section-title"><span><i class="fas fa-user-cog"></i> Panel OWN</span></div><div id="panelContent">Memuat...</div></div>`;
+}
+
+// ================================================================
+// NAVIGASI
+// ================================================================
+function navigateTo(page) {
+    currentPage = page;
+    navItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.page === page);
+    });
+    const user = getCurrentUser();
+    let content = '';
+    switch (page) {
+        case 'produk':
+            content = `<div class="page-content"><div class="section-title"><span>Produk</span></div><div id="productList">Memuat...</div></div>`;
+            break;
+        case 'riwayat':
+            content = renderRiwayat();
+            break;
+        case 'info':
+            content = renderInfo();
+            break;
+        case 'panel':
+            content = renderPanel();
+            break;
+        default:
+            content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
+    }
+    mainContent.innerHTML = content;
+    searchInput.value = '';
+
+    if (page === 'produk') {
+        refs.products.on('value', snap => {
+            const products = snap.val();
+            const el = document.getElementById('productList');
+            if (el) el.innerHTML = renderProductGrid(products);
+            attachEvents();
+        });
+    } else if (page === 'panel' && user && user.role === 'owner') {
+        renderPanelContent();
+    } else if (page === 'riwayat') {
+        getUserDeposits(user.username).then(deposits => {
+            const el = document.getElementById('riwayatList');
+            if (!el) return;
+            if (deposits.length === 0) {
+                el.innerHTML = `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
+            } else {
+                let html = '<div class="user-list">';
+                deposits.forEach(r => {
+                    const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+                    html += `
+                        <div class="user-item">
+                            <div class="user-info">
+                                <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
+                                <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
+                                <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                el.innerHTML = html;
+            }
+        });
+    } else if (page === 'info') {
+        refs.config.on('value', snap => {
+            const config = snap.val() || {};
+            const qr = config.paymentQr && config.paymentQr.length > 100 ?
+                `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid var(--border); padding:12px; background:#fff;" />` :
+                '<p style="color:var(--text-muted);">QR belum diatur oleh OWN.</p>';
+            const el = document.getElementById('infoContent');
+            if (el) {
+                el.innerHTML = `
+                    <div style="background:var(--bg-card); border-radius:12px; padding:16px; border:1px solid var(--border);">
+                        <p><i class="fas fa-store" style="color:var(--accent); width:24px;"></i> <strong>${config.storeInfo || 'PutzxStore'}</strong></p>
+                        <p><i class="fas fa-phone" style="color:var(--accent); width:24px;"></i> Admin WA: <strong>${config.waNumber || WA_NUMBER}</strong></p>
+                        <p><i class="fab fa-whatsapp" style="color:#25D366; width:24px;"></i> Saluran: <a href="${config.slLink || WA_LINK}" target="_blank" style="color:var(--accent);">PUTZX MARKET</a></p>
+                        <hr style="margin:12px 0; border:0; border-top:1px solid var(--border);">
+                        <div style="text-align:center;"><p style="font-weight:600;">QR Pembayaran</p>${qr}</div>
+                    </div>
+                `;
+            }
+        });
+    }
+    attachEvents();
+}
+
+function renderPanelContent() {
+    const user = getCurrentUser();
+    if (!user || user.role !== 'owner') return;
+
+    Promise.all([
+        refs.products.once('value'),
+        refs.users.once('value'),
+        getPendingDeposits(),
+        refs.config.once('value')
+    ]).then(([productsSnap, usersSnap, pending, configSnap]) => {
+        const products = productsSnap.val() || {};
+        const users = usersSnap.val() || {};
+        const config = configSnap.val() || {};
+
+        let productListHtml = Object.values(products).map(p => `
             <div class="product-item" data-id="${p.id}">
                 <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:var(--text-muted);"></i>'}</div>
                 <div class="info">
@@ -742,336 +839,329 @@
             </div>
         `).join('');
 
-        return `
-            <div class="page-content">
-                <div class="section-title"><span><i class="fas fa-user-cog"></i> Panel OWN</span></div>
-                <div class="own-panel">
-                    <div class="panel-tabs">
-                        <button class="panel-tab active" data-panel-tab="produk">Produk</button>
-                        <button class="panel-tab" data-panel-tab="akun">Akun</button>
-                        <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
-                        <button class="panel-tab" data-panel-tab="info">Info</button>
+        const userListHtml = renderUserList(users);
+        const pendingHtml = renderPendingRequests(pending);
+
+        const html = `
+            <div class="own-panel">
+                <div class="panel-tabs">
+                    <button class="panel-tab active" data-panel-tab="produk">Produk</button>
+                    <button class="panel-tab" data-panel-tab="akun">Akun</button>
+                    <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
+                    <button class="panel-tab" data-panel-tab="info">Info</button>
+                </div>
+                <div id="panelTabProduk" class="panel-tab-content active">
+                    <h3>Daftar Produk</h3>${productListHtml}
+                    <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                    <h3>Tambah Produk</h3>
+                    <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama" /></div>
+                    <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
+                    <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
+                    <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
+                    <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah</button>
+                    <div id="panelAlert" class="alert"></div>
+                    <div class="qr-upload">
+                        <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
+                        <div class="form-group"><label>Upload QR</label><input type="file" id="qrUpload" accept="image/*" /></div>
+                        ${config.paymentQr && config.paymentQr.length > 100 ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:var(--text-muted);">Belum ada QR.</p>'}
+                        <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
+                        <div id="qrAlert" class="alert"></div>
                     </div>
-                    <div id="panelTabProduk" class="panel-tab-content active">
-                        <h3>Daftar Produk</h3>${productListHtml}
-                        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
-                        <h3>Tambah Produk</h3>
-                        <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama" /></div>
-                        <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
-                        <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
-                        <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
-                        <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah</button>
-                        <div id="panelAlert" class="alert"></div>
-                        <div class="qr-upload">
-                            <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
-                            <div class="form-group"><label>Upload QR</label><input type="file" id="qrUpload" accept="image/*" /></div>
-                            ${config.paymentQr && config.paymentQr.length > 100 ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:var(--text-muted);">Belum ada QR.</p>'}
-                            <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
-                            <div id="qrAlert" class="alert"></div>
-                        </div>
-                    </div>
-                    <div id="panelTabAkun" class="panel-tab-content">
-                        <h3>Daftar Akun</h3><p style="font-size:13px; color:var(--text-muted);">Username, Password, No HP, Saldo.</p>
-                        ${renderUserList()}
-                        <div id="userAlert" class="alert"></div>
-                    </div>
-                    <div id="panelTabDeposit" class="panel-tab-content">
-                        <h3>Permintaan Deposit</h3>
-                        ${renderPendingRequests()}
-                        <div id="depositAlert" class="alert"></div>
-                    </div>
-                    <div id="panelTabInfo" class="panel-tab-content">
-                        <h3>Edit Info Toko</h3>
-                        <div class="form-group"><label>Nama/Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
-                        <div class="form-group"><label>Nomor WA Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
-                        <div class="form-group"><label>Link Saluran</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
-                        <button class="btn-save" id="saveInfoBtn"><i class="fas fa-save"></i> Simpan Info</button>
-                        <div id="infoAlert" class="alert"></div>
-                    </div>
+                </div>
+                <div id="panelTabAkun" class="panel-tab-content">
+                    <h3>Daftar Akun</h3><p style="font-size:13px; color:var(--text-muted);">Username, Password, No HP, Saldo.</p>
+                    ${userListHtml}
+                    <div id="userAlert" class="alert"></div>
+                </div>
+                <div id="panelTabDeposit" class="panel-tab-content">
+                    <h3>Permintaan Deposit</h3>
+                    ${pendingHtml}
+                    <div id="depositAlert" class="alert"></div>
+                </div>
+                <div id="panelTabInfo" class="panel-tab-content">
+                    <h3>Edit Info Toko</h3>
+                    <div class="form-group"><label>Nama/Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
+                    <div class="form-group"><label>Nomor WA Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
+                    <div class="form-group"><label>Link Saluran</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
+                    <button class="btn-save" id="saveInfoBtn"><i class="fas fa-save"></i> Simpan Info</button>
+                    <div id="infoAlert" class="alert"></div>
                 </div>
             </div>
         `;
-    }
-
-    // ============================================================
-    // NAVIGASI
-    // ============================================================
-    function navigateTo(page) {
-        currentPage = page;
-        navItems.forEach(item => {
-            item.classList.toggle('active', item.dataset.page === page);
-        });
-        const user = getCurrentUser();
-        let content = '';
-        switch (page) {
-            case 'produk': content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(getProducts())}</div>`; break;
-            case 'riwayat': content = renderRiwayat(); break;
-            case 'info': content = renderInfo(); break;
-            case 'panel': content = renderPanel(); break;
-            default: content = `<div class="empty-state"><h3>Halaman tidak tersedia</h3></div>`;
-        }
-        mainContent.innerHTML = content;
-        searchInput.value = '';
+        const container = document.getElementById('panelContent');
+        if (container) container.innerHTML = html;
+        attachPanelEvents();
         attachEvents();
-    }
-
-    // ============================================================
-    // EVENT ATTACH
-    // ============================================================
-    function attachEvents() {
-        // PEMBELIAN
-        mainContent.removeEventListener('click', handlePurchase);
-        mainContent.addEventListener('click', handlePurchase);
-
-        // PANEL TABS
-        document.querySelectorAll('.panel-tab').forEach(tab => {
-            tab.removeEventListener('click', handlePanelTab);
-            tab.addEventListener('click', handlePanelTab);
+        // Subscribe saldo real-time di panel akun
+        Object.values(users).forEach(u => {
+            refs.saldo.child(u.username).on('value', snap => {
+                const el = document.getElementById('saldo-' + u.username);
+                if (el) el.textContent = (snap.val() || 0).toLocaleString('id-ID');
+            });
         });
+    });
+}
 
-        // HAPUS PRODUK
-        document.querySelectorAll('.product-item .btn-del').forEach(btn => {
-            btn.removeEventListener('click', handleDeleteProduct);
-            btn.addEventListener('click', handleDeleteProduct);
-        });
+// ================================================================
+// EVENT ATTACH
+// ================================================================
+function attachEvents() {
+    mainContent.removeEventListener('click', handlePurchase);
+    mainContent.addEventListener('click', handlePurchase);
+}
 
-        // UPLOAD GAMBAR PRODUK
-        document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
-            input.removeEventListener('change', handleProductImage);
-            input.addEventListener('change', handleProductImage);
-        });
+function attachPanelEvents() {
+    document.querySelectorAll('.panel-tab').forEach(tab => {
+        tab.removeEventListener('click', handlePanelTab);
+        tab.addEventListener('click', handlePanelTab);
+    });
 
-        // TAMBAH PRODUK
-        const addBtn = document.getElementById('addProductBtn');
-        if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
+    document.querySelectorAll('.product-item .btn-del').forEach(btn => {
+        btn.removeEventListener('click', handleDeleteProduct);
+        btn.addEventListener('click', handleDeleteProduct);
+    });
 
-        // SIMPAN QR
-        const saveQr = document.getElementById('saveQrBtn');
-        if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
+    document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
+        input.removeEventListener('change', handleProductImage);
+        input.addEventListener('change', handleProductImage);
+    });
 
-        // SIMPAN INFO
-        const saveInfo = document.getElementById('saveInfoBtn');
-        if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
+    const addBtn = document.getElementById('addProductBtn');
+    if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
 
-        // UBAH SALDO USER
-        document.querySelectorAll('.btn-saldo').forEach(btn => {
-            btn.removeEventListener('click', handleUserSaldo);
-            btn.addEventListener('click', handleUserSaldo);
-        });
+    const saveQr = document.getElementById('saveQrBtn');
+    if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
 
-        // HAPUS USER
-        document.querySelectorAll('.btn-del-user').forEach(btn => {
-            btn.removeEventListener('click', handleDeleteUser);
-            btn.addEventListener('click', handleDeleteUser);
-        });
+    const saveInfo = document.getElementById('saveInfoBtn');
+    if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
 
-        // APPROVE/REJECT DEPOSIT
-        document.querySelectorAll('.btn-approve').forEach(btn => {
-            btn.removeEventListener('click', handleApprove);
-            btn.addEventListener('click', handleApprove);
-        });
-        document.querySelectorAll('.btn-reject').forEach(btn => {
-            btn.removeEventListener('click', handleReject);
-            btn.addEventListener('click', handleReject);
-        });
-    }
+    document.querySelectorAll('.btn-saldo').forEach(btn => {
+        btn.removeEventListener('click', handleUserSaldo);
+        btn.addEventListener('click', handleUserSaldo);
+    });
 
-    // ============================================================
-    // HANDLERS
-    // ============================================================
-    function handlePurchase(e) {
-        const btn = e.target.closest('.btn-beli');
-        if (!btn) return;
-        const productId = parseInt(btn.dataset.id);
-        const user = getCurrentUser();
-        if (!user) { alert('Silakan login.'); return; }
-        if (user.role === 'owner') { alert('OWN tidak bisa membeli.'); return; }
-        const products = getProducts();
-        const product = products.find(p => p.id === productId);
+    document.querySelectorAll('.btn-del-user').forEach(btn => {
+        btn.removeEventListener('click', handleDeleteUser);
+        btn.addEventListener('click', handleDeleteUser);
+    });
+
+    document.querySelectorAll('.btn-approve').forEach(btn => {
+        btn.removeEventListener('click', handleApprove);
+        btn.addEventListener('click', handleApprove);
+    });
+    document.querySelectorAll('.btn-reject').forEach(btn => {
+        btn.removeEventListener('click', handleReject);
+        btn.addEventListener('click', handleReject);
+    });
+}
+
+// ================================================================
+// HANDLERS
+// ================================================================
+function handlePurchase(e) {
+    const btn = e.target.closest('.btn-beli');
+    if (!btn) return;
+    const productId = btn.dataset.id;
+    const user = getCurrentUser();
+    if (!user) { alert('Silakan login.'); return; }
+    if (user.role && user.role.toLowerCase() === 'owner') { alert('OWN tidak bisa membeli.'); return; }
+
+    refs.products.child(productId).once('value', snap => {
+        const product = snap.val();
         if (!product) { alert('Produk tidak ditemukan.'); return; }
         if (product.stock <= 0) { alert('Stok habis.'); return; }
-        const saldo = getUserSaldo(user.username);
-        if (saldo < product.price) {
-            alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
-            return;
+
+        refs.saldo.child(user.username).once('value', snapSaldo => {
+            const saldo = snapSaldo.val() || 0;
+            if (saldo < product.price) {
+                alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
+                return;
+            }
+            if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
+                refs.saldo.child(user.username).set(saldo - product.price);
+                refs.products.child(productId).update({ stock: product.stock - 1 });
+                showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
+                navigateTo('produk');
+                updateStats();
+            }
+        });
+    });
+}
+
+function handlePanelTab(e) {
+    document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    const target = this.dataset.panelTab;
+    document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
+    const map = { produk: 'panelTabProduk', akun: 'panelTabAkun', deposit: 'panelTabDeposit', info: 'panelTabInfo' };
+    const el = document.getElementById(map[target]);
+    if (el) {
+        el.classList.add('active');
+        if (target === 'akun') {
+            refs.users.once('value', snap => {
+                const users = snap.val();
+                const container = document.getElementById('panelTabAkun');
+                const list = container.querySelector('.user-list');
+                if (list) list.outerHTML = renderUserList(users);
+                attachPanelEvents();
+            });
         }
-        if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
-            addUserSaldo(user.username, -product.price);
-            const idx = products.findIndex(p => p.id === productId);
-            products[idx].stock -= 1;
-            saveProducts(products);
-            updateSaldoDisplay();
-            showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
-            navigateTo(currentPage);
-            updateStats();
+        if (target === 'deposit') {
+            getPendingDeposits().then(pending => {
+                const container = document.getElementById('panelTabDeposit');
+                const list = container.querySelector('.user-list');
+                if (list) list.outerHTML = renderPendingRequests(pending);
+                attachPanelEvents();
+            });
         }
     }
+}
 
-    function handlePanelTab(e) {
-        document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        const target = this.dataset.panelTab;
-        document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
-        const map = { produk: 'panelTabProduk', akun: 'panelTabAkun', deposit: 'panelTabDeposit', info: 'panelTabInfo' };
-        const el = document.getElementById(map[target]);
-        if (el) {
-            el.classList.add('active');
-            if (target === 'akun') { const c = document.getElementById('panelTabAkun'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderUserList(); attachEvents(); } }
-            if (target === 'deposit') { const c = document.getElementById('panelTabDeposit'); const list = c.querySelector('.user-list'); if (list) { list.outerHTML = renderPendingRequests(); attachEvents(); } }
-        }
-    }
+function handleDeleteProduct(e) {
+    if (!confirm('Hapus produk ini?')) return;
+    const id = this.dataset.id;
+    refs.products.child(id).remove();
+    showToast('Produk dihapus!', 'success');
+    navigateTo('panel');
+    updateStats();
+}
 
-    function handleDeleteProduct(e) {
-        if (!confirm('Hapus produk ini?')) return;
-        const id = parseInt(this.dataset.id);
-        let products = getProducts();
-        products = products.filter(p => p.id !== id);
-        saveProducts(products);
-        showToast('Produk dihapus!', 'success');
+function handleProductImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        const base64 = ev.target.result;
+        const productId = this.closest('.product-item').dataset.id;
+        refs.products.child(productId).update({ image: base64 });
+        showToast('Gambar diperbarui!', 'success');
         navigateTo('panel');
-        updateStats();
-    }
+    }.bind(this);
+    reader.readAsDataURL(file);
+}
 
-    function handleProductImage(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            const base64 = ev.target.result;
-            const productId = parseInt(this.closest('.product-item').dataset.id);
-            let products = getProducts();
-            const idx = products.findIndex(p => p.id === productId);
-            if (idx !== -1) { products[idx].image = base64; saveProducts(products); showToast('Gambar diperbarui!', 'success'); navigateTo('panel'); }
-        }.bind(this);
-        reader.readAsDataURL(file);
-    }
-
-    function handleAddProduct() {
-        const name = document.getElementById('newProductName').value.trim();
-        const price = parseInt(document.getElementById('newProductPrice').value);
-        const stock = parseInt(document.getElementById('newProductStock').value);
-        const fileInput = document.getElementById('newProductImage');
-        if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            let products = getProducts();
-            const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-            products.push({ id: newId, name, price, stock, image: e.target.result || '' });
-            saveProducts(products);
+function handleAddProduct() {
+    const name = document.getElementById('newProductName').value.trim();
+    const price = parseInt(document.getElementById('newProductPrice').value);
+    const stock = parseInt(document.getElementById('newProductStock').value);
+    const fileInput = document.getElementById('newProductImage');
+    if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        refs.products.once('value', snap => {
+            const products = snap.val() || {};
+            const ids = Object.keys(products).map(Number);
+            const newId = ids.length ? Math.max(...ids) + 1 : 1;
+            refs.products.child(newId).set({
+                id: newId, name, price, stock, image: e.target.result || ''
+            });
             showAlert('panelAlert', 'Produk ditambahkan!', 'success');
             navigateTo('panel');
             updateStats();
-        };
-        if (fileInput.files && fileInput.files[0]) {
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            let products = getProducts();
-            const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-            products.push({ id: newId, name, price, stock, image: '' });
-            saveProducts(products);
-            showAlert('panelAlert', 'Produk ditambahkan!', 'success');
-            navigateTo('panel');
-            updateStats();
-        }
-    }
-
-    // === PERBAIKAN UTAMA: handleSaveQr ===
-    function handleSaveQr() {
-        const fileInput = document.getElementById('qrUpload');
-        if (!fileInput.files || !fileInput.files[0]) {
-            showAlert('qrAlert', 'Pilih file QR terlebih dahulu.', 'error');
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const base64 = e.target.result;
-            // Ambil konfigurasi saat ini
-            const config = getAdminConfig();
-            config.paymentQr = base64;
-            // Simpan ke localStorage
-            setAdminConfig(config);
-            showAlert('qrAlert', 'QR berhasil disimpan!', 'success');
-            // Refresh panel agar preview muncul
-            navigateTo('panel');
-            // Broadcast ke member via storage event (otomatis)
-        };
+        });
+    };
+    if (fileInput.files && fileInput.files[0]) {
         reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        refs.products.once('value', snap => {
+            const products = snap.val() || {};
+            const ids = Object.keys(products).map(Number);
+            const newId = ids.length ? Math.max(...ids) + 1 : 1;
+            refs.products.child(newId).set({
+                id: newId, name, price, stock, image: ''
+            });
+            showAlert('panelAlert', 'Produk ditambahkan!', 'success');
+            navigateTo('panel');
+            updateStats();
+        });
     }
+}
 
-    function handleSaveInfo() {
-        const info = document.getElementById('editStoreInfo').value.trim();
-        const wa = document.getElementById('editWaNumber').value.trim();
-        const sl = document.getElementById('editSlLink').value.trim();
-        const config = getAdminConfig();
-        config.storeInfo = info || 'PutzxStore - Toko Online';
-        config.waNumber = wa || WA_NUMBER;
-        config.slLink = sl || WA_LINK;
-        setAdminConfig(config);
-        showAlert('infoAlert', 'Info disimpan!', 'success');
+function handleSaveQr() {
+    const fileInput = document.getElementById('qrUpload');
+    if (!fileInput.files || !fileInput.files[0]) { showAlert('qrAlert', 'Pilih file QR.', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        refs.config.update({ paymentQr: e.target.result });
+        showAlert('qrAlert', 'QR disimpan!', 'success');
         navigateTo('panel');
-    }
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+}
 
-    function handleUserSaldo(e) {
-        const btn = this;
-        const username = btn.dataset.username;
-        const item = btn.closest('.user-item');
-        const input = item.querySelector('.saldo-input');
-        const amount = parseInt(input.value);
-        if (isNaN(amount) || amount < 0) { alert('Nominal valid (min 0).'); return; }
-        if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
-        setUserSaldo(username, amount);
-        const saldoText = item.querySelector('.saldo-text');
-        if (saldoText) saldoText.textContent = amount.toLocaleString('id-ID');
-        input.value = '';
-        showToast('Saldo ' + username + ' diubah!', 'success');
-        updateStats();
-        if (getCurrentUser() && getCurrentUser().username === username) updateSaldoDisplay();
-    }
+function handleSaveInfo() {
+    const info = document.getElementById('editStoreInfo').value.trim();
+    const wa = document.getElementById('editWaNumber').value.trim();
+    const sl = document.getElementById('editSlLink').value.trim();
+    refs.config.update({
+        storeInfo: info || 'PutzxStore - Toko Online',
+        waNumber: wa || WA_NUMBER,
+        slLink: sl || WA_LINK
+    });
+    showAlert('infoAlert', 'Info disimpan!', 'success');
+    navigateTo('panel');
+}
 
-    function handleDeleteUser(e) {
-        if (this.disabled) return;
-        const username = this.dataset.username;
-        if (!confirm('Hapus akun "' + username + '"?')) return;
-        let users = getUsers();
-        users = users.filter(u => u.username !== username);
-        saveUsers(users);
-        const map = get('userSaldo') || {};
-        delete map[username];
-        set('userSaldo', map);
-        showToast('Akun dihapus!', 'success');
-        navigateTo('panel');
-        updateStats();
-    }
+function handleUserSaldo(e) {
+    const btn = this;
+    const username = btn.dataset.username;
+    const item = btn.closest('.user-item');
+    const input = item.querySelector('.saldo-input');
+    const amount = parseInt(input.value);
+    if (isNaN(amount) || amount < 0) { alert('Nominal valid (min 0).'); return; }
+    if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
+    refs.saldo.child(username).set(amount);
+    input.value = '';
+    showToast('Saldo ' + username + ' diubah!', 'success');
+    updateStats();
+    const user = getCurrentUser();
+    if (user && user.username === username) updateSaldoDisplay();
+}
 
-    function handleApprove(e) {
-        const id = parseInt(this.dataset.id);
-        if (!confirm('Setujui deposit ini?')) return;
-        const reqs = getDepositRequests();
-        const req = reqs.find(r => r.id === id);
+function handleDeleteUser(e) {
+    if (this.disabled) return;
+    const username = this.dataset.username;
+    if (!confirm('Hapus akun "' + username + '"?')) return;
+    refs.users.child(username).remove();
+    refs.saldo.child(username).remove();
+    showToast('Akun dihapus!', 'success');
+    navigateTo('panel');
+    updateStats();
+}
+
+function handleApprove(e) {
+    const id = parseInt(this.dataset.id);
+    if (!confirm('Setujui deposit ini?')) return;
+    refs.deposits.child(id).once('value', snap => {
+        const req = snap.val();
         if (req) {
-            addUserSaldo(req.username, req.amount);
+            refs.saldo.child(req.username).once('value', snapSaldo => {
+                const saldo = snapSaldo.val() || 0;
+                refs.saldo.child(req.username).set(saldo + req.amount);
+            });
             updateDepositRequest(id, 'approved');
-            showToast('Deposit disetujui! Saldo ' + req.username + ' bertambah.', 'success');
-            if (getCurrentUser() && getCurrentUser().username === req.username) updateSaldoDisplay();
+            showToast('Deposit disetujui!', 'success');
             navigateTo('panel');
             updateStats();
         }
-    }
+    });
+}
 
-    function handleReject(e) {
-        const id = parseInt(this.dataset.id);
-        if (!confirm('Tolak deposit ini?')) return;
-        updateDepositRequest(id, 'rejected');
-        showToast('Deposit ditolak.', 'error');
-        navigateTo('panel');
-        updateStats();
-    }
+function handleReject(e) {
+    const id = parseInt(this.dataset.id);
+    if (!confirm('Tolak deposit ini?')) return;
+    updateDepositRequest(id, 'rejected');
+    showToast('Deposit ditolak.', 'error');
+    navigateTo('panel');
+    updateStats();
+}
 
-    // ============================================================
-    // DEPOSIT MODAL - PASTIKAN QR TERBACA
-    // ============================================================
-    depositBtn.addEventListener('click', function() {
-        const config = getAdminConfig(); // ambil fresh dari localStorage
+// ================================================================
+// DEPOSIT MODAL
+// ================================================================
+depositBtn.addEventListener('click', function() {
+    refs.config.once('value', snap => {
+        const config = snap.val() || {};
         if (!config.paymentQr || config.paymentQr.length < 100) {
             alert('QR belum diatur oleh OWN. Silakan hubungi admin.');
             return;
@@ -1085,118 +1175,136 @@
         depositAmount.focus();
         pendingAmount = 0;
     });
+});
 
-    depositCancelBtn.addEventListener('click', () => depositModal.classList.remove('active'));
+depositCancelBtn.addEventListener('click', () => depositModal.classList.remove('active'));
 
-    depositConfirmBtn.addEventListener('click', function() {
-        const amount = parseInt(depositAmount.value);
-        if (isNaN(amount) || amount <= 0) { depositError.style.display = 'block'; return; }
-        depositError.style.display = 'none';
-        pendingAmount = amount;
-        depositStep1.classList.add('hidden');
-        depositStep2.classList.remove('hidden');
-        qrNominal.textContent = 'Rp ' + amount.toLocaleString('id-ID');
-        const config = getAdminConfig();
+depositConfirmBtn.addEventListener('click', function() {
+    const amount = parseInt(depositAmount.value);
+    if (isNaN(amount) || amount <= 0) { depositError.style.display = 'block'; return; }
+    depositError.style.display = 'none';
+    pendingAmount = amount;
+    depositStep1.classList.add('hidden');
+    depositStep2.classList.remove('hidden');
+    qrNominal.textContent = 'Rp ' + amount.toLocaleString('id-ID');
+    refs.config.once('value', snap => {
+        const config = snap.val() || {};
         qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR" />`;
-        requestDepositBtn.disabled = false;
     });
+    requestDepositBtn.disabled = false;
+});
 
-    requestDepositBtn.addEventListener('click', function() {
-        const user = getCurrentUser();
-        if (!user) { alert('Login dulu.'); return; }
-        if (pendingAmount <= 0) return;
-        const req = createDepositRequest(user.username, pendingAmount);
+requestDepositBtn.addEventListener('click', function() {
+    const user = getCurrentUser();
+    if (!user) { alert('Login dulu.'); return; }
+    if (pendingAmount <= 0) return;
+    createDepositRequest(user.username, pendingAmount).then(() => {
         depositStep2.classList.add('hidden');
         depositStep3.classList.remove('hidden');
         reqNominal.textContent = 'Rp ' + pendingAmount.toLocaleString('id-ID');
-        updateRequestStatusDisplay(req);
+        reqStatus.textContent = 'Menunggu Konfirmasi';
+        reqStatus.className = 'status-badge pending';
         requestDepositBtn.disabled = true;
         showToast('Permintaan deposit terkirim, tunggu konfirmasi admin.', 'info');
         updateStats();
     });
+});
 
-    depositBack.addEventListener('click', function() {
-        depositStep2.classList.add('hidden');
-        depositStep1.classList.remove('hidden');
-        depositAmount.value = '';
-        depositError.style.display = 'none';
-    });
+depositBack.addEventListener('click', function() {
+    depositStep2.classList.add('hidden');
+    depositStep1.classList.remove('hidden');
+    depositAmount.value = '';
+    depositError.style.display = 'none';
+});
 
-    depositClose.addEventListener('click', function() {
-        depositModal.classList.remove('active');
-        updateSaldoDisplay();
-        if (currentPage === 'riwayat') navigateTo('riwayat');
-        updateStats();
-    });
+depositClose.addEventListener('click', function() {
+    depositModal.classList.remove('active');
+    updateSaldoDisplay();
+    if (currentPage === 'riwayat') navigateTo('riwayat');
+    updateStats();
+});
 
-    depositModal.addEventListener('click', function(e) {
-        if (e.target === this) depositModal.classList.remove('active');
-    });
+depositModal.addEventListener('click', function(e) {
+    if (e.target === this) depositModal.classList.remove('active');
+});
 
-    // ============================================================
-    // CHAT & CHANNEL
-    // ============================================================
-    document.getElementById('chatAdminBtn').addEventListener('click', function() {
-        const config = getAdminConfig();
+// ================================================================
+// CHAT & CHANNEL
+// ================================================================
+document.getElementById('chatAdminBtn').addEventListener('click', function() {
+    refs.config.once('value', snap => {
+        const config = snap.val() || {};
         window.open('https://wa.me/' + (config.waNumber || WA_NUMBER).replace(/\D/g, ''), '_blank');
     });
-    document.getElementById('channelBtn').addEventListener('click', function() {
-        const config = getAdminConfig();
+});
+document.getElementById('channelBtn').addEventListener('click', function() {
+    refs.config.once('value', snap => {
+        const config = snap.val() || {};
         window.open(config.slLink || WA_LINK, '_blank');
     });
+});
 
-    // ============================================================
-    // SEARCH
-    // ============================================================
-    searchInput.addEventListener('input', function() {
-        const keyword = this.value.toLowerCase().trim();
-        if (currentPage === 'produk') {
-            const filtered = getProducts().filter(p => p.name.toLowerCase().includes(keyword));
-            const content = `<div class="page-content"><div class="section-title"><span>Produk</span></div>${renderProductGrid(filtered)}</div>`;
-            mainContent.innerHTML = content;
+// ================================================================
+// SEARCH
+// ================================================================
+searchInput.addEventListener('input', function() {
+    const keyword = this.value.toLowerCase().trim();
+    if (currentPage === 'produk') {
+        refs.products.once('value', snap => {
+            const products = snap.val() || {};
+            const filtered = {};
+            Object.keys(products).forEach(key => {
+                if (products[key].name.toLowerCase().includes(keyword)) {
+                    filtered[key] = products[key];
+                }
+            });
+            const el = document.getElementById('productList');
+            if (el) el.innerHTML = renderProductGrid(filtered);
             attachEvents();
+        });
+    }
+});
+
+// ================================================================
+// NAV ITEMS
+// ================================================================
+navItems.forEach(item => {
+    item.addEventListener('click', function() {
+        const page = this.dataset.page;
+        if (page === 'panel') {
+            const user = getCurrentUser();
+            if (user && user.role && user.role.toLowerCase() === 'owner') navigateTo('panel');
+            else alert('Akses ditolak. Hanya OWN.');
+            return;
         }
+        navigateTo(page);
     });
+});
 
-    // ============================================================
-    // NAV ITEMS
-    // ============================================================
-    navItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const page = this.dataset.page;
-            if (page === 'panel') {
-                const user = getCurrentUser();
-                if (user && user.role === 'owner') navigateTo('panel');
-                else alert('Akses ditolak. Hanya OWN.');
-                return;
-            }
-            navigateTo(page);
-        });
+// ================================================================
+// AUTH EVENTS
+// ================================================================
+authTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+        authTabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const tabName = this.dataset.tab;
+        loginForm.classList.toggle('active', tabName === 'login');
+        signupForm.classList.toggle('active', tabName === 'signup');
+        loginError.style.display = 'none';
+        signupError.style.display = 'none';
     });
+});
 
-    // ============================================================
-    // AUTH EVENTS
-    // ============================================================
-    authTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            authTabs.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            const tabName = this.dataset.tab;
-            loginForm.classList.toggle('active', tabName === 'login');
-            signupForm.classList.toggle('active', tabName === 'signup');
-            loginError.style.display = 'none';
-            signupError.style.display = 'none';
-        });
-    });
+switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
+switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
 
-    switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
-    switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
-
-    loginBtn.addEventListener('click', function() {
-        const username = loginUsername.value.trim();
-        const password = loginPassword.value.trim();
-        if (!username || !password) { loginError.textContent = 'Isi semua field.'; loginError.style.display = 'block'; return; }
-        if (login(username, password)) {
+loginBtn.addEventListener('click', function() {
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value.trim();
+    if (!username || !password) { loginError.textContent = 'Isi semua field.'; loginError.style.display = 'block'; return; }
+    login(username, password).then(success => {
+        if (success) {
             loginError.style.display = 'none';
             showApp(getCurrentUser());
         } else {
@@ -1204,22 +1312,23 @@
             loginError.style.display = 'block';
         }
     });
-    loginUsername.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-    loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+});
+loginUsername.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
 
-    signupBtn.addEventListener('click', function() {
-        const name = signupName.value.trim();
-        const username = signupUsername.value.trim();
-        const phone = signupPhone.value.trim();
-        const password = signupPassword.value.trim();
-        const confirm = signupConfirm.value.trim();
-        if (!name || !username || !phone || !password || !confirm) {
-            signupError.textContent = 'Semua field wajib diisi.';
-            signupError.style.display = 'block';
-            return;
-        }
-        if (password !== confirm) { signupError.textContent = 'Password tidak cocok.'; signupError.style.display = 'block'; return; }
-        const result = signup(name, username, phone, password);
+signupBtn.addEventListener('click', function() {
+    const name = signupName.value.trim();
+    const username = signupUsername.value.trim();
+    const phone = signupPhone.value.trim();
+    const password = signupPassword.value.trim();
+    const confirm = signupConfirm.value.trim();
+    if (!name || !username || !phone || !password || !confirm) {
+        signupError.textContent = 'Semua field wajib diisi.';
+        signupError.style.display = 'block';
+        return;
+    }
+    if (password !== confirm) { signupError.textContent = 'Password tidak cocok.'; signupError.style.display = 'block'; return; }
+    signup(name, username, phone, password).then(result => {
         if (result.success) {
             signupError.style.display = 'none';
             showApp(getCurrentUser());
@@ -1228,26 +1337,32 @@
             signupError.style.display = 'block';
         }
     });
-    signupName.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-    signupUsername.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-    signupPhone.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-    signupPassword.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
-    signupConfirm.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+});
+signupName.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+signupUsername.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+signupPhone.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+signupPassword.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
+signupConfirm.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
 
-    logoutBtn.addEventListener('click', function() {
-        if (confirm('Yakin logout?')) showAuth();
+logoutBtn.addEventListener('click', function() {
+    if (confirm('Yakin logout?')) showAuth();
+});
+
+// ================================================================
+// START
+// ================================================================
+const user = getCurrentUser();
+if (user) {
+    refs.users.child(user.username).once('value', snap => {
+        if (snap.exists()) {
+            showApp(user);
+        } else {
+            showAuth();
+        }
     });
-
-    // ============================================================
-    // START
-    // ============================================================
-    const user = getCurrentUser();
-    if (user) {
-        showApp(user);
-    } else {
-        showAuth();
-    }
-})();
+} else {
+    showAuth();
+}
 </script>
 </body>
 </html>

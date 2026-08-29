@@ -6,7 +6,7 @@
     <title>PutzxStore - Dark</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* DARK THEME */
+        /* ===== DARK THEME ===== */
         :root {
             --bg-primary: #0f0f13;
             --bg-secondary: #1a1a24;
@@ -216,7 +216,7 @@
 </head>
 <body>
 
-<!-- AUTH PAGE -->
+<!-- AUTH -->
 <div id="authPage" class="auth-page">
     <div class="logo">PutzxStore</div>
     <div class="subtitle">Login atau daftar untuk berbelanja</div>
@@ -250,7 +250,7 @@
     </div>
 </div>
 
-<!-- APP MAIN -->
+<!-- APP -->
 <div id="appMain" class="app-container app-main">
     <div class="saldo-card">
         <div class="saldo-left">
@@ -260,7 +260,7 @@
         <button class="btn-deposit" id="depositBtn"><i class="fas fa-plus-circle"></i> Deposit</button>
     </div>
 
-    <div class="login-info" id="userInfo">
+    <div class="login-info">
         <div class="login-detail">
             <span class="label">LOGIN SEBAGAI</span>
             <span class="value" id="displayName">-</span>
@@ -298,7 +298,7 @@
 
     <div id="mainContent" class="main-content"></div>
 
-    <div class="bottom-nav" id="bottomNav">
+    <div class="bottom-nav">
         <button class="nav-item active" data-page="produk"><i class="fas fa-store"></i> Produk</button>
         <button class="nav-item" data-page="riwayat"><i class="fas fa-history"></i> Riwayat</button>
         <button class="nav-item" data-page="info"><i class="fas fa-info-circle"></i> Info</button>
@@ -351,7 +351,7 @@
     const OWNER_PASS = 'putzx123';
 
     // ============================================================
-    // STORAGE
+    // STORAGE (SEMUA DATA PAKAI KEY YANG SAMA)
     // ============================================================
     function get(key) {
         try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
@@ -362,6 +362,7 @@
 
     function getUsers() { return get('users') || []; }
     function saveUsers(u) { set('users', u); }
+
     function getCurrentUser() { return get('currentUser'); }
     function setCurrentUser(u) { set('currentUser', u); }
     function clearCurrentUser() { localStorage.removeItem('currentUser'); }
@@ -379,12 +380,15 @@
         setUserSaldo(username, getUserSaldo(username) + amount);
     }
 
+    // === PRODUK ===
     function getProducts() { return get('products') || []; }
     function saveProducts(p) { set('products', p); }
 
+    // === DEPOSIT REQUESTS ===
     function getDepositRequests() { return get('depositRequests') || []; }
     function saveDepositRequests(r) { set('depositRequests', r); }
 
+    // === ADMIN CONFIG (QR, WA, LINK, INFO) ===
     function getAdminConfig() {
         const def = { waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' };
         const data = get('adminConfig');
@@ -396,13 +400,18 @@
     // INISIALISASI
     // ============================================================
     function init() {
+        // Akun OWN default
         let users = getUsers();
         if (!users.some(u => u.role === 'owner')) {
             users.push({ name: 'Putzx', username: OWNER_USER, phone: WA_NUMBER, password: OWNER_PASS, role: 'owner' });
             saveUsers(users);
             setUserSaldo(OWNER_USER, 0);
         }
-        users.forEach(u => { if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0); });
+        users.forEach(u => {
+            if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0);
+        });
+
+        // Produk default jika kosong
         if (getProducts().length === 0) {
             saveProducts([
                 { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
@@ -421,7 +430,10 @@
     // ============================================================
     function login(username, password) {
         const found = getUsers().find(u => u.username === username && u.password === password);
-        if (found) { setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role }); return true; }
+        if (found) {
+            setCurrentUser({ name: found.name, username: found.username, phone: found.phone, role: found.role });
+            return true;
+        }
         return false;
     }
 
@@ -522,6 +534,21 @@
         updateStats();
         updateSaldoDisplay();
         navigateTo('produk');
+
+        // === LISTENER SINKRONISASI ANTAR TAB ===
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'products' || e.key === 'adminConfig' || e.key === 'depositRequests' || e.key === 'userSaldo') {
+                // Refresh tampilan jika ada perubahan
+                if (currentPage === 'produk') navigateTo('produk');
+                else if (currentPage === 'panel' && user.role === 'owner') navigateTo('panel');
+                else if (currentPage === 'riwayat') navigateTo('riwayat');
+                else if (currentPage === 'info') navigateTo('info');
+                updateStats();
+                updateSaldoDisplay();
+            }
+        });
+
+        // Polling untuk deteksi perubahan (backup)
         if (window._depositPoll) clearInterval(window._depositPoll);
         window._depositPoll = setInterval(() => {
             const u = getCurrentUser();
@@ -570,7 +597,6 @@
         productList.forEach(p => {
             const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
             const inStock = p.stock > 0;
-            // TOMBOL BELI - hanya untuk member (bukan owner)
             const btnHtml = (user && user.role !== 'owner') ?
                 `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>` :
                 (user && user.role === 'owner' ? `<div style="font-size:11px; color:var(--text-muted); margin-top:8px; text-align:center;">OWN tidak bisa membeli</div>` : '');

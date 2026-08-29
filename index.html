@@ -3,19 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PutzxStore - Pembelian</title>
+    <title>PutzxStore - Nokos Indo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
         /* ===== DARK THEME ===== */
-        :root {
-            --bg-primary: #0f0f13; --bg-secondary: #1a1a24; --bg-card: #23232e;
-            --bg-input: #2a2a36; --text-primary: #e8e8f0; --text-secondary: #a0a0b8;
-            --text-muted: #6a6a7e; --accent: #00c853; --accent-hover: #00e676;
-            --danger: #ef5350; --danger-hover: #e53935; --warning: #ffb300;
-            --border: #2f2f3e; --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.6);
-        }
+        :root { --bg-primary:#0f0f13; --bg-secondary:#1a1a24; --bg-card:#23232e; --bg-input:#2a2a36; --text-primary:#e8e8f0; --text-secondary:#a0a0b8; --text-muted:#6a6a7e; --accent:#00c853; --accent-hover:#00e676; --danger:#ef5350; --danger-hover:#e53935; --warning:#ffb300; --border:#2f2f3e; --radius:16px; --shadow:0 4px 20px rgba(0,0,0,0.6); }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
         .app-container { max-width:420px; width:100%; background:var(--bg-secondary); border-radius:var(--radius); padding:16px 16px 80px; box-shadow:var(--shadow); position:relative; }
@@ -90,6 +84,8 @@
         .product-name { font-weight:600; font-size:13px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .product-price { font-weight:700; color:var(--accent); font-size:14px; margin-top:2px; }
         .product-stock { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
+        .nokos-input { width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:20px; font-size:13px; background:var(--bg-input); color:var(--text-primary); margin-bottom:6px; outline:none; }
+        .nokos-input:focus { border-color:var(--accent); }
         .btn-beli { background:var(--accent); color:#fff; border:none; padding:8px 0; border-radius:20px; font-weight:600; font-size:13px; cursor:pointer; width:100%; transition:background .2s; margin-top:auto; }
         .btn-beli:hover { background:var(--accent-hover); }
         .btn-beli:disabled { background:var(--text-muted); cursor:not-allowed; opacity:0.5; }
@@ -99,9 +95,7 @@
         .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
         .empty-state i { font-size:48px; color:var(--text-muted); margin-bottom:12px; }
         .empty-state h3 { font-weight:600; color:var(--text-primary); margin-bottom:6px; }
-        .empty-state p { font-size:14px; color:var(--text-secondary); }
 
-        /* PANEL */
         .own-panel { background:var(--bg-card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); margin-top:8px; }
         .own-panel .panel-tabs { display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; flex-wrap:wrap; }
         .own-panel .panel-tab { padding:8px 18px; border-radius:30px; border:none; background:transparent; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .2s; }
@@ -147,16 +141,18 @@
         .user-item .user-actions .btn-del-user { background:var(--danger); color:#fff; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .user-item .user-actions .btn-del-user:disabled { opacity:0.5; cursor:not-allowed; }
 
-        /* Purchase items (riwayat & panel) */
         .purchase-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
         .purchase-item .purchase-info { flex:1; min-width:140px; }
         .purchase-item .purchase-info .pname { font-weight:600; color:var(--text-primary); }
         .purchase-item .purchase-info .detail { font-size:13px; color:var(--text-secondary); }
+        .purchase-item .purchase-info .nokos-detail { font-size:13px; color:var(--accent); margin-top:2px; }
         .purchase-item .purchase-info .note-text { font-size:12px; color:var(--accent); margin-top:4px; }
         .purchase-item .purchase-actions { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
         .purchase-item .purchase-actions button { padding:6px 14px; border:none; border-radius:20px; font-weight:600; font-size:12px; cursor:pointer; }
         .purchase-item .purchase-actions .btn-note { background:var(--warning); color:#000; }
         .purchase-item .purchase-actions .btn-note:hover { opacity:0.8; }
+        .purchase-item .purchase-actions .btn-code { background:#64b5f6; color:#000; }
+        .purchase-item .purchase-actions .btn-code:hover { opacity:0.8; }
 
         .request-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
         .request-item .req-info { flex:1; min-width:140px; }
@@ -344,7 +340,7 @@
     </div>
 </div>
 
-<!-- MODAL UNTUK CATATAN OWN -->
+<!-- MODAL UNTUK CATATAN -->
 <div class="modal-overlay" id="noteModal">
     <div class="modal-box">
         <h3>Tambah Catatan Pembelian</h3>
@@ -355,6 +351,20 @@
             <button class="btn-confirm" id="noteSave"><i class="fas fa-save"></i> Simpan</button>
         </div>
         <div id="noteAlert" style="color:var(--danger); font-size:13px; margin-top:8px; display:none;"></div>
+    </div>
+</div>
+
+<!-- MODAL UNTUK KODE VERIFIKASI -->
+<div class="modal-overlay" id="codeModal">
+    <div class="modal-box">
+        <h3>Isi Kode Verifikasi</h3>
+        <p>Masukkan kode verifikasi untuk pembelian Nokos Indo ini.</p>
+        <input type="text" id="codeInput" placeholder="Kode verifikasi..." />
+        <div class="modal-actions">
+            <button class="btn-cancel" id="codeCancel">Batal</button>
+            <button class="btn-confirm" id="codeSave"><i class="fas fa-save"></i> Simpan</button>
+        </div>
+        <div id="codeAlert" style="color:var(--danger); font-size:13px; margin-top:8px; display:none;"></div>
     </div>
 </div>
 
@@ -392,11 +402,11 @@ const refs = {
     saldo: db.ref('saldo'),
     deposits: db.ref('deposits'),
     config: db.ref('config'),
-    purchases: db.ref('purchases') // ✅ node baru untuk riwayat pembelian
+    purchases: db.ref('purchases')
 };
 
 // ================================================================
-// FUNGSI BANTU & AUTH (sama seperti sebelumnya, ditambah purchases)
+// FUNGSI BANTU
 // ================================================================
 function getCurrentUser() {
     try { return JSON.parse(localStorage.getItem('currentUser')); } catch(e) { return null; }
@@ -446,9 +456,6 @@ function signup(name, username, phone, password) {
     });
 }
 
-// ================================================================
-// DEPOSIT
-// ================================================================
 function createDepositRequest(username, amount) {
     const id = Date.now();
     return refs.deposits.child(id).set({ id, username, amount, status: 'pending', createdAt: new Date().toISOString() });
@@ -466,9 +473,9 @@ function getUserDeposits(username) {
 }
 
 // ================================================================
-// PURCHASES (RIWAYAT PEMBELIAN)
+// PURCHASES
 // ================================================================
-function savePurchase(username, productId, productName, price, quantity, total) {
+function savePurchase(username, productId, productName, price, quantity, total, phone = '', isNokos = false) {
     const newRef = refs.purchases.push();
     return newRef.set({
         id: newRef.key,
@@ -479,7 +486,10 @@ function savePurchase(username, productId, productName, price, quantity, total) 
         quantity,
         total,
         timestamp: new Date().toISOString(),
-        note: '' // kosong, diisi oleh OWN nanti
+        note: '',
+        isNokos,
+        phone,              // untuk Nokos
+        verificationCode: '' // akan diisi oleh OWN
     });
 }
 
@@ -497,11 +507,14 @@ function updatePurchaseNote(purchaseId, note) {
     return refs.purchases.child(purchaseId).update({ note });
 }
 
+function updatePurchaseCode(purchaseId, code) {
+    return refs.purchases.child(purchaseId).update({ verificationCode: code });
+}
+
 // ================================================================
 // INISIALISASI DATA DEFAULT
 // ================================================================
 function initData() {
-    // Owner
     refs.users.orderByChild('role').equalTo('owner').once('value').then(snap => {
         if (!snap.exists()) {
             return refs.users.child(OWNER_USER).set({ username: OWNER_USER, password: OWNER_PASS, name: 'Putzx', phone: WA_NUMBER, role: 'owner' })
@@ -509,7 +522,6 @@ function initData() {
         }
     }).catch(console.error);
 
-    // Produk default
     refs.products.once('value').then(snap => {
         if (!snap.exists()) {
             const defaultProducts = [
@@ -518,14 +530,14 @@ function initData() {
                 { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '' },
                 { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '' },
                 { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
-                { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' }
+                { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' },
+                { id: 7, name: 'Nokos Indo 10GB', price: 25000, stock: 50, image: '', isNokos: true }
             ];
             const promises = defaultProducts.map(p => refs.products.child(p.id).set(p));
             return Promise.all(promises);
         }
     }).catch(console.error);
 
-    // Config
     refs.config.once('value').then(snap => {
         if (!snap.exists()) {
             return refs.config.set({ waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' });
@@ -554,10 +566,11 @@ const depositError = $('depositError'), depositStep1 = $('depositStep1'), deposi
 const qrNominal = $('qrNominal'), qrContainer = $('qrContainer'), requestDepositBtn = $('requestDepositBtn');
 const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNominal = $('reqNominal'), reqStatus = $('reqStatus');
 
-// Modal note
 const noteModal = $('noteModal'), noteInput = $('noteInput'), noteCancel = $('noteCancel'), noteSave = $('noteSave'), noteAlert = $('noteAlert');
-let currentNotePurchaseId = null;
+const codeModal = $('codeModal'), codeInput = $('codeInput'), codeCancel = $('codeCancel'), codeSave = $('codeSave'), codeAlert = $('codeAlert');
 
+let currentNotePurchaseId = null;
+let currentCodePurchaseId = null;
 let currentPage = 'produk', pendingAmount = 0;
 
 // ================================================================
@@ -592,7 +605,6 @@ function showApp(user) {
     updateSaldoDisplay();
     navigateTo('produk');
 
-    // Listener deposit
     if (window._depositListener) window._depositListener();
     window._depositListener = refs.deposits.orderByChild('username').equalTo(user.username).on('child_added', snap => {
         const req = snap.val();
@@ -628,7 +640,7 @@ function updateRequestStatusDisplay(req) {
 }
 
 // ================================================================
-// RENDER FUNGSI (produk, akun, deposit, riwayat, info, panel)
+// RENDER FUNGSI
 // ================================================================
 function renderProductGrid(products) {
     const user = getCurrentUser();
@@ -637,11 +649,23 @@ function renderProductGrid(products) {
     Object.values(products).forEach(p => {
         const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
         const inStock = p.stock > 0;
+        const isNokos = p.isNokos || (p.name && p.name.toLowerCase().includes('nokos'));
         let actionHtml = '';
         if (user) {
             const isOwner = user.role && user.role.toLowerCase() === 'owner';
-            if (isOwner) actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
-            else actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
+            if (isOwner) {
+                actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
+            } else {
+                // Tampilkan input HP jika produk Nokos
+                if (isNokos) {
+                    actionHtml = `
+                        <input type="tel" class="nokos-input" id="phone-${p.id}" placeholder="Masukkan No. HP penerima" />
+                        <button class="btn-beli" data-id="${p.id}" data-nokos="true" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>
+                    `;
+                } else {
+                    actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
+                }
+            }
         }
         html += `
             <div class="product-card">
@@ -711,19 +735,16 @@ function renderPendingRequests(reqs) {
     return html;
 }
 
-// ✅ RIWAYAT PEMBELIAN (MEMBER)
 function renderRiwayat() {
     const user = getCurrentUser();
     if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
     return `<div class="page-content"><div class="section-title"><span>Riwayat Pembelian</span></div><div id="riwayatList">Memuat...</div></div>`;
 }
 
-// ✅ INFO
 function renderInfo() {
     return `<div class="page-content"><div class="section-title"><span>Informasi Toko</span></div><div id="infoContent">Memuat...</div></div>`;
 }
 
-// ✅ PANEL OWN
 function renderPanel() {
     const user = getCurrentUser();
     if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
@@ -731,7 +752,7 @@ function renderPanel() {
 }
 
 // ================================================================
-// NAVIGASI + LOAD DATA PER HALAMAN
+// NAVIGASI
 // ================================================================
 function navigateTo(page) {
     currentPage = page;
@@ -759,7 +780,6 @@ function navigateTo(page) {
     mainContent.innerHTML = content;
     searchInput.value = '';
 
-    // Load data sesuai halaman
     if (page === 'produk') {
         refs.products.on('value', snap => {
             const products = snap.val();
@@ -779,6 +799,14 @@ function navigateTo(page) {
                 let html = '<div class="user-list">';
                 purchases.forEach(p => {
                     const noteHtml = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> Catatan: ${p.note}</div>` : '';
+                    let nokosHtml = '';
+                    if (p.isNokos) {
+                        const codeDisplay = p.verificationCode ? p.verificationCode : '<span style="color:var(--warning);">Loading...</span>';
+                        nokosHtml = `
+                            <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${p.phone || '-'}</div>
+                            <div class="nokos-detail"><i class="fas fa-key"></i> Kode Verifikasi: ${codeDisplay}</div>
+                        `;
+                    }
                     html += `
                         <div class="purchase-item">
                             <div class="purchase-info">
@@ -786,6 +814,7 @@ function navigateTo(page) {
                                 <div class="detail">Harga: Rp ${p.price.toLocaleString('id-ID')} &nbsp;|&nbsp; Jumlah: ${p.quantity}</div>
                                 <div class="detail">Total: Rp ${p.total.toLocaleString('id-ID')}</div>
                                 <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                                ${nokosHtml}
                                 ${noteHtml}
                             </div>
                         </div>
@@ -819,7 +848,7 @@ function navigateTo(page) {
 }
 
 // ================================================================
-// RENDER PANEL CONTENT (Produk, Akun, Deposit, Pembelian, Info)
+// RENDER PANEL CONTENT
 // ================================================================
 function renderPanelContent() {
     const user = getCurrentUser();
@@ -830,7 +859,7 @@ function renderPanelContent() {
         refs.users.once('value'),
         getPendingDeposits(),
         refs.config.once('value'),
-        getAllPurchases() // ✅ ambil semua pembelian
+        getAllPurchases()
     ]).then(([productsSnap, usersSnap, pending, configSnap, allPurchases]) => {
         const products = productsSnap.val() || {};
         const users = usersSnap.val() || {};
@@ -855,7 +884,6 @@ function renderPanelContent() {
         const userListHtml = renderUserList(users);
         const pendingHtml = renderPendingRequests(pending);
 
-        // ✅ Daftar pembelian untuk OWN
         let purchaseHtml = '';
         if (allPurchases.length === 0) {
             purchaseHtml = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Belum ada pembelian</h3></div>`;
@@ -863,16 +891,26 @@ function renderPanelContent() {
             purchaseHtml = '<div class="user-list">';
             allPurchases.forEach(p => {
                 const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
+                let nokosDetail = '';
+                if (p.isNokos) {
+                    const codeDisplay = p.verificationCode ? p.verificationCode : '<span style="color:var(--warning);">Belum diisi</span>';
+                    nokosDetail = `
+                        <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${p.phone || '-'}</div>
+                        <div class="nokos-detail"><i class="fas fa-key"></i> Kode: ${codeDisplay}</div>
+                    `;
+                }
                 purchaseHtml += `
                     <div class="purchase-item" data-id="${p.id}">
                         <div class="purchase-info">
                             <div class="pname">${p.productName}</div>
                             <div class="detail">Pembeli: <strong>${p.username}</strong> &nbsp;|&nbsp; Total: Rp ${p.total.toLocaleString('id-ID')}</div>
                             <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                            ${nokosDetail}
                             ${noteDisplay}
                         </div>
                         <div class="purchase-actions">
                             <button class="btn-note" data-id="${p.id}"><i class="fas fa-pen"></i> Catatan</button>
+                            ${p.isNokos ? `<button class="btn-code" data-id="${p.id}"><i class="fas fa-key"></i> Isi Kode</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -897,6 +935,12 @@ function renderPanelContent() {
                     <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
                     <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
                     <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
+                    <div class="form-group"><label>Nokos Indo?</label>
+                        <select id="newProductNokos" style="width:100%; padding:10px 16px; border:1px solid var(--border); border-radius:30px; background:var(--bg-input); color:var(--text-primary);">
+                            <option value="false">Tidak</option>
+                            <option value="true">Ya (Nokos Indo)</option>
+                        </select>
+                    </div>
                     <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah</button>
                     <div id="panelAlert" class="alert"></div>
                     <div class="qr-upload">
@@ -919,7 +963,7 @@ function renderPanelContent() {
                 </div>
                 <div id="panelTabPembelian" class="panel-tab-content">
                     <h3>Riwayat Pembelian Semua Member</h3>
-                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Klik "Catatan" untuk menambahkan pesan ke pembelian tersebut.</p>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Klik "Catatan" untuk menambahkan pesan, atau "Isi Kode" untuk produk Nokos Indo.</p>
                     ${purchaseHtml}
                     <div id="purchaseAlert" class="alert"></div>
                 </div>
@@ -937,7 +981,6 @@ function renderPanelContent() {
         if (container) container.innerHTML = html;
         attachPanelEvents();
         attachEvents();
-        // Subscribe saldo real-time
         Object.values(users).forEach(u => {
             refs.saldo.child(u.username).on('value', snap => {
                 const el = document.getElementById('saldo-' + u.username);
@@ -956,49 +999,40 @@ function attachEvents() {
 }
 
 function attachPanelEvents() {
-    // Tab switching
     document.querySelectorAll('.panel-tab').forEach(tab => {
         tab.removeEventListener('click', handlePanelTab);
         tab.addEventListener('click', handlePanelTab);
     });
 
-    // Hapus produk
     document.querySelectorAll('.product-item .btn-del').forEach(btn => {
         btn.removeEventListener('click', handleDeleteProduct);
         btn.addEventListener('click', handleDeleteProduct);
     });
 
-    // Upload gambar produk
     document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
         input.removeEventListener('change', handleProductImage);
         input.addEventListener('change', handleProductImage);
     });
 
-    // Tambah produk
     const addBtn = document.getElementById('addProductBtn');
     if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
 
-    // Simpan QR
     const saveQr = document.getElementById('saveQrBtn');
     if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
 
-    // Simpan info
     const saveInfo = document.getElementById('saveInfoBtn');
     if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
 
-    // Ubah saldo user
     document.querySelectorAll('.btn-saldo').forEach(btn => {
         btn.removeEventListener('click', handleUserSaldo);
         btn.addEventListener('click', handleUserSaldo);
     });
 
-    // Hapus user
     document.querySelectorAll('.btn-del-user').forEach(btn => {
         btn.removeEventListener('click', handleDeleteUser);
         btn.addEventListener('click', handleDeleteUser);
     });
 
-    // Approve/reject deposit
     document.querySelectorAll('.btn-approve').forEach(btn => {
         btn.removeEventListener('click', handleApprove);
         btn.addEventListener('click', handleApprove);
@@ -1008,10 +1042,14 @@ function attachPanelEvents() {
         btn.addEventListener('click', handleReject);
     });
 
-    // ✅ Tombol catatan di panel pembelian
     document.querySelectorAll('.btn-note').forEach(btn => {
         btn.removeEventListener('click', handleOpenNoteModal);
         btn.addEventListener('click', handleOpenNoteModal);
+    });
+
+    document.querySelectorAll('.btn-code').forEach(btn => {
+        btn.removeEventListener('click', handleOpenCodeModal);
+        btn.addEventListener('click', handleOpenCodeModal);
     });
 }
 
@@ -1022,9 +1060,18 @@ function handlePurchase(e) {
     const btn = e.target.closest('.btn-beli');
     if (!btn) return;
     const productId = btn.dataset.id;
+    const isNokos = btn.dataset.nokos === 'true';
     const user = getCurrentUser();
     if (!user) { alert('Silakan login.'); return; }
     if (user.role && user.role.toLowerCase() === 'owner') { alert('OWN tidak bisa membeli.'); return; }
+
+    let phone = '';
+    if (isNokos) {
+        const input = document.getElementById('phone-' + productId);
+        if (!input) { alert('Input nomor HP tidak ditemukan.'); return; }
+        phone = input.value.trim();
+        if (!phone) { alert('Masukkan nomor HP penerima.'); return; }
+    }
 
     refs.products.child(productId).once('value')
         .then(snap => {
@@ -1042,8 +1089,7 @@ function handlePurchase(e) {
                         return refs.saldo.child(user.username).set(saldo - product.price)
                             .then(() => refs.products.child(productId).update({ stock: product.stock - 1 }))
                             .then(() => {
-                                // ✅ Simpan ke riwayat pembelian
-                                return savePurchase(user.username, productId, product.name, product.price, 1, product.price);
+                                return savePurchase(user.username, productId, product.name, product.price, 1, product.price, phone, isNokos);
                             })
                             .then(() => {
                                 showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
@@ -1100,16 +1146,26 @@ function handlePanelTab(e) {
                         html = '<div class="user-list">';
                         purchases.forEach(p => {
                             const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
+                            let nokosDetail = '';
+                            if (p.isNokos) {
+                                const codeDisplay = p.verificationCode ? p.verificationCode : '<span style="color:var(--warning);">Belum diisi</span>';
+                                nokosDetail = `
+                                    <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${p.phone || '-'}</div>
+                                    <div class="nokos-detail"><i class="fas fa-key"></i> Kode: ${codeDisplay}</div>
+                                `;
+                            }
                             html += `
                                 <div class="purchase-item" data-id="${p.id}">
                                     <div class="purchase-info">
                                         <div class="pname">${p.productName}</div>
                                         <div class="detail">Pembeli: <strong>${p.username}</strong> &nbsp;|&nbsp; Total: Rp ${p.total.toLocaleString('id-ID')}</div>
                                         <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                                        ${nokosDetail}
                                         ${noteDisplay}
                                     </div>
                                     <div class="purchase-actions">
                                         <button class="btn-note" data-id="${p.id}"><i class="fas fa-pen"></i> Catatan</button>
+                                        ${p.isNokos ? `<button class="btn-code" data-id="${p.id}"><i class="fas fa-key"></i> Isi Kode</button>` : ''}
                                     </div>
                                 </div>
                             `;
@@ -1150,6 +1206,7 @@ function handleAddProduct() {
     const name = document.getElementById('newProductName').value.trim();
     const price = parseInt(document.getElementById('newProductPrice').value);
     const stock = parseInt(document.getElementById('newProductStock').value);
+    const isNokos = document.getElementById('newProductNokos').value === 'true';
     const fileInput = document.getElementById('newProductImage');
     if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
     const reader = new FileReader();
@@ -1160,7 +1217,7 @@ function handleAddProduct() {
                 const ids = Object.keys(products).map(Number);
                 const newId = ids.length ? Math.max(...ids) + 1 : 1;
                 return refs.products.child(newId).set({
-                    id: newId, name, price, stock, image: e.target.result || ''
+                    id: newId, name, price, stock, image: e.target.result || '', isNokos
                 });
             })
             .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
@@ -1175,7 +1232,7 @@ function handleAddProduct() {
                 const ids = Object.keys(products).map(Number);
                 const newId = ids.length ? Math.max(...ids) + 1 : 1;
                 return refs.products.child(newId).set({
-                    id: newId, name, price, stock, image: ''
+                    id: newId, name, price, stock, image: '', isNokos
                 });
             })
             .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
@@ -1264,20 +1321,18 @@ function handleReject(e) {
         .catch(err => console.error('Reject error:', err));
 }
 
-// ✅ HANDLER UNTUK CATATAN
+// ================================================================
+// NOTE & CODE MODALS
+// ================================================================
 function handleOpenNoteModal(e) {
     const btn = e.currentTarget;
     const purchaseId = btn.dataset.id;
     currentNotePurchaseId = purchaseId;
-    // Ambil catatan sebelumnya jika ada
     refs.purchases.child(purchaseId).once('value')
         .then(snap => {
             const data = snap.val();
-            if (data && data.note) {
-                noteInput.value = data.note;
-            } else {
-                noteInput.value = '';
-            }
+            if (data && data.note) noteInput.value = data.note;
+            else noteInput.value = '';
             noteAlert.style.display = 'none';
             noteModal.classList.add('active');
             noteInput.focus();
@@ -1302,7 +1357,6 @@ function saveNote() {
         .then(() => {
             noteModal.classList.remove('active');
             showToast('Catatan berhasil disimpan!', 'success');
-            // Refresh panel pembelian
             if (currentPage === 'panel') navigateTo('panel');
         })
         .catch(err => {
@@ -1322,7 +1376,61 @@ noteInput.addEventListener('keydown', (e) => {
 });
 
 // ================================================================
-// DEPOSIT MODAL (sama seperti sebelumnya)
+// CODE VERIFICATION MODAL
+// ================================================================
+function handleOpenCodeModal(e) {
+    const btn = e.currentTarget;
+    const purchaseId = btn.dataset.id;
+    currentCodePurchaseId = purchaseId;
+    refs.purchases.child(purchaseId).once('value')
+        .then(snap => {
+            const data = snap.val();
+            if (data && data.verificationCode) codeInput.value = data.verificationCode;
+            else codeInput.value = '';
+            codeAlert.style.display = 'none';
+            codeModal.classList.add('active');
+            codeInput.focus();
+        })
+        .catch(() => {
+            codeInput.value = '';
+            codeAlert.style.display = 'none';
+            codeModal.classList.add('active');
+            codeInput.focus();
+        });
+}
+
+function saveCode() {
+    const code = codeInput.value.trim();
+    if (!code) {
+        codeAlert.textContent = 'Kode verifikasi tidak boleh kosong.';
+        codeAlert.style.display = 'block';
+        return;
+    }
+    if (!currentCodePurchaseId) return;
+    updatePurchaseCode(currentCodePurchaseId, code)
+        .then(() => {
+            codeModal.classList.remove('active');
+            showToast('Kode verifikasi berhasil disimpan!', 'success');
+            if (currentPage === 'panel') navigateTo('panel');
+        })
+        .catch(err => {
+            console.error('Save code error:', err);
+            codeAlert.textContent = 'Gagal menyimpan kode.';
+            codeAlert.style.display = 'block';
+        });
+}
+
+codeCancel.addEventListener('click', () => {
+    codeModal.classList.remove('active');
+    codeAlert.style.display = 'none';
+});
+codeSave.addEventListener('click', saveCode);
+codeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') saveCode();
+});
+
+// ================================================================
+// DEPOSIT MODAL
 // ================================================================
 depositBtn.addEventListener('click', function() {
     refs.config.once('value')
@@ -1459,7 +1567,7 @@ navItems.forEach(item => {
 });
 
 // ================================================================
-// AUTH EVENTS (Login & Register)
+// AUTH EVENTS
 // ================================================================
 authTabs.forEach(tab => {
     tab.addEventListener('click', function() {

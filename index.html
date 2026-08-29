@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PutzxStore - Nokos</title>
+    <title>PutzxStore - Nokos Indo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        /* ===== DARK THEME (sama seperti sebelumnya, dipotong agar ringkas) ===== */
+        /* ===== DARK THEME ===== */
         :root { --bg-primary:#0f0f13; --bg-secondary:#1a1a24; --bg-card:#23232e; --bg-input:#2a2a36; --text-primary:#e8e8f0; --text-secondary:#a0a0b8; --text-muted:#6a6a7e; --accent:#00c853; --accent-hover:#00e676; --danger:#ef5350; --danger-hover:#e53935; --warning:#ffb300; --border:#2f2f3e; --radius:16px; --shadow:0 4px 20px rgba(0,0,0,0.6); }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
         .app-container { max-width:420px; width:100%; background:var(--bg-secondary); border-radius:var(--radius); padding:16px 16px 80px; box-shadow:var(--shadow); position:relative; }
 
-        /* AUTH */
         .auth-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; background:var(--bg-primary); border-radius:var(--radius); }
         .auth-page .logo { font-size:28px; font-weight:700; color:var(--accent); margin-bottom:4px; }
         .auth-page .subtitle { color:var(--text-secondary); margin-bottom:24px; font-size:14px; }
@@ -32,7 +31,6 @@
         .auth-switch { margin-top:16px; text-align:center; font-size:14px; color:var(--text-secondary); }
         .auth-switch a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
 
-        /* APP */
         .app-main { display:none; }
         .saldo-card { background:linear-gradient(135deg,var(--accent),#009624); border-radius:var(--radius); padding:18px 20px; color:#fff; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
         .saldo-left { display:flex; flex-direction:column; }
@@ -93,6 +91,7 @@
         .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
         .empty-state i { font-size:48px; color:var(--text-muted); margin-bottom:12px; }
         .empty-state h3 { font-weight:600; color:var(--text-primary); margin-bottom:6px; }
+        .empty-state p { font-size:14px; color:var(--text-secondary); }
 
         .own-panel { background:var(--bg-card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); margin-top:8px; }
         .own-panel .panel-tabs { display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; flex-wrap:wrap; }
@@ -118,14 +117,15 @@
         .own-panel .product-item .info { flex:1; min-width:100px; }
         .own-panel .product-item .info .name { font-weight:600; color:var(--text-primary); }
         .own-panel .product-item .info .price { color:var(--accent); }
-        .own-panel .product-item .info .nokos-phone { font-size:12px; color:var(--text-secondary); margin-top:4px; }
+        .own-panel .product-item .info .stock { font-size:13px; color:var(--text-secondary); }
+        .own-panel .product-item .info .nokos-phone-display { font-size:12px; color:var(--warning); margin-top:4px; }
         .own-panel .product-item .actions { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
         .own-panel .product-item .actions input[type="file"] { display:none; }
         .own-panel .product-item .actions label { background:var(--bg-input); padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--text-secondary); }
         .own-panel .product-item .actions label:hover { background:var(--bg-hover); }
         .own-panel .product-item .actions .btn-del { background:var(--danger); color:#fff; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .own-panel .product-item .actions .btn-del:hover { background:var(--danger-hover); }
-        .own-panel .product-item .actions .nokos-phone-input { width:120px; padding:4px 8px; border:1px solid var(--border); border-radius:20px; background:var(--bg-input); color:var(--text-primary); font-size:12px; }
+        .own-panel .product-item .actions .nokos-phone-input { width:130px; padding:4px 8px; border:1px solid var(--border); border-radius:20px; background:var(--bg-input); color:var(--text-primary); font-size:12px; }
         .own-panel .product-item .actions .nokos-phone-input:focus { border-color:var(--accent); }
         .own-panel .product-item .actions .btn-phone { background:var(--warning); color:#000; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .own-panel .product-item .actions .btn-phone:hover { opacity:0.8; }
@@ -344,7 +344,7 @@
     </div>
 </div>
 
-<!-- MODAL UNTUK CATATAN -->
+<!-- MODAL CATATAN -->
 <div class="modal-overlay" id="noteModal">
     <div class="modal-box">
         <h3>Tambah Catatan Pembelian</h3>
@@ -358,7 +358,7 @@
     </div>
 </div>
 
-<!-- MODAL UNTUK KODE VERIFIKASI -->
+<!-- MODAL KODE VERIFIKASI -->
 <div class="modal-overlay" id="codeModal">
     <div class="modal-box">
         <h3>Isi Kode Verifikasi</h3>
@@ -374,7 +374,7 @@
 
 <script>
 // ================================================================
-// 🔥 KONFIGURASI FIREBASE
+// 🔥 FIREBASE CONFIG (ganti dengan milik Anda jika berbeda)
 // ================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyAUjNdfvGcJm4TtLPGP-5aogj2xTdfrmrE",
@@ -436,32 +436,6 @@ function showAlert(id, msg, type) {
     setTimeout(() => el.className = 'alert', 4000);
 }
 
-// ================================================================
-// NOTIFIKASI
-// ================================================================
-function requestNotificationPermission() {
-    if (!("Notification" in window)) {
-        console.log("Browser tidak mendukung notifikasi.");
-        return;
-    }
-    if (Notification.permission === "granted") return;
-    if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(permission => {
-            console.log("Notifikasi: " + permission);
-        });
-    }
-}
-
-function sendNotification(title, body) {
-    if (!("Notification" in window)) return;
-    if (Notification.permission === "granted") {
-        new Notification(title, { body, icon: 'https://via.placeholder.com/64/00c853/ffffff?text=P' });
-    }
-}
-
-// ================================================================
-// AUTH
-// ================================================================
 function login(username, password) {
     return refs.users.child(username).once('value').then(snap => {
         const user = snap.val();
@@ -486,9 +460,6 @@ function signup(name, username, phone, password) {
     });
 }
 
-// ================================================================
-// DEPOSIT
-// ================================================================
 function createDepositRequest(username, amount) {
     const id = Date.now();
     return refs.deposits.child(id).set({ id, username, amount, status: 'pending', createdAt: new Date().toISOString() });
@@ -505,9 +476,6 @@ function getUserDeposits(username) {
         .then(snap => snap.val() ? Object.values(snap.val()).sort((a,b) => b.id - a.id) : []);
 }
 
-// ================================================================
-// PURCHASES
-// ================================================================
 function savePurchase(username, productId, productName, price, quantity, total, phone = '', isNokos = false) {
     const newRef = refs.purchases.push();
     return newRef.set({
@@ -521,7 +489,7 @@ function savePurchase(username, productId, productName, price, quantity, total, 
         timestamp: new Date().toISOString(),
         note: '',
         isNokos,
-        phone,              // no HP dari produk (diisi OWN)
+        phone,
         verificationCode: ''
     });
 }
@@ -544,10 +512,8 @@ function updatePurchaseCode(purchaseId, code) {
     return refs.purchases.child(purchaseId).update({ verificationCode: code });
 }
 
-// ================================================================
-// INISIALISASI DATA DEFAULT
-// ================================================================
 function initData() {
+    // OWN
     refs.users.orderByChild('role').equalTo('owner').once('value').then(snap => {
         if (!snap.exists()) {
             return refs.users.child(OWNER_USER).set({ username: OWNER_USER, password: OWNER_PASS, name: 'Putzx', phone: WA_NUMBER, role: 'owner' })
@@ -555,6 +521,7 @@ function initData() {
         }
     }).catch(console.error);
 
+    // Produk default
     refs.products.once('value').then(snap => {
         if (!snap.exists()) {
             const defaultProducts = [
@@ -571,14 +538,12 @@ function initData() {
         }
     }).catch(console.error);
 
+    // Config
     refs.config.once('value').then(snap => {
         if (!snap.exists()) {
             return refs.config.set({ waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' });
         }
     }).catch(console.error);
-
-    // Minta izin notifikasi
-    requestNotificationPermission();
 }
 initData();
 
@@ -691,7 +656,6 @@ function renderProductGrid(products) {
             if (isOwner) {
                 actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
             } else {
-                // Tidak ada input untuk member
                 actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
             }
         }
@@ -780,7 +744,7 @@ function renderPanel() {
 }
 
 // ================================================================
-// NAVIGASI
+// NAVIGASI + LOAD DATA
 // ================================================================
 function navigateTo(page) {
     currentPage = page;
@@ -829,9 +793,8 @@ function navigateTo(page) {
                     const noteHtml = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> Catatan: ${p.note}</div>` : '';
                     let nokosHtml = '';
                     if (p.isNokos) {
-                        // Jika phone masih kosong, tampilkan "Loading..."
-                        const phoneDisplay = p.phone ? p.phone : '<span style="color:var(--warning);">Loading...</span>';
-                        const codeDisplay = p.verificationCode ? p.verificationCode : '<span style="color:var(--warning);">Loading...</span>';
+                        const phoneDisplay = p.phone || '<span style="color:var(--warning);">Loading...</span>';
+                        const codeDisplay = p.verificationCode || '<span style="color:var(--warning);">Loading...</span>';
                         nokosHtml = `
                             <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${phoneDisplay}</div>
                             <div class="nokos-detail"><i class="fas fa-key"></i> Kode Verifikasi: ${codeDisplay}</div>
@@ -877,9 +840,6 @@ function navigateTo(page) {
     attachEvents();
 }
 
-// ================================================================
-// RENDER PANEL CONTENT (dengan fitur Nokos)
-// ================================================================
 function renderPanelContent() {
     const user = getCurrentUser();
     if (!user || user.role !== 'owner') return;
@@ -895,7 +855,6 @@ function renderPanelContent() {
         const users = usersSnap.val() || {};
         const config = configSnap.val() || {};
 
-        // Produk list dengan fitur Nokos phone
         let productListHtml = Object.values(products).map(p => {
             const isNokos = p.isNokos || false;
             const phone = p.nokosPhone || '';
@@ -906,7 +865,7 @@ function renderPanelContent() {
                         <div class="name">${p.name}</div>
                         <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
                         <div class="stock">Stok: ${p.stock}</div>
-                        ${isNokos ? `<div class="nokos-phone"><i class="fas fa-phone"></i> No. HP: ${phone || 'Belum diisi'}</div>` : ''}
+                        ${isNokos ? `<div class="nokos-phone-display"><i class="fas fa-phone"></i> No. HP: ${phone || 'Belum diisi'}</div>` : ''}
                     </div>
                     <div class="actions">
                         <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti</label>
@@ -1057,7 +1016,6 @@ function attachPanelEvents() {
         input.addEventListener('change', handleProductImage);
     });
 
-    // Tombol simpan No HP Nokos
     document.querySelectorAll('.product-item .btn-phone').forEach(btn => {
         btn.removeEventListener('click', handleNokosPhone);
         btn.addEventListener('click', handleNokosPhone);
@@ -1135,10 +1093,6 @@ function handlePurchase(e) {
                             })
                             .then(() => {
                                 showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
-                                // Notifikasi jika Nokos
-                                if (product.isNokos) {
-                                    sendNotification('📱 Nokos Indo Dibeli', 'Member ' + user.username + ' membeli ' + product.name);
-                                }
                                 navigateTo('produk');
                                 updateStats();
                             });
@@ -1386,9 +1340,6 @@ function handleReject(e) {
         .catch(err => console.error('Reject error:', err));
 }
 
-// ================================================================
-// NOTE & CODE MODALS
-// ================================================================
 function handleOpenNoteModal(e) {
     const btn = e.currentTarget;
     const purchaseId = btn.dataset.id;

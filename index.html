@@ -3,35 +3,24 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PutzxStore - Firebase</title>
+    <title>PutzxStore - Pembelian</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <!-- Firebase SDK (compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        /* ===== DARK THEME (sama seperti sebelumnya) ===== */
+        /* ===== DARK THEME ===== */
         :root {
-            --bg-primary: #0f0f13;
-            --bg-secondary: #1a1a24;
-            --bg-card: #23232e;
-            --bg-input: #2a2a36;
-            --bg-hover: #2f2f3e;
-            --text-primary: #e8e8f0;
-            --text-secondary: #a0a0b8;
-            --text-muted: #6a6a7e;
-            --accent: #00c853;
-            --accent-hover: #00e676;
-            --danger: #ef5350;
-            --danger-hover: #e53935;
-            --warning: #ffb300;
-            --border: #2f2f3e;
-            --shadow: 0 4px 20px rgba(0,0,0,0.6);
-            --radius: 16px;
+            --bg-primary: #0f0f13; --bg-secondary: #1a1a24; --bg-card: #23232e;
+            --bg-input: #2a2a36; --text-primary: #e8e8f0; --text-secondary: #a0a0b8;
+            --text-muted: #6a6a7e; --accent: #00c853; --accent-hover: #00e676;
+            --danger: #ef5350; --danger-hover: #e53935; --warning: #ffb300;
+            --border: #2f2f3e; --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.6);
         }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
         .app-container { max-width:420px; width:100%; background:var(--bg-secondary); border-radius:var(--radius); padding:16px 16px 80px; box-shadow:var(--shadow); position:relative; }
 
+        /* AUTH */
         .auth-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; background:var(--bg-primary); border-radius:var(--radius); }
         .auth-page .logo { font-size:28px; font-weight:700; color:var(--accent); margin-bottom:4px; }
         .auth-page .subtitle { color:var(--text-secondary); margin-bottom:24px; font-size:14px; }
@@ -49,6 +38,7 @@
         .auth-switch { margin-top:16px; text-align:center; font-size:14px; color:var(--text-secondary); }
         .auth-switch a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
 
+        /* APP */
         .app-main { display:none; }
         .saldo-card { background:linear-gradient(135deg,var(--accent),#009624); border-radius:var(--radius); padding:18px 20px; color:#fff; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
         .saldo-left { display:flex; flex-direction:column; }
@@ -109,7 +99,9 @@
         .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
         .empty-state i { font-size:48px; color:var(--text-muted); margin-bottom:12px; }
         .empty-state h3 { font-weight:600; color:var(--text-primary); margin-bottom:6px; }
+        .empty-state p { font-size:14px; color:var(--text-secondary); }
 
+        /* PANEL */
         .own-panel { background:var(--bg-card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); margin-top:8px; }
         .own-panel .panel-tabs { display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; flex-wrap:wrap; }
         .own-panel .panel-tab { padding:8px 18px; border-radius:30px; border:none; background:transparent; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .2s; }
@@ -155,6 +147,17 @@
         .user-item .user-actions .btn-del-user { background:var(--danger); color:#fff; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .user-item .user-actions .btn-del-user:disabled { opacity:0.5; cursor:not-allowed; }
 
+        /* Purchase items (riwayat & panel) */
+        .purchase-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+        .purchase-item .purchase-info { flex:1; min-width:140px; }
+        .purchase-item .purchase-info .pname { font-weight:600; color:var(--text-primary); }
+        .purchase-item .purchase-info .detail { font-size:13px; color:var(--text-secondary); }
+        .purchase-item .purchase-info .note-text { font-size:12px; color:var(--accent); margin-top:4px; }
+        .purchase-item .purchase-actions { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+        .purchase-item .purchase-actions button { padding:6px 14px; border:none; border-radius:20px; font-weight:600; font-size:12px; cursor:pointer; }
+        .purchase-item .purchase-actions .btn-note { background:var(--warning); color:#000; }
+        .purchase-item .purchase-actions .btn-note:hover { opacity:0.8; }
+
         .request-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
         .request-item .req-info { flex:1; min-width:140px; }
         .request-item .req-actions { display:flex; gap:8px; }
@@ -196,8 +199,9 @@
         @keyframes fadeIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
         .modal-box h3 { margin-bottom:8px; color:var(--text-primary); }
         .modal-box p { color:var(--text-secondary); margin-bottom:16px; font-size:14px; }
-        .modal-box input { width:100%; padding:12px; border:1px solid var(--border); border-radius:30px; margin-bottom:16px; font-size:16px; outline:none; background:var(--bg-input); color:var(--text-primary); }
-        .modal-box input:focus { border-color:var(--accent); }
+        .modal-box input, .modal-box textarea { width:100%; padding:12px; border:1px solid var(--border); border-radius:30px; margin-bottom:16px; font-size:16px; outline:none; background:var(--bg-input); color:var(--text-primary); }
+        .modal-box textarea { border-radius:16px; min-height:80px; resize:vertical; }
+        .modal-box input:focus, .modal-box textarea:focus { border-color:var(--accent); }
         .modal-box .modal-actions { display:flex; gap:12px; }
         .modal-box .modal-actions button { flex:1; padding:12px; border:none; border-radius:30px; font-weight:600; cursor:pointer; transition:.2s; }
         .modal-box .modal-actions .btn-confirm { background:var(--accent); color:#fff; }
@@ -216,7 +220,7 @@
 </head>
 <body>
 
-<!-- ========== AUTH PAGE ========== -->
+<!-- AUTH PAGE -->
 <div id="authPage" class="auth-page">
     <div class="logo">PutzxStore</div>
     <div class="subtitle">Login atau daftar untuk berbelanja</div>
@@ -250,7 +254,7 @@
     </div>
 </div>
 
-<!-- ========== APP MAIN ========== -->
+<!-- APP MAIN -->
 <div id="appMain" class="app-container app-main">
     <div class="saldo-card">
         <div class="saldo-left">
@@ -306,7 +310,7 @@
     </div>
 </div>
 
-<!-- ========== MODAL DEPOSIT ========== -->
+<!-- MODAL DEPOSIT -->
 <div class="modal-overlay" id="depositModal">
     <div class="modal-box">
         <div id="depositStep1">
@@ -340,9 +344,23 @@
     </div>
 </div>
 
+<!-- MODAL UNTUK CATATAN OWN -->
+<div class="modal-overlay" id="noteModal">
+    <div class="modal-box">
+        <h3>Tambah Catatan Pembelian</h3>
+        <p>Masukkan catatan untuk transaksi ini (misal: status pengiriman).</p>
+        <textarea id="noteInput" placeholder="Tulis catatan..."></textarea>
+        <div class="modal-actions">
+            <button class="btn-cancel" id="noteCancel">Batal</button>
+            <button class="btn-confirm" id="noteSave"><i class="fas fa-save"></i> Simpan</button>
+        </div>
+        <div id="noteAlert" style="color:var(--danger); font-size:13px; margin-top:8px; display:none;"></div>
+    </div>
+</div>
+
 <script>
 // ================================================================
-// 🔥 KONFIGURASI FIREBASE (SUDAH PAKAI PUNYA ANDA)
+// 🔥 KONFIGURASI FIREBASE
 // ================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyAUjNdfvGcJm4TtLPGP-5aogj2xTdfrmrE",
@@ -354,8 +372,6 @@ const firebaseConfig = {
     appId: "1:108796843751:web:6d15254175d6c1ef9e7442",
     measurementId: "G-1HW2HYMH4V"
 };
-
-// Inisialisasi Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
@@ -368,18 +384,19 @@ const OWNER_USER = 'putzx';
 const OWNER_PASS = 'putzx123';
 
 // ================================================================
-// DATA REFERENCE
+// REFERENSI FIREBASE
 // ================================================================
 const refs = {
     users: db.ref('users'),
     products: db.ref('products'),
     saldo: db.ref('saldo'),
     deposits: db.ref('deposits'),
-    config: db.ref('config')
+    config: db.ref('config'),
+    purchases: db.ref('purchases') // ✅ node baru untuk riwayat pembelian
 };
 
 // ================================================================
-// FUNGSI BANTU
+// FUNGSI BANTU & AUTH (sama seperti sebelumnya, ditambah purchases)
 // ================================================================
 function getCurrentUser() {
     try { return JSON.parse(localStorage.getItem('currentUser')); } catch(e) { return null; }
@@ -405,27 +422,95 @@ function showAlert(id, msg, type) {
     setTimeout(() => el.className = 'alert', 4000);
 }
 
+function login(username, password) {
+    return refs.users.child(username).once('value').then(snap => {
+        const user = snap.val();
+        if (user && user.password === password) {
+            setCurrentUser({ username, name: user.name, phone: user.phone, role: user.role });
+            return true;
+        }
+        return false;
+    });
+}
+
+function signup(name, username, phone, password) {
+    return refs.users.child(username).once('value').then(snap => {
+        if (snap.exists()) return { success: false, message: 'Username sudah digunakan.' };
+        if (password.length < 6) return { success: false, message: 'Password minimal 6 karakter.' };
+        return refs.users.child(username).set({ username, password, name, phone, role: 'member' })
+            .then(() => refs.saldo.child(username).set(0))
+            .then(() => {
+                setCurrentUser({ username, name, phone, role: 'member' });
+                return { success: true };
+            });
+    });
+}
+
+// ================================================================
+// DEPOSIT
+// ================================================================
+function createDepositRequest(username, amount) {
+    const id = Date.now();
+    return refs.deposits.child(id).set({ id, username, amount, status: 'pending', createdAt: new Date().toISOString() });
+}
+function updateDepositRequest(id, status) {
+    return refs.deposits.child(id).update({ status });
+}
+function getPendingDeposits() {
+    return refs.deposits.orderByChild('status').equalTo('pending').once('value')
+        .then(snap => snap.val() ? Object.values(snap.val()) : []);
+}
+function getUserDeposits(username) {
+    return refs.deposits.orderByChild('username').equalTo(username).once('value')
+        .then(snap => snap.val() ? Object.values(snap.val()).sort((a,b) => b.id - a.id) : []);
+}
+
+// ================================================================
+// PURCHASES (RIWAYAT PEMBELIAN)
+// ================================================================
+function savePurchase(username, productId, productName, price, quantity, total) {
+    const newRef = refs.purchases.push();
+    return newRef.set({
+        id: newRef.key,
+        username,
+        productId,
+        productName,
+        price,
+        quantity,
+        total,
+        timestamp: new Date().toISOString(),
+        note: '' // kosong, diisi oleh OWN nanti
+    });
+}
+
+function getUserPurchases(username) {
+    return refs.purchases.orderByChild('username').equalTo(username).once('value')
+        .then(snap => snap.val() ? Object.values(snap.val()).sort((a,b) => b.timestamp < a.timestamp ? 1 : -1) : []);
+}
+
+function getAllPurchases() {
+    return refs.purchases.once('value')
+        .then(snap => snap.val() ? Object.values(snap.val()).sort((a,b) => b.timestamp < a.timestamp ? 1 : -1) : []);
+}
+
+function updatePurchaseNote(purchaseId, note) {
+    return refs.purchases.child(purchaseId).update({ note });
+}
+
 // ================================================================
 // INISIALISASI DATA DEFAULT
 // ================================================================
 function initData() {
-    // Cek apakah sudah ada owner di Firebase
-    refs.users.orderByChild('role').equalTo('owner').once('value', snap => {
+    // Owner
+    refs.users.orderByChild('role').equalTo('owner').once('value').then(snap => {
         if (!snap.exists()) {
-            // Buat akun owner
-            refs.users.child(OWNER_USER).set({
-                username: OWNER_USER,
-                password: OWNER_PASS,
-                name: 'Putzx',
-                phone: WA_NUMBER,
-                role: 'owner'
-            });
-            refs.saldo.child(OWNER_USER).set(0);
+            return refs.users.child(OWNER_USER).set({ username: OWNER_USER, password: OWNER_PASS, name: 'Putzx', phone: WA_NUMBER, role: 'owner' })
+                .then(() => refs.saldo.child(OWNER_USER).set(0));
         }
-    });
+    }).catch(console.error);
 
-    // Cek produk default
-    refs.products.once('value', snap => {
+    // Produk default
+    refs.products.once('value').then(snap => {
         if (!snap.exists()) {
             const defaultProducts = [
                 { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
@@ -435,95 +520,19 @@ function initData() {
                 { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
                 { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' }
             ];
-            defaultProducts.forEach(p => {
-                refs.products.child(p.id).set(p);
-            });
+            const promises = defaultProducts.map(p => refs.products.child(p.id).set(p));
+            return Promise.all(promises);
         }
-    });
+    }).catch(console.error);
 
-    // Cek konfigurasi
-    refs.config.once('value', snap => {
+    // Config
+    refs.config.once('value').then(snap => {
         if (!snap.exists()) {
-            refs.config.set({
-                waNumber: WA_NUMBER,
-                slLink: WA_LINK,
-                paymentQr: '',
-                storeInfo: 'PutzxStore - Toko Online'
-            });
+            return refs.config.set({ waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' });
         }
-    });
+    }).catch(console.error);
 }
 initData();
-
-// ================================================================
-// AUTH FUNGSI (dengan Firebase)
-// ================================================================
-function login(username, password) {
-    return new Promise((resolve, reject) => {
-        refs.users.child(username).once('value', snap => {
-            const user = snap.val();
-            if (user && user.password === password) {
-                setCurrentUser({ username, name: user.name, phone: user.phone, role: user.role });
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-        });
-    });
-}
-
-function signup(name, username, phone, password) {
-    return new Promise((resolve, reject) => {
-        refs.users.child(username).once('value', snap => {
-            if (snap.exists()) {
-                resolve({ success: false, message: 'Username sudah digunakan.' });
-                return;
-            }
-            if (password.length < 6) {
-                resolve({ success: false, message: 'Password minimal 6 karakter.' });
-                return;
-            }
-            refs.users.child(username).set({
-                username, password, name, phone, role: 'member'
-            });
-            refs.saldo.child(username).set(0);
-            setCurrentUser({ username, name, phone, role: 'member' });
-            resolve({ success: true });
-        });
-    });
-}
-
-// ================================================================
-// DEPOSIT FUNGSI (Firebase)
-// ================================================================
-function createDepositRequest(username, amount) {
-    const id = Date.now();
-    return refs.deposits.child(id).set({
-        id, username, amount, status: 'pending', createdAt: new Date().toISOString()
-    });
-}
-
-function updateDepositRequest(id, status) {
-    return refs.deposits.child(id).update({ status });
-}
-
-function getPendingDeposits() {
-    return new Promise(resolve => {
-        refs.deposits.orderByChild('status').equalTo('pending').once('value', snap => {
-            const data = snap.val();
-            resolve(data ? Object.values(data) : []);
-        });
-    });
-}
-
-function getUserDeposits(username) {
-    return new Promise(resolve => {
-        refs.deposits.orderByChild('username').equalTo(username).once('value', snap => {
-            const data = snap.val();
-            resolve(data ? Object.values(data).sort((a,b) => b.id - a.id) : []);
-        });
-    });
-}
 
 // ================================================================
 // DOM REFS
@@ -545,6 +554,10 @@ const depositError = $('depositError'), depositStep1 = $('depositStep1'), deposi
 const qrNominal = $('qrNominal'), qrContainer = $('qrContainer'), requestDepositBtn = $('requestDepositBtn');
 const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNominal = $('reqNominal'), reqStatus = $('reqStatus');
 
+// Modal note
+const noteModal = $('noteModal'), noteInput = $('noteInput'), noteCancel = $('noteCancel'), noteSave = $('noteSave'), noteAlert = $('noteAlert');
+let currentNotePurchaseId = null;
+
 let currentPage = 'produk', pendingAmount = 0;
 
 // ================================================================
@@ -560,15 +573,9 @@ function updateSaldoDisplay() {
 }
 
 function updateStats() {
-    refs.users.once('value', snap => {
-        totalUserStat.textContent = snap.numChildren();
-    });
-    refs.products.once('value', snap => {
-        totalProductStat.textContent = snap.numChildren();
-    });
-    getPendingDeposits().then(pending => {
-        pendingDepositStat.textContent = pending.length;
-    });
+    refs.users.once('value').then(snap => totalUserStat.textContent = snap.numChildren()).catch(()=>{});
+    refs.products.once('value').then(snap => totalProductStat.textContent = snap.numChildren()).catch(()=>{});
+    getPendingDeposits().then(pending => pendingDepositStat.textContent = pending.length);
 }
 
 function showApp(user) {
@@ -585,7 +592,7 @@ function showApp(user) {
     updateSaldoDisplay();
     navigateTo('produk');
 
-    // Listener real-time untuk deposit status user ini
+    // Listener deposit
     if (window._depositListener) window._depositListener();
     window._depositListener = refs.deposits.orderByChild('username').equalTo(user.username).on('child_added', snap => {
         const req = snap.val();
@@ -621,7 +628,7 @@ function updateRequestStatusDisplay(req) {
 }
 
 // ================================================================
-// RENDER FUNGSI
+// RENDER FUNGSI (produk, akun, deposit, riwayat, info, panel)
 // ================================================================
 function renderProductGrid(products) {
     const user = getCurrentUser();
@@ -633,11 +640,8 @@ function renderProductGrid(products) {
         let actionHtml = '';
         if (user) {
             const isOwner = user.role && user.role.toLowerCase() === 'owner';
-            if (isOwner) {
-                actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
-            } else {
-                actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
-            }
+            if (isOwner) actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
+            else actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
         }
         html += `
             <div class="product-card">
@@ -676,7 +680,6 @@ function renderUserList(users) {
         `;
     });
     html += '</div>';
-    // Subscribe saldo tiap user
     Object.values(users).forEach(u => {
         refs.saldo.child(u.username).on('value', snap => {
             const el = document.getElementById('saldo-' + u.username);
@@ -708,16 +711,19 @@ function renderPendingRequests(reqs) {
     return html;
 }
 
+// ✅ RIWAYAT PEMBELIAN (MEMBER)
 function renderRiwayat() {
     const user = getCurrentUser();
     if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
-    return `<div class="page-content"><div class="section-title"><span>Riwayat Deposit</span></div><div id="riwayatList">Memuat...</div></div>`;
+    return `<div class="page-content"><div class="section-title"><span>Riwayat Pembelian</span></div><div id="riwayatList">Memuat...</div></div>`;
 }
 
+// ✅ INFO
 function renderInfo() {
     return `<div class="page-content"><div class="section-title"><span>Informasi Toko</span></div><div id="infoContent">Memuat...</div></div>`;
 }
 
+// ✅ PANEL OWN
 function renderPanel() {
     const user = getCurrentUser();
     if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
@@ -725,7 +731,7 @@ function renderPanel() {
 }
 
 // ================================================================
-// NAVIGASI
+// NAVIGASI + LOAD DATA PER HALAMAN
 // ================================================================
 function navigateTo(page) {
     currentPage = page;
@@ -753,6 +759,7 @@ function navigateTo(page) {
     mainContent.innerHTML = content;
     searchInput.value = '';
 
+    // Load data sesuai halaman
     if (page === 'produk') {
         refs.products.on('value', snap => {
             const products = snap.val();
@@ -763,21 +770,23 @@ function navigateTo(page) {
     } else if (page === 'panel' && user && user.role === 'owner') {
         renderPanelContent();
     } else if (page === 'riwayat') {
-        getUserDeposits(user.username).then(deposits => {
+        getUserPurchases(user.username).then(purchases => {
             const el = document.getElementById('riwayatList');
             if (!el) return;
-            if (deposits.length === 0) {
-                el.innerHTML = `<div class="empty-state"><i class="fas fa-clock"></i><h3>Belum ada riwayat deposit</h3></div>`;
+            if (purchases.length === 0) {
+                el.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Belum ada pembelian</h3><p>Silakan belanja dulu!</p></div>`;
             } else {
                 let html = '<div class="user-list">';
-                deposits.forEach(r => {
-                    const statusText = r.status === 'pending' ? 'Menunggu' : r.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
+                purchases.forEach(p => {
+                    const noteHtml = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> Catatan: ${p.note}</div>` : '';
                     html += `
-                        <div class="user-item">
-                            <div class="user-info">
-                                <div class="uname">Deposit Rp ${r.amount.toLocaleString('id-ID')}</div>
-                                <div class="detail">Tanggal: ${new Date(r.createdAt).toLocaleString()}</div>
-                                <div class="detail"><span class="status-badge ${r.status}">${statusText}</span></div>
+                        <div class="purchase-item">
+                            <div class="purchase-info">
+                                <div class="pname">${p.productName}</div>
+                                <div class="detail">Harga: Rp ${p.price.toLocaleString('id-ID')} &nbsp;|&nbsp; Jumlah: ${p.quantity}</div>
+                                <div class="detail">Total: Rp ${p.total.toLocaleString('id-ID')}</div>
+                                <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                                ${noteHtml}
                             </div>
                         </div>
                     `;
@@ -809,6 +818,9 @@ function navigateTo(page) {
     attachEvents();
 }
 
+// ================================================================
+// RENDER PANEL CONTENT (Produk, Akun, Deposit, Pembelian, Info)
+// ================================================================
 function renderPanelContent() {
     const user = getCurrentUser();
     if (!user || user.role !== 'owner') return;
@@ -817,8 +829,9 @@ function renderPanelContent() {
         refs.products.once('value'),
         refs.users.once('value'),
         getPendingDeposits(),
-        refs.config.once('value')
-    ]).then(([productsSnap, usersSnap, pending, configSnap]) => {
+        refs.config.once('value'),
+        getAllPurchases() // ✅ ambil semua pembelian
+    ]).then(([productsSnap, usersSnap, pending, configSnap, allPurchases]) => {
         const products = productsSnap.val() || {};
         const users = usersSnap.val() || {};
         const config = configSnap.val() || {};
@@ -842,12 +855,38 @@ function renderPanelContent() {
         const userListHtml = renderUserList(users);
         const pendingHtml = renderPendingRequests(pending);
 
+        // ✅ Daftar pembelian untuk OWN
+        let purchaseHtml = '';
+        if (allPurchases.length === 0) {
+            purchaseHtml = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Belum ada pembelian</h3></div>`;
+        } else {
+            purchaseHtml = '<div class="user-list">';
+            allPurchases.forEach(p => {
+                const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
+                purchaseHtml += `
+                    <div class="purchase-item" data-id="${p.id}">
+                        <div class="purchase-info">
+                            <div class="pname">${p.productName}</div>
+                            <div class="detail">Pembeli: <strong>${p.username}</strong> &nbsp;|&nbsp; Total: Rp ${p.total.toLocaleString('id-ID')}</div>
+                            <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                            ${noteDisplay}
+                        </div>
+                        <div class="purchase-actions">
+                            <button class="btn-note" data-id="${p.id}"><i class="fas fa-pen"></i> Catatan</button>
+                        </div>
+                    </div>
+                `;
+            });
+            purchaseHtml += '</div>';
+        }
+
         const html = `
             <div class="own-panel">
                 <div class="panel-tabs">
                     <button class="panel-tab active" data-panel-tab="produk">Produk</button>
                     <button class="panel-tab" data-panel-tab="akun">Akun</button>
                     <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
+                    <button class="panel-tab" data-panel-tab="pembelian">Pembelian</button>
                     <button class="panel-tab" data-panel-tab="info">Info</button>
                 </div>
                 <div id="panelTabProduk" class="panel-tab-content active">
@@ -878,6 +917,12 @@ function renderPanelContent() {
                     ${pendingHtml}
                     <div id="depositAlert" class="alert"></div>
                 </div>
+                <div id="panelTabPembelian" class="panel-tab-content">
+                    <h3>Riwayat Pembelian Semua Member</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Klik "Catatan" untuk menambahkan pesan ke pembelian tersebut.</p>
+                    ${purchaseHtml}
+                    <div id="purchaseAlert" class="alert"></div>
+                </div>
                 <div id="panelTabInfo" class="panel-tab-content">
                     <h3>Edit Info Toko</h3>
                     <div class="form-group"><label>Nama/Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
@@ -892,14 +937,14 @@ function renderPanelContent() {
         if (container) container.innerHTML = html;
         attachPanelEvents();
         attachEvents();
-        // Subscribe saldo real-time di panel akun
+        // Subscribe saldo real-time
         Object.values(users).forEach(u => {
             refs.saldo.child(u.username).on('value', snap => {
                 const el = document.getElementById('saldo-' + u.username);
                 if (el) el.textContent = (snap.val() || 0).toLocaleString('id-ID');
             });
         });
-    });
+    }).catch(err => console.error('renderPanelContent error:', err));
 }
 
 // ================================================================
@@ -911,40 +956,49 @@ function attachEvents() {
 }
 
 function attachPanelEvents() {
+    // Tab switching
     document.querySelectorAll('.panel-tab').forEach(tab => {
         tab.removeEventListener('click', handlePanelTab);
         tab.addEventListener('click', handlePanelTab);
     });
 
+    // Hapus produk
     document.querySelectorAll('.product-item .btn-del').forEach(btn => {
         btn.removeEventListener('click', handleDeleteProduct);
         btn.addEventListener('click', handleDeleteProduct);
     });
 
+    // Upload gambar produk
     document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
         input.removeEventListener('change', handleProductImage);
         input.addEventListener('change', handleProductImage);
     });
 
+    // Tambah produk
     const addBtn = document.getElementById('addProductBtn');
     if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
 
+    // Simpan QR
     const saveQr = document.getElementById('saveQrBtn');
     if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
 
+    // Simpan info
     const saveInfo = document.getElementById('saveInfoBtn');
     if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
 
+    // Ubah saldo user
     document.querySelectorAll('.btn-saldo').forEach(btn => {
         btn.removeEventListener('click', handleUserSaldo);
         btn.addEventListener('click', handleUserSaldo);
     });
 
+    // Hapus user
     document.querySelectorAll('.btn-del-user').forEach(btn => {
         btn.removeEventListener('click', handleDeleteUser);
         btn.addEventListener('click', handleDeleteUser);
     });
 
+    // Approve/reject deposit
     document.querySelectorAll('.btn-approve').forEach(btn => {
         btn.removeEventListener('click', handleApprove);
         btn.addEventListener('click', handleApprove);
@@ -952,6 +1006,12 @@ function attachPanelEvents() {
     document.querySelectorAll('.btn-reject').forEach(btn => {
         btn.removeEventListener('click', handleReject);
         btn.addEventListener('click', handleReject);
+    });
+
+    // ✅ Tombol catatan di panel pembelian
+    document.querySelectorAll('.btn-note').forEach(btn => {
+        btn.removeEventListener('click', handleOpenNoteModal);
+        btn.addEventListener('click', handleOpenNoteModal);
     });
 }
 
@@ -966,26 +1026,34 @@ function handlePurchase(e) {
     if (!user) { alert('Silakan login.'); return; }
     if (user.role && user.role.toLowerCase() === 'owner') { alert('OWN tidak bisa membeli.'); return; }
 
-    refs.products.child(productId).once('value', snap => {
-        const product = snap.val();
-        if (!product) { alert('Produk tidak ditemukan.'); return; }
-        if (product.stock <= 0) { alert('Stok habis.'); return; }
-
-        refs.saldo.child(user.username).once('value', snapSaldo => {
-            const saldo = snapSaldo.val() || 0;
-            if (saldo < product.price) {
-                alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
-                return;
-            }
-            if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
-                refs.saldo.child(user.username).set(saldo - product.price);
-                refs.products.child(productId).update({ stock: product.stock - 1 });
-                showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
-                navigateTo('produk');
-                updateStats();
-            }
-        });
-    });
+    refs.products.child(productId).once('value')
+        .then(snap => {
+            const product = snap.val();
+            if (!product) { alert('Produk tidak ditemukan.'); return; }
+            if (product.stock <= 0) { alert('Stok habis.'); return; }
+            return refs.saldo.child(user.username).once('value')
+                .then(snapSaldo => {
+                    const saldo = snapSaldo.val() || 0;
+                    if (saldo < product.price) {
+                        alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
+                        return;
+                    }
+                    if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
+                        return refs.saldo.child(user.username).set(saldo - product.price)
+                            .then(() => refs.products.child(productId).update({ stock: product.stock - 1 }))
+                            .then(() => {
+                                // ✅ Simpan ke riwayat pembelian
+                                return savePurchase(user.username, productId, product.name, product.price, 1, product.price);
+                            })
+                            .then(() => {
+                                showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
+                                navigateTo('produk');
+                                updateStats();
+                            });
+                    }
+                });
+        })
+        .catch(err => console.error('Purchase error:', err));
 }
 
 function handlePanelTab(e) {
@@ -993,12 +1061,18 @@ function handlePanelTab(e) {
     this.classList.add('active');
     const target = this.dataset.panelTab;
     document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
-    const map = { produk: 'panelTabProduk', akun: 'panelTabAkun', deposit: 'panelTabDeposit', info: 'panelTabInfo' };
+    const map = {
+        produk: 'panelTabProduk',
+        akun: 'panelTabAkun',
+        deposit: 'panelTabDeposit',
+        pembelian: 'panelTabPembelian',
+        info: 'panelTabInfo'
+    };
     const el = document.getElementById(map[target]);
     if (el) {
         el.classList.add('active');
         if (target === 'akun') {
-            refs.users.once('value', snap => {
+            refs.users.once('value').then(snap => {
                 const users = snap.val();
                 const container = document.getElementById('panelTabAkun');
                 const list = container.querySelector('.user-list');
@@ -1014,16 +1088,48 @@ function handlePanelTab(e) {
                 attachPanelEvents();
             });
         }
+        if (target === 'pembelian') {
+            getAllPurchases().then(purchases => {
+                const container = document.getElementById('panelTabPembelian');
+                const list = container.querySelector('.user-list');
+                if (list) {
+                    let html = '';
+                    if (purchases.length === 0) {
+                        html = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Belum ada pembelian</h3></div>`;
+                    } else {
+                        html = '<div class="user-list">';
+                        purchases.forEach(p => {
+                            const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
+                            html += `
+                                <div class="purchase-item" data-id="${p.id}">
+                                    <div class="purchase-info">
+                                        <div class="pname">${p.productName}</div>
+                                        <div class="detail">Pembeli: <strong>${p.username}</strong> &nbsp;|&nbsp; Total: Rp ${p.total.toLocaleString('id-ID')}</div>
+                                        <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                                        ${noteDisplay}
+                                    </div>
+                                    <div class="purchase-actions">
+                                        <button class="btn-note" data-id="${p.id}"><i class="fas fa-pen"></i> Catatan</button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    list.outerHTML = html;
+                    attachPanelEvents();
+                }
+            });
+        }
     }
 }
 
 function handleDeleteProduct(e) {
     if (!confirm('Hapus produk ini?')) return;
     const id = this.dataset.id;
-    refs.products.child(id).remove();
-    showToast('Produk dihapus!', 'success');
-    navigateTo('panel');
-    updateStats();
+    refs.products.child(id).remove()
+        .then(() => { showToast('Produk dihapus!', 'success'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Delete product error:', err));
 }
 
 function handleProductImage(e) {
@@ -1033,9 +1139,9 @@ function handleProductImage(e) {
     reader.onload = function(ev) {
         const base64 = ev.target.result;
         const productId = this.closest('.product-item').dataset.id;
-        refs.products.child(productId).update({ image: base64 });
-        showToast('Gambar diperbarui!', 'success');
-        navigateTo('panel');
+        refs.products.child(productId).update({ image: base64 })
+            .then(() => { showToast('Gambar diperbarui!', 'success'); navigateTo('panel'); })
+            .catch(err => console.error('Update image error:', err));
     }.bind(this);
     reader.readAsDataURL(file);
 }
@@ -1048,32 +1154,32 @@ function handleAddProduct() {
     if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
     const reader = new FileReader();
     reader.onload = function(e) {
-        refs.products.once('value', snap => {
-            const products = snap.val() || {};
-            const ids = Object.keys(products).map(Number);
-            const newId = ids.length ? Math.max(...ids) + 1 : 1;
-            refs.products.child(newId).set({
-                id: newId, name, price, stock, image: e.target.result || ''
-            });
-            showAlert('panelAlert', 'Produk ditambahkan!', 'success');
-            navigateTo('panel');
-            updateStats();
-        });
+        refs.products.once('value')
+            .then(snap => {
+                const products = snap.val() || {};
+                const ids = Object.keys(products).map(Number);
+                const newId = ids.length ? Math.max(...ids) + 1 : 1;
+                return refs.products.child(newId).set({
+                    id: newId, name, price, stock, image: e.target.result || ''
+                });
+            })
+            .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
+            .catch(err => console.error('Add product error:', err));
     };
     if (fileInput.files && fileInput.files[0]) {
         reader.readAsDataURL(fileInput.files[0]);
     } else {
-        refs.products.once('value', snap => {
-            const products = snap.val() || {};
-            const ids = Object.keys(products).map(Number);
-            const newId = ids.length ? Math.max(...ids) + 1 : 1;
-            refs.products.child(newId).set({
-                id: newId, name, price, stock, image: ''
-            });
-            showAlert('panelAlert', 'Produk ditambahkan!', 'success');
-            navigateTo('panel');
-            updateStats();
-        });
+        refs.products.once('value')
+            .then(snap => {
+                const products = snap.val() || {};
+                const ids = Object.keys(products).map(Number);
+                const newId = ids.length ? Math.max(...ids) + 1 : 1;
+                return refs.products.child(newId).set({
+                    id: newId, name, price, stock, image: ''
+                });
+            })
+            .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
+            .catch(err => console.error('Add product error:', err));
     }
 }
 
@@ -1082,9 +1188,9 @@ function handleSaveQr() {
     if (!fileInput.files || !fileInput.files[0]) { showAlert('qrAlert', 'Pilih file QR.', 'error'); return; }
     const reader = new FileReader();
     reader.onload = function(e) {
-        refs.config.update({ paymentQr: e.target.result });
-        showAlert('qrAlert', 'QR disimpan!', 'success');
-        navigateTo('panel');
+        refs.config.update({ paymentQr: e.target.result })
+            .then(() => { showAlert('qrAlert', 'QR disimpan!', 'success'); navigateTo('panel'); })
+            .catch(err => console.error('Save QR error:', err));
     };
     reader.readAsDataURL(fileInput.files[0]);
 }
@@ -1097,9 +1203,9 @@ function handleSaveInfo() {
         storeInfo: info || 'PutzxStore - Toko Online',
         waNumber: wa || WA_NUMBER,
         slLink: sl || WA_LINK
-    });
-    showAlert('infoAlert', 'Info disimpan!', 'success');
-    navigateTo('panel');
+    })
+    .then(() => { showAlert('infoAlert', 'Info disimpan!', 'success'); navigateTo('panel'); })
+    .catch(err => console.error('Save info error:', err));
 }
 
 function handleUserSaldo(e) {
@@ -1110,71 +1216,132 @@ function handleUserSaldo(e) {
     const amount = parseInt(input.value);
     if (isNaN(amount) || amount < 0) { alert('Nominal valid (min 0).'); return; }
     if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
-    refs.saldo.child(username).set(amount);
-    input.value = '';
-    showToast('Saldo ' + username + ' diubah!', 'success');
-    updateStats();
-    const user = getCurrentUser();
-    if (user && user.username === username) updateSaldoDisplay();
+    refs.saldo.child(username).set(amount)
+        .then(() => {
+            input.value = '';
+            showToast('Saldo ' + username + ' diubah!', 'success');
+            updateStats();
+            const user = getCurrentUser();
+            if (user && user.username === username) updateSaldoDisplay();
+        })
+        .catch(err => console.error('Update saldo error:', err));
 }
 
 function handleDeleteUser(e) {
     if (this.disabled) return;
     const username = this.dataset.username;
     if (!confirm('Hapus akun "' + username + '"?')) return;
-    refs.users.child(username).remove();
-    refs.saldo.child(username).remove();
-    showToast('Akun dihapus!', 'success');
-    navigateTo('panel');
-    updateStats();
+    refs.users.child(username).remove()
+        .then(() => refs.saldo.child(username).remove())
+        .then(() => { showToast('Akun dihapus!', 'success'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Delete user error:', err));
 }
 
 function handleApprove(e) {
     const id = parseInt(this.dataset.id);
     if (!confirm('Setujui deposit ini?')) return;
-    refs.deposits.child(id).once('value', snap => {
-        const req = snap.val();
-        if (req) {
-            refs.saldo.child(req.username).once('value', snapSaldo => {
-                const saldo = snapSaldo.val() || 0;
-                refs.saldo.child(req.username).set(saldo + req.amount);
-            });
-            updateDepositRequest(id, 'approved');
-            showToast('Deposit disetujui!', 'success');
-            navigateTo('panel');
-            updateStats();
-        }
-    });
+    refs.deposits.child(id).once('value')
+        .then(snap => {
+            const req = snap.val();
+            if (req) {
+                return refs.saldo.child(req.username).once('value')
+                    .then(snapSaldo => {
+                        const saldo = snapSaldo.val() || 0;
+                        return refs.saldo.child(req.username).set(saldo + req.amount)
+                            .then(() => updateDepositRequest(id, 'approved'));
+                    });
+            }
+        })
+        .then(() => { showToast('Deposit disetujui!', 'success'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Approve error:', err));
 }
 
 function handleReject(e) {
     const id = parseInt(this.dataset.id);
     if (!confirm('Tolak deposit ini?')) return;
-    updateDepositRequest(id, 'rejected');
-    showToast('Deposit ditolak.', 'error');
-    navigateTo('panel');
-    updateStats();
+    updateDepositRequest(id, 'rejected')
+        .then(() => { showToast('Deposit ditolak.', 'error'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Reject error:', err));
 }
 
+// ✅ HANDLER UNTUK CATATAN
+function handleOpenNoteModal(e) {
+    const btn = e.currentTarget;
+    const purchaseId = btn.dataset.id;
+    currentNotePurchaseId = purchaseId;
+    // Ambil catatan sebelumnya jika ada
+    refs.purchases.child(purchaseId).once('value')
+        .then(snap => {
+            const data = snap.val();
+            if (data && data.note) {
+                noteInput.value = data.note;
+            } else {
+                noteInput.value = '';
+            }
+            noteAlert.style.display = 'none';
+            noteModal.classList.add('active');
+            noteInput.focus();
+        })
+        .catch(() => {
+            noteInput.value = '';
+            noteAlert.style.display = 'none';
+            noteModal.classList.add('active');
+            noteInput.focus();
+        });
+}
+
+function saveNote() {
+    const note = noteInput.value.trim();
+    if (!note) {
+        noteAlert.textContent = 'Catatan tidak boleh kosong.';
+        noteAlert.style.display = 'block';
+        return;
+    }
+    if (!currentNotePurchaseId) return;
+    updatePurchaseNote(currentNotePurchaseId, note)
+        .then(() => {
+            noteModal.classList.remove('active');
+            showToast('Catatan berhasil disimpan!', 'success');
+            // Refresh panel pembelian
+            if (currentPage === 'panel') navigateTo('panel');
+        })
+        .catch(err => {
+            console.error('Save note error:', err);
+            noteAlert.textContent = 'Gagal menyimpan catatan.';
+            noteAlert.style.display = 'block';
+        });
+}
+
+noteCancel.addEventListener('click', () => {
+    noteModal.classList.remove('active');
+    noteAlert.style.display = 'none';
+});
+noteSave.addEventListener('click', saveNote);
+noteInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.ctrlKey) saveNote();
+});
+
 // ================================================================
-// DEPOSIT MODAL
+// DEPOSIT MODAL (sama seperti sebelumnya)
 // ================================================================
 depositBtn.addEventListener('click', function() {
-    refs.config.once('value', snap => {
-        const config = snap.val() || {};
-        if (!config.paymentQr || config.paymentQr.length < 100) {
-            alert('QR belum diatur oleh OWN. Silakan hubungi admin.');
-            return;
-        }
-        depositModal.classList.add('active');
-        depositStep1.classList.remove('hidden');
-        depositStep2.classList.add('hidden');
-        depositStep3.classList.add('hidden');
-        depositAmount.value = '';
-        depositError.style.display = 'none';
-        depositAmount.focus();
-        pendingAmount = 0;
-    });
+    refs.config.once('value')
+        .then(snap => {
+            const config = snap.val() || {};
+            if (!config.paymentQr || config.paymentQr.length < 100) {
+                alert('QR belum diatur oleh OWN. Silakan hubungi admin.');
+                return;
+            }
+            depositModal.classList.add('active');
+            depositStep1.classList.remove('hidden');
+            depositStep2.classList.add('hidden');
+            depositStep3.classList.add('hidden');
+            depositAmount.value = '';
+            depositError.style.display = 'none';
+            depositAmount.focus();
+            pendingAmount = 0;
+        })
+        .catch(err => console.error('Deposit modal error:', err));
 });
 
 depositCancelBtn.addEventListener('click', () => depositModal.classList.remove('active'));
@@ -1187,10 +1354,12 @@ depositConfirmBtn.addEventListener('click', function() {
     depositStep1.classList.add('hidden');
     depositStep2.classList.remove('hidden');
     qrNominal.textContent = 'Rp ' + amount.toLocaleString('id-ID');
-    refs.config.once('value', snap => {
-        const config = snap.val() || {};
-        qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR" />`;
-    });
+    refs.config.once('value')
+        .then(snap => {
+            const config = snap.val() || {};
+            qrContainer.innerHTML = `<img src="${config.paymentQr}" alt="QR" />`;
+        })
+        .catch(err => console.error('Get QR error:', err));
     requestDepositBtn.disabled = false;
 });
 
@@ -1198,16 +1367,18 @@ requestDepositBtn.addEventListener('click', function() {
     const user = getCurrentUser();
     if (!user) { alert('Login dulu.'); return; }
     if (pendingAmount <= 0) return;
-    createDepositRequest(user.username, pendingAmount).then(() => {
-        depositStep2.classList.add('hidden');
-        depositStep3.classList.remove('hidden');
-        reqNominal.textContent = 'Rp ' + pendingAmount.toLocaleString('id-ID');
-        reqStatus.textContent = 'Menunggu Konfirmasi';
-        reqStatus.className = 'status-badge pending';
-        requestDepositBtn.disabled = true;
-        showToast('Permintaan deposit terkirim, tunggu konfirmasi admin.', 'info');
-        updateStats();
-    });
+    createDepositRequest(user.username, pendingAmount)
+        .then(() => {
+            depositStep2.classList.add('hidden');
+            depositStep3.classList.remove('hidden');
+            reqNominal.textContent = 'Rp ' + pendingAmount.toLocaleString('id-ID');
+            reqStatus.textContent = 'Menunggu Konfirmasi';
+            reqStatus.className = 'status-badge pending';
+            requestDepositBtn.disabled = true;
+            showToast('Permintaan deposit terkirim, tunggu konfirmasi admin.', 'info');
+            updateStats();
+        })
+        .catch(err => console.error('Request deposit error:', err));
 });
 
 depositBack.addEventListener('click', function() {
@@ -1232,16 +1403,20 @@ depositModal.addEventListener('click', function(e) {
 // CHAT & CHANNEL
 // ================================================================
 document.getElementById('chatAdminBtn').addEventListener('click', function() {
-    refs.config.once('value', snap => {
-        const config = snap.val() || {};
-        window.open('https://wa.me/' + (config.waNumber || WA_NUMBER).replace(/\D/g, ''), '_blank');
-    });
+    refs.config.once('value')
+        .then(snap => {
+            const config = snap.val() || {};
+            window.open('https://wa.me/' + (config.waNumber || WA_NUMBER).replace(/\D/g, ''), '_blank');
+        })
+        .catch(() => window.open('https://wa.me/' + WA_NUMBER.replace(/\D/g, ''), '_blank'));
 });
 document.getElementById('channelBtn').addEventListener('click', function() {
-    refs.config.once('value', snap => {
-        const config = snap.val() || {};
-        window.open(config.slLink || WA_LINK, '_blank');
-    });
+    refs.config.once('value')
+        .then(snap => {
+            const config = snap.val() || {};
+            window.open(config.slLink || WA_LINK, '_blank');
+        })
+        .catch(() => window.open(WA_LINK, '_blank'));
 });
 
 // ================================================================
@@ -1250,18 +1425,20 @@ document.getElementById('channelBtn').addEventListener('click', function() {
 searchInput.addEventListener('input', function() {
     const keyword = this.value.toLowerCase().trim();
     if (currentPage === 'produk') {
-        refs.products.once('value', snap => {
-            const products = snap.val() || {};
-            const filtered = {};
-            Object.keys(products).forEach(key => {
-                if (products[key].name.toLowerCase().includes(keyword)) {
-                    filtered[key] = products[key];
-                }
-            });
-            const el = document.getElementById('productList');
-            if (el) el.innerHTML = renderProductGrid(filtered);
-            attachEvents();
-        });
+        refs.products.once('value')
+            .then(snap => {
+                const products = snap.val() || {};
+                const filtered = {};
+                Object.keys(products).forEach(key => {
+                    if (products[key].name.toLowerCase().includes(keyword)) {
+                        filtered[key] = products[key];
+                    }
+                });
+                const el = document.getElementById('productList');
+                if (el) el.innerHTML = renderProductGrid(filtered);
+                attachEvents();
+            })
+            .catch(err => console.error('Search error:', err));
     }
 });
 
@@ -1282,7 +1459,7 @@ navItems.forEach(item => {
 });
 
 // ================================================================
-// AUTH EVENTS
+// AUTH EVENTS (Login & Register)
 // ================================================================
 authTabs.forEach(tab => {
     tab.addEventListener('click', function() {
@@ -1302,16 +1479,26 @@ switchToLogin.addEventListener('click', e => { e.preventDefault(); document.quer
 loginBtn.addEventListener('click', function() {
     const username = loginUsername.value.trim();
     const password = loginPassword.value.trim();
-    if (!username || !password) { loginError.textContent = 'Isi semua field.'; loginError.style.display = 'block'; return; }
-    login(username, password).then(success => {
-        if (success) {
-            loginError.style.display = 'none';
-            showApp(getCurrentUser());
-        } else {
-            loginError.textContent = 'Username atau password salah.';
+    if (!username || !password) {
+        loginError.textContent = 'Isi semua field.';
+        loginError.style.display = 'block';
+        return;
+    }
+    loginError.style.display = 'none';
+    login(username, password)
+        .then(success => {
+            if (success) {
+                showApp(getCurrentUser());
+            } else {
+                loginError.textContent = 'Username atau password salah.';
+                loginError.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            console.error('Login error:', err);
+            loginError.textContent = 'Terjadi kesalahan. Cek koneksi internet.';
             loginError.style.display = 'block';
-        }
-    });
+        });
 });
 loginUsername.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
 loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
@@ -1327,16 +1514,26 @@ signupBtn.addEventListener('click', function() {
         signupError.style.display = 'block';
         return;
     }
-    if (password !== confirm) { signupError.textContent = 'Password tidak cocok.'; signupError.style.display = 'block'; return; }
-    signup(name, username, phone, password).then(result => {
-        if (result.success) {
-            signupError.style.display = 'none';
-            showApp(getCurrentUser());
-        } else {
-            signupError.textContent = result.message;
+    if (password !== confirm) {
+        signupError.textContent = 'Password tidak cocok.';
+        signupError.style.display = 'block';
+        return;
+    }
+    signupError.style.display = 'none';
+    signup(name, username, phone, password)
+        .then(result => {
+            if (result.success) {
+                showApp(getCurrentUser());
+            } else {
+                signupError.textContent = result.message;
+                signupError.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            console.error('Signup error:', err);
+            signupError.textContent = 'Terjadi kesalahan. Cek koneksi internet.';
             signupError.style.display = 'block';
-        }
-    });
+        });
 });
 signupName.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
 signupUsername.addEventListener('keypress', e => { if (e.key === 'Enter') signupBtn.click(); });
@@ -1353,13 +1550,15 @@ logoutBtn.addEventListener('click', function() {
 // ================================================================
 const user = getCurrentUser();
 if (user) {
-    refs.users.child(user.username).once('value', snap => {
-        if (snap.exists()) {
-            showApp(user);
-        } else {
-            showAuth();
-        }
-    });
+    refs.users.child(user.username).once('value')
+        .then(snap => {
+            if (snap.exists()) {
+                showApp(user);
+            } else {
+                showAuth();
+            }
+        })
+        .catch(() => showAuth());
 } else {
     showAuth();
 }

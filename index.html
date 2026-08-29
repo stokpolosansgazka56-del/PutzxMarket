@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PutzxStore - Nokos Indo</title>
+    <title>PutzxStore - Nokos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        /* ===== DARK THEME ===== */
+        /* ===== DARK THEME (sama seperti sebelumnya, dipotong agar ringkas) ===== */
         :root { --bg-primary:#0f0f13; --bg-secondary:#1a1a24; --bg-card:#23232e; --bg-input:#2a2a36; --text-primary:#e8e8f0; --text-secondary:#a0a0b8; --text-muted:#6a6a7e; --accent:#00c853; --accent-hover:#00e676; --danger:#ef5350; --danger-hover:#e53935; --warning:#ffb300; --border:#2f2f3e; --radius:16px; --shadow:0 4px 20px rgba(0,0,0,0.6); }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
@@ -84,8 +84,6 @@
         .product-name { font-weight:600; font-size:13px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .product-price { font-weight:700; color:var(--accent); font-size:14px; margin-top:2px; }
         .product-stock { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
-        .nokos-input { width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:20px; font-size:13px; background:var(--bg-input); color:var(--text-primary); margin-bottom:6px; outline:none; }
-        .nokos-input:focus { border-color:var(--accent); }
         .btn-beli { background:var(--accent); color:#fff; border:none; padding:8px 0; border-radius:20px; font-weight:600; font-size:13px; cursor:pointer; width:100%; transition:background .2s; margin-top:auto; }
         .btn-beli:hover { background:var(--accent-hover); }
         .btn-beli:disabled { background:var(--text-muted); cursor:not-allowed; opacity:0.5; }
@@ -120,12 +118,18 @@
         .own-panel .product-item .info { flex:1; min-width:100px; }
         .own-panel .product-item .info .name { font-weight:600; color:var(--text-primary); }
         .own-panel .product-item .info .price { color:var(--accent); }
+        .own-panel .product-item .info .nokos-phone { font-size:12px; color:var(--text-secondary); margin-top:4px; }
         .own-panel .product-item .actions { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
         .own-panel .product-item .actions input[type="file"] { display:none; }
         .own-panel .product-item .actions label { background:var(--bg-input); padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--text-secondary); }
         .own-panel .product-item .actions label:hover { background:var(--bg-hover); }
         .own-panel .product-item .actions .btn-del { background:var(--danger); color:#fff; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .own-panel .product-item .actions .btn-del:hover { background:var(--danger-hover); }
+        .own-panel .product-item .actions .nokos-phone-input { width:120px; padding:4px 8px; border:1px solid var(--border); border-radius:20px; background:var(--bg-input); color:var(--text-primary); font-size:12px; }
+        .own-panel .product-item .actions .nokos-phone-input:focus { border-color:var(--accent); }
+        .own-panel .product-item .actions .btn-phone { background:var(--warning); color:#000; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
+        .own-panel .product-item .actions .btn-phone:hover { opacity:0.8; }
+
         .own-panel .qr-upload { margin-top:20px; border-top:1px solid var(--border); padding-top:20px; }
         .own-panel .qr-preview { margin-top:8px; max-width:200px; border-radius:8px; border:1px solid var(--border); padding:8px; background:var(--bg-input); }
         .own-panel .qr-preview img { width:100%; height:auto; display:block; }
@@ -432,6 +436,32 @@ function showAlert(id, msg, type) {
     setTimeout(() => el.className = 'alert', 4000);
 }
 
+// ================================================================
+// NOTIFIKASI
+// ================================================================
+function requestNotificationPermission() {
+    if (!("Notification" in window)) {
+        console.log("Browser tidak mendukung notifikasi.");
+        return;
+    }
+    if (Notification.permission === "granted") return;
+    if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+            console.log("Notifikasi: " + permission);
+        });
+    }
+}
+
+function sendNotification(title, body) {
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "granted") {
+        new Notification(title, { body, icon: 'https://via.placeholder.com/64/00c853/ffffff?text=P' });
+    }
+}
+
+// ================================================================
+// AUTH
+// ================================================================
 function login(username, password) {
     return refs.users.child(username).once('value').then(snap => {
         const user = snap.val();
@@ -456,6 +486,9 @@ function signup(name, username, phone, password) {
     });
 }
 
+// ================================================================
+// DEPOSIT
+// ================================================================
 function createDepositRequest(username, amount) {
     const id = Date.now();
     return refs.deposits.child(id).set({ id, username, amount, status: 'pending', createdAt: new Date().toISOString() });
@@ -488,7 +521,7 @@ function savePurchase(username, productId, productName, price, quantity, total, 
         timestamp: new Date().toISOString(),
         note: '',
         isNokos,
-        phone,
+        phone,              // no HP dari produk (diisi OWN)
         verificationCode: ''
     });
 }
@@ -525,13 +558,13 @@ function initData() {
     refs.products.once('value').then(snap => {
         if (!snap.exists()) {
             const defaultProducts = [
-                { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
-                { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '' },
-                { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '' },
-                { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '' },
-                { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
-                { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' },
-                { id: 7, name: 'Nokos Indo 10GB', price: 25000, stock: 50, image: '', isNokos: true }
+                { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '', isNokos: false, nokosPhone: '' },
+                { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '', isNokos: false, nokosPhone: '' },
+                { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '', isNokos: false, nokosPhone: '' },
+                { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '', isNokos: false, nokosPhone: '' },
+                { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '', isNokos: false, nokosPhone: '' },
+                { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '', isNokos: false, nokosPhone: '' },
+                { id: 7, name: 'Nokos Indo 10GB', price: 25000, stock: 50, image: '', isNokos: true, nokosPhone: '' }
             ];
             const promises = defaultProducts.map(p => refs.products.child(p.id).set(p));
             return Promise.all(promises);
@@ -543,6 +576,9 @@ function initData() {
             return refs.config.set({ waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' });
         }
     }).catch(console.error);
+
+    // Minta izin notifikasi
+    requestNotificationPermission();
 }
 initData();
 
@@ -649,21 +685,14 @@ function renderProductGrid(products) {
     Object.values(products).forEach(p => {
         const img = p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image"></i>';
         const inStock = p.stock > 0;
-        const isNokos = p.isNokos || (p.name && p.name.toLowerCase().includes('nokos'));
         let actionHtml = '';
         if (user) {
             const isOwner = user.role && user.role.toLowerCase() === 'owner';
             if (isOwner) {
                 actionHtml = `<div class="owner-text">OWN tidak bisa membeli</div>`;
             } else {
-                if (isNokos) {
-                    actionHtml = `
-                        <input type="tel" class="nokos-input" id="phone-${p.id}" placeholder="Masukkan No. HP penerima" />
-                        <button class="btn-beli" data-id="${p.id}" data-nokos="true" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>
-                    `;
-                } else {
-                    actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
-                }
+                // Tidak ada input untuk member
+                actionHtml = `<button class="btn-beli" data-id="${p.id}" ${inStock ? '' : 'disabled'}>${inStock ? 'Beli' : 'Habis'}</button>`;
             }
         }
         html += `
@@ -800,9 +829,11 @@ function navigateTo(page) {
                     const noteHtml = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> Catatan: ${p.note}</div>` : '';
                     let nokosHtml = '';
                     if (p.isNokos) {
+                        // Jika phone masih kosong, tampilkan "Loading..."
+                        const phoneDisplay = p.phone ? p.phone : '<span style="color:var(--warning);">Loading...</span>';
                         const codeDisplay = p.verificationCode ? p.verificationCode : '<span style="color:var(--warning);">Loading...</span>';
                         nokosHtml = `
-                            <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${p.phone || '-'}</div>
+                            <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${phoneDisplay}</div>
                             <div class="nokos-detail"><i class="fas fa-key"></i> Kode Verifikasi: ${codeDisplay}</div>
                         `;
                     }
@@ -847,7 +878,7 @@ function navigateTo(page) {
 }
 
 // ================================================================
-// RENDER PANEL CONTENT
+// RENDER PANEL CONTENT (dengan fitur Nokos)
 // ================================================================
 function renderPanelContent() {
     const user = getCurrentUser();
@@ -864,21 +895,31 @@ function renderPanelContent() {
         const users = usersSnap.val() || {};
         const config = configSnap.val() || {};
 
-        let productListHtml = Object.values(products).map(p => `
-            <div class="product-item" data-id="${p.id}">
-                <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:var(--text-muted);"></i>'}</div>
-                <div class="info">
-                    <div class="name">${p.name}</div>
-                    <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
-                    <div class="stock">Stok: ${p.stock}</div>
+        // Produk list dengan fitur Nokos phone
+        let productListHtml = Object.values(products).map(p => {
+            const isNokos = p.isNokos || false;
+            const phone = p.nokosPhone || '';
+            return `
+                <div class="product-item" data-id="${p.id}">
+                    <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:var(--text-muted);"></i>'}</div>
+                    <div class="info">
+                        <div class="name">${p.name}</div>
+                        <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+                        <div class="stock">Stok: ${p.stock}</div>
+                        ${isNokos ? `<div class="nokos-phone"><i class="fas fa-phone"></i> No. HP: ${phone || 'Belum diisi'}</div>` : ''}
+                    </div>
+                    <div class="actions">
+                        <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti</label>
+                        <input type="file" id="img-${p.id}" accept="image/*" />
+                        ${isNokos ? `
+                            <input type="text" class="nokos-phone-input" id="nokos-phone-${p.id}" placeholder="No. HP" value="${phone}" />
+                            <button class="btn-phone btn-sm" data-id="${p.id}"><i class="fas fa-save"></i> Simpan No</button>
+                        ` : ''}
+                        <button class="btn-del btn-sm" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
+                    </div>
                 </div>
-                <div class="actions">
-                    <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti</label>
-                    <input type="file" id="img-${p.id}" accept="image/*" />
-                    <button class="btn-del btn-sm" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         const userListHtml = renderUserList(users);
         const pendingHtml = renderPendingRequests(pending);
@@ -892,9 +933,10 @@ function renderPanelContent() {
                 const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
                 let nokosDetail = '';
                 if (p.isNokos) {
-                    const codeDisplay = p.verificationCode ? p.verificationCode : '<span style="color:var(--warning);">Belum diisi</span>';
+                    const phoneDisplay = p.phone || 'Belum diisi';
+                    const codeDisplay = p.verificationCode || 'Belum diisi';
                     nokosDetail = `
-                        <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${p.phone || '-'}</div>
+                        <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${phoneDisplay}</div>
                         <div class="nokos-detail"><i class="fas fa-key"></i> Kode: ${codeDisplay}</div>
                     `;
                 }
@@ -927,7 +969,9 @@ function renderPanelContent() {
                     <button class="panel-tab" data-panel-tab="info">Info</button>
                 </div>
                 <div id="panelTabProduk" class="panel-tab-content active">
-                    <h3>Daftar Produk</h3>${productListHtml}
+                    <h3>Daftar Produk</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Untuk produk Nokos, isi No. HP di kolom yang tersedia.</p>
+                    ${productListHtml}
                     <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
                     <h3>Tambah Produk</h3>
                     <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama" /></div>
@@ -1013,6 +1057,12 @@ function attachPanelEvents() {
         input.addEventListener('change', handleProductImage);
     });
 
+    // Tombol simpan No HP Nokos
+    document.querySelectorAll('.product-item .btn-phone').forEach(btn => {
+        btn.removeEventListener('click', handleNokosPhone);
+        btn.addEventListener('click', handleNokosPhone);
+    });
+
     const addBtn = document.getElementById('addProductBtn');
     if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
 
@@ -1059,18 +1109,9 @@ function handlePurchase(e) {
     const btn = e.target.closest('.btn-beli');
     if (!btn) return;
     const productId = btn.dataset.id;
-    const isNokos = btn.dataset.nokos === 'true';
     const user = getCurrentUser();
     if (!user) { alert('Silakan login.'); return; }
     if (user.role && user.role.toLowerCase() === 'owner') { alert('OWN tidak bisa membeli.'); return; }
-
-    let phone = '';
-    if (isNokos) {
-        const input = document.getElementById('phone-' + productId);
-        if (!input) { alert('Input nomor HP tidak ditemukan.'); return; }
-        phone = input.value.trim();
-        if (!phone) { alert('Masukkan nomor HP penerima.'); return; }
-    }
 
     refs.products.child(productId).once('value')
         .then(snap => {
@@ -1088,10 +1129,16 @@ function handlePurchase(e) {
                         return refs.saldo.child(user.username).set(saldo - product.price)
                             .then(() => refs.products.child(productId).update({ stock: product.stock - 1 }))
                             .then(() => {
+                                const isNokos = product.isNokos || false;
+                                const phone = isNokos ? (product.nokosPhone || '') : '';
                                 return savePurchase(user.username, productId, product.name, product.price, 1, product.price, phone, isNokos);
                             })
                             .then(() => {
                                 showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
+                                // Notifikasi jika Nokos
+                                if (product.isNokos) {
+                                    sendNotification('📱 Nokos Indo Dibeli', 'Member ' + user.username + ' membeli ' + product.name);
+                                }
                                 navigateTo('produk');
                                 updateStats();
                             });
@@ -1147,9 +1194,10 @@ function handlePanelTab(e) {
                             const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
                             let nokosDetail = '';
                             if (p.isNokos) {
-                                const codeDisplay = p.verificationCode ? p.verificationCode : '<span style="color:var(--warning);">Belum diisi</span>';
+                                const phoneDisplay = p.phone || 'Belum diisi';
+                                const codeDisplay = p.verificationCode || 'Belum diisi';
                                 nokosDetail = `
-                                    <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${p.phone || '-'}</div>
+                                    <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${phoneDisplay}</div>
                                     <div class="nokos-detail"><i class="fas fa-key"></i> Kode: ${codeDisplay}</div>
                                 `;
                             }
@@ -1201,6 +1249,24 @@ function handleProductImage(e) {
     reader.readAsDataURL(file);
 }
 
+function handleNokosPhone(e) {
+    const btn = e.currentTarget;
+    const productId = btn.dataset.id;
+    const input = document.getElementById('nokos-phone-' + productId);
+    if (!input) return;
+    const phone = input.value.trim();
+    if (!phone) {
+        alert('Masukkan nomor HP.');
+        return;
+    }
+    refs.products.child(productId).update({ nokosPhone: phone })
+        .then(() => {
+            showToast('No HP untuk Nokos berhasil disimpan!', 'success');
+            navigateTo('panel');
+        })
+        .catch(err => console.error('Save nokos phone error:', err));
+}
+
 function handleAddProduct() {
     const name = document.getElementById('newProductName').value.trim();
     const price = parseInt(document.getElementById('newProductPrice').value);
@@ -1216,7 +1282,7 @@ function handleAddProduct() {
                 const ids = Object.keys(products).map(Number);
                 const newId = ids.length ? Math.max(...ids) + 1 : 1;
                 return refs.products.child(newId).set({
-                    id: newId, name, price, stock, image: e.target.result || '', isNokos
+                    id: newId, name, price, stock, image: e.target.result || '', isNokos, nokosPhone: ''
                 });
             })
             .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
@@ -1231,7 +1297,7 @@ function handleAddProduct() {
                 const ids = Object.keys(products).map(Number);
                 const newId = ids.length ? Math.max(...ids) + 1 : 1;
                 return refs.products.child(newId).set({
-                    id: newId, name, price, stock, image: '', isNokos
+                    id: newId, name, price, stock, image: '', isNokos, nokosPhone: ''
                 });
             })
             .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
@@ -1374,9 +1440,6 @@ noteInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.ctrlKey) saveNote();
 });
 
-// ================================================================
-// CODE VERIFICATION MODAL
-// ================================================================
 function handleOpenCodeModal(e) {
     const btn = e.currentTarget;
     const purchaseId = btn.dataset.id;

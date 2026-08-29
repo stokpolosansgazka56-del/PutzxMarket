@@ -6,7 +6,7 @@
     <title>PutzxStore - Dark</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ===== DARK THEME ===== */
+        /* ===== DARK THEME (sama seperti sebelumnya, tidak diubah) ===== */
         :root {
             --bg-primary: #0f0f13;
             --bg-secondary: #1a1a24;
@@ -351,15 +351,23 @@
     const OWNER_PASS = 'putzx123';
 
     // ============================================================
-    // STORAGE (SEMUA DATA PAKAI KEY YANG SAMA)
+    // STORAGE HELPERS (dengan debugging log)
     // ============================================================
     function get(key) {
-        try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
+        try {
+            const raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : null;
+        } catch(e) { console.error('Error get', key, e); return null; }
     }
     function set(key, val) {
-        localStorage.setItem(key, JSON.stringify(val));
+        try {
+            localStorage.setItem(key, JSON.stringify(val));
+        } catch(e) { console.error('Error set', key, e); }
     }
 
+    // ============================================================
+    // DATA ACCESSORS
+    // ============================================================
     function getUsers() { return get('users') || []; }
     function saveUsers(u) { set('users', u); }
 
@@ -380,27 +388,32 @@
         setUserSaldo(username, getUserSaldo(username) + amount);
     }
 
-    // === PRODUK ===
     function getProducts() { return get('products') || []; }
     function saveProducts(p) { set('products', p); }
 
-    // === DEPOSIT REQUESTS ===
     function getDepositRequests() { return get('depositRequests') || []; }
     function saveDepositRequests(r) { set('depositRequests', r); }
 
-    // === ADMIN CONFIG (QR, WA, LINK, INFO) ===
+    // === ADMIN CONFIG - PERBAIKAN ===
     function getAdminConfig() {
-        const def = { waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' };
-        const data = get('adminConfig');
-        return data ? { ...def, ...data } : def;
+        const raw = get('adminConfig');
+        if (raw && typeof raw === 'object') {
+            // Pastikan paymentQr tetap ada
+            return raw;
+        }
+        // Default jika belum ada
+        return { waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' };
     }
-    function setAdminConfig(c) { set('adminConfig', c); }
+    function setAdminConfig(config) {
+        set('adminConfig', config);
+        // Log untuk debugging
+        console.log('AdminConfig disimpan, paymentQr length:', (config.paymentQr || '').length);
+    }
 
     // ============================================================
     // INISIALISASI
     // ============================================================
     function init() {
-        // Akun OWN default
         let users = getUsers();
         if (!users.some(u => u.role === 'owner')) {
             users.push({ name: 'Putzx', username: OWNER_USER, phone: WA_NUMBER, password: OWNER_PASS, role: 'owner' });
@@ -411,7 +424,6 @@
             if (getUserSaldo(u.username) === undefined) setUserSaldo(u.username, 0);
         });
 
-        // Produk default jika kosong
         if (getProducts().length === 0) {
             saveProducts([
                 { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '' },
@@ -421,6 +433,10 @@
                 { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '' },
                 { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '' }
             ]);
+        }
+        // Jika belum ada adminConfig, buat default
+        if (!get('adminConfig')) {
+            setAdminConfig({ waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' });
         }
     }
     init();
@@ -535,10 +551,9 @@
         updateSaldoDisplay();
         navigateTo('produk');
 
-        // === LISTENER SINKRONISASI ANTAR TAB ===
+        // Storage event untuk sinkron antar tab
         window.addEventListener('storage', function(e) {
             if (e.key === 'products' || e.key === 'adminConfig' || e.key === 'depositRequests' || e.key === 'userSaldo') {
-                // Refresh tampilan jika ada perubahan
                 if (currentPage === 'produk') navigateTo('produk');
                 else if (currentPage === 'panel' && user.role === 'owner') navigateTo('panel');
                 else if (currentPage === 'riwayat') navigateTo('riwayat');
@@ -548,7 +563,7 @@
             }
         });
 
-        // Polling untuk deteksi perubahan (backup)
+        // Polling status deposit
         if (window._depositPoll) clearInterval(window._depositPoll);
         window._depositPoll = setInterval(() => {
             const u = getCurrentUser();
@@ -690,7 +705,9 @@
 
     function renderInfo() {
         const config = getAdminConfig();
-        const qr = config.paymentQr ? `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid var(--border); padding:12px; background:#fff;" />` : '<p style="color:var(--text-muted);">QR belum diatur.</p>';
+        const qr = config.paymentQr && config.paymentQr.length > 100 ?
+            `<img src="${config.paymentQr}" style="max-width:200px; border-radius:12px; border:1px solid var(--border); padding:12px; background:#fff;" />` :
+            '<p style="color:var(--text-muted);">QR belum diatur oleh OWN.</p>';
         return `
             <div class="page-content">
                 <div class="section-title"><span>Informasi Toko</span></div>
@@ -748,7 +765,7 @@
                         <div class="qr-upload">
                             <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
                             <div class="form-group"><label>Upload QR</label><input type="file" id="qrUpload" accept="image/*" /></div>
-                            ${config.paymentQr ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:var(--text-muted);">Belum ada QR.</p>'}
+                            ${config.paymentQr && config.paymentQr.length > 100 ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:var(--text-muted);">Belum ada QR.</p>'}
                             <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
                             <div id="qrAlert" class="alert"></div>
                         </div>
@@ -958,16 +975,25 @@
         }
     }
 
+    // === PERBAIKAN UTAMA: handleSaveQr ===
     function handleSaveQr() {
         const fileInput = document.getElementById('qrUpload');
-        if (!fileInput.files || !fileInput.files[0]) { showAlert('qrAlert', 'Pilih file QR.', 'error'); return; }
+        if (!fileInput.files || !fileInput.files[0]) {
+            showAlert('qrAlert', 'Pilih file QR terlebih dahulu.', 'error');
+            return;
+        }
         const reader = new FileReader();
         reader.onload = function(e) {
+            const base64 = e.target.result;
+            // Ambil konfigurasi saat ini
             const config = getAdminConfig();
-            config.paymentQr = e.target.result;
+            config.paymentQr = base64;
+            // Simpan ke localStorage
             setAdminConfig(config);
-            showAlert('qrAlert', 'QR disimpan!', 'success');
+            showAlert('qrAlert', 'QR berhasil disimpan!', 'success');
+            // Refresh panel agar preview muncul
             navigateTo('panel');
+            // Broadcast ke member via storage event (otomatis)
         };
         reader.readAsDataURL(fileInput.files[0]);
     }
@@ -1042,11 +1068,14 @@
     }
 
     // ============================================================
-    // DEPOSIT MODAL
+    // DEPOSIT MODAL - PASTIKAN QR TERBACA
     // ============================================================
     depositBtn.addEventListener('click', function() {
-        const config = getAdminConfig();
-        if (!config.paymentQr) { alert('QR belum diatur oleh OWN.'); return; }
+        const config = getAdminConfig(); // ambil fresh dari localStorage
+        if (!config.paymentQr || config.paymentQr.length < 100) {
+            alert('QR belum diatur oleh OWN. Silakan hubungi admin.');
+            return;
+        }
         depositModal.classList.add('active');
         depositStep1.classList.remove('hidden');
         depositStep2.classList.add('hidden');

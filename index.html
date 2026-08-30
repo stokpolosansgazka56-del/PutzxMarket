@@ -8,12 +8,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        /* ===== DARK THEME ===== */
         :root { --bg-primary:#0f0f13; --bg-secondary:#1a1a24; --bg-card:#23232e; --bg-input:#2a2a36; --text-primary:#e8e8f0; --text-secondary:#a0a0b8; --text-muted:#6a6a7e; --accent:#00c853; --accent-hover:#00e676; --danger:#ef5350; --danger-hover:#e53935; --warning:#ffb300; --border:#2f2f3e; --radius:16px; --shadow:0 4px 20px rgba(0,0,0,0.6); }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
         .app-container { max-width:420px; width:100%; background:var(--bg-secondary); border-radius:var(--radius); padding:16px 16px 80px; box-shadow:var(--shadow); position:relative; }
-
         .auth-page { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; background:var(--bg-primary); border-radius:var(--radius); }
         .auth-page .logo { font-size:28px; font-weight:700; color:var(--accent); margin-bottom:4px; }
         .auth-page .subtitle { color:var(--text-secondary); margin-bottom:24px; font-size:14px; }
@@ -30,7 +28,6 @@
         .auth-error { color:var(--danger); font-size:13px; margin-top:8px; text-align:center; display:none; }
         .auth-switch { margin-top:16px; text-align:center; font-size:14px; color:var(--text-secondary); }
         .auth-switch a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
-
         .app-main { display:none; }
         .saldo-card { background:linear-gradient(135deg,var(--accent),#009624); border-radius:var(--radius); padding:18px 20px; color:#fff; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
         .saldo-left { display:flex; flex-direction:column; }
@@ -38,23 +35,19 @@
         .saldo-nominal { font-size:28px; font-weight:700; margin-top:2px; }
         .btn-deposit { background:rgba(255,255,255,0.2); border:none; color:#fff; padding:8px 18px; border-radius:30px; font-weight:600; font-size:14px; cursor:pointer; backdrop-filter:blur(4px); transition:background .2s; }
         .btn-deposit:hover { background:rgba(255,255,255,0.35); }
-
         .login-info { background:var(--bg-card); border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border:1px solid var(--border); }
         .login-detail { display:flex; flex-direction:column; gap:2px; }
         .login-detail .label { color:var(--text-muted); font-size:11px; font-weight:500; }
         .login-detail .value { font-weight:600; color:var(--text-primary); }
         .role-badge { background:var(--accent); color:#fff; padding:4px 14px; border-radius:30px; font-size:12px; font-weight:600; display:flex; align-items:center; gap:6px; }
         .role-badge .logout-btn { background:transparent; border:none; color:#fff; font-size:12px; cursor:pointer; margin-left:4px; padding:2px 6px; border-radius:20px; transition:background .2s; }
-
         .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
         .stat-item { background:var(--bg-card); border-radius:12px; padding:12px 8px; text-align:center; border:1px solid var(--border); }
         .stat-number { font-size:20px; font-weight:700; color:var(--text-primary); }
         .stat-label { font-size:11px; color:var(--text-muted); margin-top:4px; font-weight:500; }
-
         .status-loading { background:var(--bg-card); border-radius:10px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:center; gap:12px; font-size:13px; color:var(--text-secondary); border:1px solid var(--border); }
         .spinner { animation:spin 1s linear infinite; }
         @keyframes spin { 100% { transform:rotate(360deg); } }
-
         .action-buttons { display:flex; gap:10px; margin-bottom:16px; }
         .action-btn { flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:30px; padding:12px 0; font-weight:600; font-size:13px; color:var(--text-primary); display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:background .2s; }
         .action-btn i { color:var(--accent); }
@@ -62,18 +55,14 @@
         .action-btn.admin { background:var(--accent); color:#fff; border-color:var(--accent); }
         .action-btn.admin i { color:#fff; }
         .action-btn.admin:hover { background:var(--accent-hover); }
-
         .trust-badge { display:flex; justify-content:center; gap:18px; background:var(--bg-card); border-radius:30px; padding:10px 16px; margin-bottom:20px; border:1px solid var(--border); font-size:13px; font-weight:500; color:var(--text-secondary); }
         .trust-badge i { color:var(--accent); }
-
         .search-box { display:flex; align-items:center; background:var(--bg-input); border-radius:30px; padding:0 16px; margin-bottom:20px; border:1px solid var(--border); transition:border .2s; }
         .search-box:focus-within { border-color:var(--accent); }
         .search-box input { border:none; background:transparent; padding:12px 12px; width:100%; outline:none; font-size:14px; color:var(--text-primary); }
         .search-box input::placeholder { color:var(--text-muted); }
-
         .main-content { margin-top:8px; min-height:200px; }
         .section-title { font-weight:700; font-size:16px; color:var(--text-primary); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
-
         .product-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
         .product-card { background:var(--bg-card); border-radius:12px; padding:12px; border:1px solid var(--border); transition:transform .1s; display:flex; flex-direction:column; }
         .product-card:hover { transform:translateY(-2px); }
@@ -86,12 +75,10 @@
         .btn-beli:hover { background:var(--accent-hover); }
         .btn-beli:disabled { background:var(--text-muted); cursor:not-allowed; opacity:0.5; }
         .owner-text { font-size:11px; color:var(--text-muted); margin-top:8px; text-align:center; }
-
         .page-content { padding:8px 0; }
         .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
         .empty-state i { font-size:48px; color:var(--text-muted); margin-bottom:12px; }
         .empty-state h3 { font-weight:600; color:var(--text-primary); margin-bottom:6px; }
-
         .own-panel { background:var(--bg-card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); margin-top:8px; }
         .own-panel .panel-tabs { display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; flex-wrap:wrap; }
         .own-panel .panel-tab { padding:8px 18px; border-radius:30px; border:none; background:transparent; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .2s; }
@@ -128,11 +115,9 @@
         .own-panel .product-item .actions .nokos-phone-input:focus { border-color:var(--accent); }
         .own-panel .product-item .actions .btn-phone { background:var(--warning); color:#000; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .own-panel .product-item .actions .btn-phone:hover { opacity:0.8; }
-
         .own-panel .qr-upload { margin-top:20px; border-top:1px solid var(--border); padding-top:20px; }
         .own-panel .qr-preview { margin-top:8px; max-width:200px; border-radius:8px; border:1px solid var(--border); padding:8px; background:var(--bg-input); }
         .own-panel .qr-preview img { width:100%; height:auto; display:block; }
-
         .user-list { margin-top:8px; }
         .user-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
         .user-item .user-info { flex:1; min-width:140px; }
@@ -143,7 +128,6 @@
         .user-item .user-actions .btn-saldo { background:var(--warning); color:#000; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .user-item .user-actions .btn-del-user { background:var(--danger); color:#fff; border:none; padding:4px 12px; border-radius:20px; font-size:12px; cursor:pointer; }
         .user-item .user-actions .btn-del-user:disabled { opacity:0.5; cursor:not-allowed; }
-
         .purchase-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
         .purchase-item .purchase-info { flex:1; min-width:140px; }
         .purchase-item .purchase-info .pname { font-weight:600; color:var(--text-primary); }
@@ -156,7 +140,6 @@
         .purchase-item .purchase-actions .btn-note:hover { opacity:0.8; }
         .purchase-item .purchase-actions .btn-code { background:#64b5f6; color:#000; }
         .purchase-item .purchase-actions .btn-code:hover { opacity:0.8; }
-
         .request-item { background:var(--bg-secondary); border-radius:12px; padding:12px; margin-bottom:10px; border:1px solid var(--border); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
         .request-item .req-info { flex:1; min-width:140px; }
         .request-item .req-actions { display:flex; gap:8px; }
@@ -169,19 +152,16 @@
         .status-badge.pending { background:#fef3c7; color:#92400e; }
         .status-badge.approved { background:var(--accent); color:#fff; }
         .status-badge.rejected { background:var(--danger); color:#fff; }
-
         .alert { margin-top:12px; padding:10px; border-radius:10px; display:none; }
         .alert.success { background:#1a3a2a; color:var(--accent); display:block; }
         .alert.error { background:#3a1a1a; color:var(--danger); display:block; }
         .alert.info { background:#1a2a3a; color:#64b5f6; display:block; }
-
         .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--bg-secondary); border-top:1px solid var(--border); display:flex; justify-content:space-around; padding:8px 0 12px 0; max-width:420px; margin:0 auto; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.5); z-index:100; }
         .nav-item { display:flex; flex-direction:column; align-items:center; font-size:10px; color:var(--text-muted); cursor:pointer; transition:color .2s; padding:4px 8px; border:none; background:transparent; }
         .nav-item i { font-size:22px; margin-bottom:2px; }
         .nav-item.active { color:var(--accent); }
         .nav-item:hover { color:var(--accent); }
         .nav-item.hidden { display:none; }
-
         @media (max-width:420px) {
             .app-container { padding:12px 12px 80px; }
             .saldo-nominal { font-size:22px; }
@@ -191,7 +171,6 @@
             .own-panel .product-item { flex-direction:column; align-items:stretch; }
             .user-item { flex-direction:column; align-items:stretch; }
         }
-
         .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; z-index:999; }
         .modal-overlay.active { display:flex; }
         .modal-box { background:var(--bg-secondary); max-width:380px; width:92%; border-radius:24px; padding:24px 20px; box-shadow:0 20px 60px rgba(0,0,0,0.8); animation:fadeIn .3s ease; max-height:95vh; overflow-y:auto; border:1px solid var(--border); }
@@ -211,7 +190,6 @@
         .qr-container { text-align:center; margin:16px 0; }
         .qr-container img { max-width:220px; border-radius:12px; border:1px solid var(--border); padding:12px; background:#fff; }
         .hidden { display:none; }
-
         .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--bg-card); color:var(--text-primary); padding:12px 24px; border-radius:30px; font-weight:600; z-index:999; box-shadow:0 4px 20px rgba(0,0,0,0.6); border:1px solid var(--border); animation:fadeIn .3s; }
         .toast.success { border-color:var(--accent); }
         .toast.error { border-color:var(--danger); }
@@ -262,7 +240,6 @@
         </div>
         <button class="btn-deposit" id="depositBtn"><i class="fas fa-plus-circle"></i> Deposit</button>
     </div>
-
     <div class="login-info">
         <div class="login-detail">
             <span class="label">LOGIN SEBAGAI</span>
@@ -274,33 +251,26 @@
             <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </div>
-
     <div class="stats-grid">
         <div class="stat-item"><div class="stat-number" id="totalUserStat">0</div><div class="stat-label">TOTAL USER</div></div>
         <div class="stat-item"><div class="stat-number" id="totalProductStat">0</div><div class="stat-label">TOTAL PRODUK</div></div>
         <div class="stat-item"><div class="stat-number" id="pendingDepositStat">0</div><div class="stat-label">DEPOSIT PENDING</div></div>
     </div>
-
     <div class="status-loading"><i class="fas fa-circle-notch spinner"></i><span>Memuat...</span></div>
-
     <div class="action-buttons">
         <button class="action-btn" id="channelBtn"><i class="fab fa-whatsapp"></i> Saluran WhatsApp</button>
         <button class="action-btn admin" id="chatAdminBtn"><i class="fas fa-headset"></i> Chat Admin</button>
     </div>
-
     <div class="trust-badge">
         <span><i class="fas fa-shield-alt"></i> Transaksi Aman</span>
         <span><i class="fas fa-handshake"></i> Amanah</span>
         <span><i class="fas fa-check-circle"></i> Terpercaya</span>
     </div>
-
     <div class="search-box">
         <i class="fas fa-search"></i>
         <input type="text" id="searchInput" placeholder="Cari produk..." />
     </div>
-
     <div id="mainContent" class="main-content"></div>
-
     <div class="bottom-nav">
         <button class="nav-item active" data-page="produk"><i class="fas fa-store"></i> Produk</button>
         <button class="nav-item" data-page="riwayat"><i class="fas fa-history"></i> Riwayat</button>
@@ -343,7 +313,7 @@
     </div>
 </div>
 
-<!-- MODAL CATATAN -->
+<!-- MODAL CATATAN & KODE -->
 <div class="modal-overlay" id="noteModal">
     <div class="modal-box">
         <h3>Tambah Catatan Pembelian</h3>
@@ -356,8 +326,6 @@
         <div id="noteAlert" style="color:var(--danger); font-size:13px; margin-top:8px; display:none;"></div>
     </div>
 </div>
-
-<!-- MODAL KODE VERIFIKASI -->
 <div class="modal-overlay" id="codeModal">
     <div class="modal-box">
         <h3>Isi Kode Verifikasi</h3>
@@ -396,9 +364,6 @@ const WA_NUMBER = '08139196934';
 const OWNER_USER = 'putzx';
 const OWNER_PASS = 'putzx123';
 
-// ================================================================
-// REFERENSI FIREBASE
-// ================================================================
 const refs = {
     users: db.ref('users'),
     products: db.ref('products'),
@@ -426,7 +391,6 @@ function showToast(msg, type = 'info') {
     document.body.appendChild(div);
     setTimeout(() => div.remove(), 4000);
 }
-
 function showAlert(id, msg, type) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -445,7 +409,6 @@ function login(username, password) {
         return false;
     });
 }
-
 function signup(name, username, phone, password) {
     return refs.users.child(username).once('value').then(snap => {
         if (snap.exists()) return { success: false, message: 'Username sudah digunakan.' };
@@ -492,39 +455,28 @@ function savePurchase(username, productId, productName, price, quantity, total, 
         verificationCode: ''
     });
 }
-
 function getUserPurchases(username) {
     return refs.purchases.orderByChild('username').equalTo(username).once('value')
         .then(snap => snap.val() ? Object.values(snap.val()).sort((a,b) => b.timestamp < a.timestamp ? 1 : -1) : []);
 }
-
 function getAllPurchases() {
     return refs.purchases.once('value')
         .then(snap => snap.val() ? Object.values(snap.val()).sort((a,b) => b.timestamp < a.timestamp ? 1 : -1) : []);
 }
-
-function updatePurchaseNote(purchaseId, note) {
-    return refs.purchases.child(purchaseId).update({ note });
-}
-
-function updatePurchaseCode(purchaseId, code) {
-    return refs.purchases.child(purchaseId).update({ verificationCode: code });
-}
+function updatePurchaseNote(purchaseId, note) { return refs.purchases.child(purchaseId).update({ note }); }
+function updatePurchaseCode(purchaseId, code) { return refs.purchases.child(purchaseId).update({ verificationCode: code }); }
 
 // ================================================================
-// INISIALISASI DATA DEFAULT (hanya sekali, berdasarkan Firebase)
+// INISIALISASI DATA DEFAULT (hanya sekali berdasarkan Firebase)
 // ================================================================
 function initDataOnce() {
-    // Cek di Firebase apakah sudah pernah diinisialisasi
     return refs.config.child('initialized').once('value')
         .then(snap => {
             if (snap.val() === true) {
-                console.log('Data sudah diinisialisasi sebelumnya (dari Firebase).');
+                console.log('✅ Data sudah diinisialisasi.');
                 return;
             }
-            console.log('Menjalankan inisialisasi data default (pertama kali)...');
-
-            // Buat OWN jika belum ada
+            console.log('🔄 Inisialisasi data default pertama kali...');
             return refs.users.orderByChild('role').equalTo('owner').once('value')
                 .then(snap => {
                     if (!snap.exists()) {
@@ -540,7 +492,7 @@ function initDataOnce() {
                 .then(() => refs.products.once('value'))
                 .then(snap => {
                     if (!snap.exists()) {
-                        const defaultProducts = [
+                        const def = [
                             { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '', isNokos: false, nokosPhone: '' },
                             { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '', isNokos: false, nokosPhone: '' },
                             { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '', isNokos: false, nokosPhone: '' },
@@ -549,7 +501,7 @@ function initDataOnce() {
                             { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '', isNokos: false, nokosPhone: '' },
                             { id: 7, name: 'Nokos Indo 10GB', price: 25000, stock: 50, image: '', isNokos: true, nokosPhone: '' }
                         ];
-                        const promises = defaultProducts.map(p => refs.products.child(p.id).set(p));
+                        const promises = def.map(p => refs.products.child(p.id).set(p));
                         return Promise.all(promises);
                     }
                 })
@@ -564,19 +516,16 @@ function initDataOnce() {
                             initialized: true
                         });
                     } else {
-                        // Update flag initialized
                         return refs.config.update({ initialized: true });
                     }
                 });
         })
         .catch(err => console.error('Init error:', err));
 }
-
-// Jalankan inisialisasi sekali
 initDataOnce();
 
 // ================================================================
-// DOM REFS (sama seperti sebelumnya, tidak diubah)
+// DOM REFS
 // ================================================================
 const $ = id => document.getElementById(id);
 const authPage = $('authPage'), appMain = $('appMain'), mainContent = $('mainContent');
@@ -598,8 +547,7 @@ const depositBack = $('depositBack'), depositClose = $('depositClose'), reqNomin
 const noteModal = $('noteModal'), noteInput = $('noteInput'), noteCancel = $('noteCancel'), noteSave = $('noteSave'), noteAlert = $('noteAlert');
 const codeModal = $('codeModal'), codeInput = $('codeInput'), codeCancel = $('codeCancel'), codeSave = $('codeSave'), codeAlert = $('codeAlert');
 
-let currentNotePurchaseId = null;
-let currentCodePurchaseId = null;
+let currentNotePurchaseId = null, currentCodePurchaseId = null;
 let currentPage = 'produk', pendingAmount = 0;
 
 // ================================================================
@@ -613,7 +561,6 @@ function updateSaldoDisplay() {
         $('saldoDisplay').textContent = 'Rp ' + saldo.toLocaleString('id-ID');
     });
 }
-
 function updateStats() {
     refs.users.once('value').then(snap => totalUserStat.textContent = snap.numChildren()).catch(()=>{});
     refs.products.once('value').then(snap => totalProductStat.textContent = snap.numChildren()).catch(()=>{});
@@ -633,7 +580,6 @@ function showApp(user) {
     updateStats();
     updateSaldoDisplay();
     navigateTo('produk');
-
     if (window._depositListener) window._depositListener();
     window._depositListener = refs.deposits.orderByChild('username').equalTo(user.username).on('child_added', snap => {
         const req = snap.val();
@@ -651,7 +597,6 @@ function showApp(user) {
         updateStats();
     });
 }
-
 function showAuth() {
     authPage.style.display = 'flex';
     appMain.style.display = 'none';
@@ -662,14 +607,13 @@ function showAuth() {
     loginUsername.value = loginPassword.value = '';
     signupName.value = signupUsername.value = signupPhone.value = signupPassword.value = signupConfirm.value = '';
 }
-
 function updateRequestStatusDisplay(req) {
     reqStatus.textContent = req.status === 'pending' ? 'Menunggu Konfirmasi' : req.status === 'approved' ? 'Disetujui ✓' : 'Ditolak ✗';
     reqStatus.className = 'status-badge ' + req.status;
 }
 
 // ================================================================
-// RENDER FUNGSI (sama seperti sebelumnya, tidak diubah)
+// RENDER FUNGSI
 // ================================================================
 function renderProductGrid(products) {
     const user = getCurrentUser();
@@ -700,7 +644,6 @@ function renderProductGrid(products) {
     html += '</div>';
     return html;
 }
-
 function renderUserList(users) {
     if (!users || Object.keys(users).length === 0) return `<div class="empty-state"><i class="fas fa-users"></i><h3>Belum ada pengguna</h3></div>`;
     const current = getCurrentUser();
@@ -732,7 +675,6 @@ function renderUserList(users) {
     });
     return html;
 }
-
 function renderPendingRequests(reqs) {
     if (!reqs || reqs.length === 0) return `<div class="empty-state"><i class="fas fa-clock"></i><h3>Tidak ada permintaan pending</h3></div>`;
     let html = '<div class="user-list">';
@@ -754,17 +696,14 @@ function renderPendingRequests(reqs) {
     html += '</div>';
     return html;
 }
-
 function renderRiwayat() {
     const user = getCurrentUser();
     if (!user) return `<div class="empty-state"><h3>Silakan login</h3></div>`;
     return `<div class="page-content"><div class="section-title"><span>Riwayat Pembelian</span></div><div id="riwayatList">Memuat...</div></div>`;
 }
-
 function renderInfo() {
     return `<div class="page-content"><div class="section-title"><span>Informasi Toko</span></div><div id="infoContent">Memuat...</div></div>`;
 }
-
 function renderPanel() {
     const user = getCurrentUser();
     if (!user || user.role !== 'owner') return `<div class="empty-state"><i class="fas fa-ban"></i><h3>Akses Ditolak</h3><p>Hanya OWN.</p></div>`;
@@ -772,7 +711,7 @@ function renderPanel() {
 }
 
 // ================================================================
-// NAVIGASI
+// NAVIGASI + LOAD DATA
 // ================================================================
 function navigateTo(page) {
     currentPage = page;
@@ -868,36 +807,561 @@ function navigateTo(page) {
     attachEvents();
 }
 
+// ================================================================
+// RENDER PANEL CONTENT (LENGKAP)
+// ================================================================
 function renderPanelContent() {
-    // (sama seperti sebelumnya, tidak diubah karena hanya menampilkan data)
-    // ... kode renderPanelContent tetap sama
-    // Saya singkat agar tidak melebihi batas, tapi kode lengkap di bawah akan mencakup semuanya.
+    const user = getCurrentUser();
+    if (!user || user.role !== 'owner') return;
+
+    Promise.all([
+        refs.products.once('value'),
+        refs.users.once('value'),
+        getPendingDeposits(),
+        refs.config.once('value'),
+        getAllPurchases()
+    ]).then(([productsSnap, usersSnap, pending, configSnap, allPurchases]) => {
+        const products = productsSnap.val() || {};
+        const users = usersSnap.val() || {};
+        const config = configSnap.val() || {};
+
+        let productListHtml = Object.values(products).map(p => {
+            const isNokos = p.isNokos || false;
+            const phone = p.nokosPhone || '';
+            return `
+                <div class="product-item" data-id="${p.id}">
+                    <div class="thumb">${p.image ? `<img src="${p.image}" />` : '<i class="fas fa-image" style="color:var(--text-muted);"></i>'}</div>
+                    <div class="info">
+                        <div class="name">${p.name}</div>
+                        <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+                        <div class="stock">Stok: ${p.stock}</div>
+                        ${isNokos ? `<div class="nokos-phone-display"><i class="fas fa-phone"></i> No. HP: ${phone || 'Belum diisi'}</div>` : ''}
+                    </div>
+                    <div class="actions">
+                        <label for="img-${p.id}"><i class="fas fa-upload"></i> Ganti</label>
+                        <input type="file" id="img-${p.id}" accept="image/*" />
+                        ${isNokos ? `
+                            <input type="text" class="nokos-phone-input" id="nokos-phone-${p.id}" placeholder="No. HP" value="${phone}" />
+                            <button class="btn-phone btn-sm" data-id="${p.id}"><i class="fas fa-save"></i> Simpan No</button>
+                        ` : ''}
+                        <button class="btn-del btn-sm" data-id="${p.id}"><i class="fas fa-trash"></i> Hapus</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const userListHtml = renderUserList(users);
+        const pendingHtml = renderPendingRequests(pending);
+
+        let purchaseHtml = '';
+        if (allPurchases.length === 0) {
+            purchaseHtml = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Belum ada pembelian</h3></div>`;
+        } else {
+            purchaseHtml = '<div class="user-list">';
+            allPurchases.forEach(p => {
+                const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
+                let nokosDetail = '';
+                if (p.isNokos) {
+                    const phoneDisplay = p.phone || 'Belum diisi';
+                    const codeDisplay = p.verificationCode || 'Belum diisi';
+                    nokosDetail = `
+                        <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${phoneDisplay}</div>
+                        <div class="nokos-detail"><i class="fas fa-key"></i> Kode: ${codeDisplay}</div>
+                    `;
+                }
+                purchaseHtml += `
+                    <div class="purchase-item" data-id="${p.id}">
+                        <div class="purchase-info">
+                            <div class="pname">${p.productName}</div>
+                            <div class="detail">Pembeli: <strong>${p.username}</strong> &nbsp;|&nbsp; Total: Rp ${p.total.toLocaleString('id-ID')}</div>
+                            <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                            ${nokosDetail}
+                            ${noteDisplay}
+                        </div>
+                        <div class="purchase-actions">
+                            <button class="btn-note" data-id="${p.id}"><i class="fas fa-pen"></i> Catatan</button>
+                            ${p.isNokos ? `<button class="btn-code" data-id="${p.id}"><i class="fas fa-key"></i> Isi Kode</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            purchaseHtml += '</div>';
+        }
+
+        const html = `
+            <div class="own-panel">
+                <div class="panel-tabs">
+                    <button class="panel-tab active" data-panel-tab="produk">Produk</button>
+                    <button class="panel-tab" data-panel-tab="akun">Akun</button>
+                    <button class="panel-tab" data-panel-tab="deposit">Deposit</button>
+                    <button class="panel-tab" data-panel-tab="pembelian">Pembelian</button>
+                    <button class="panel-tab" data-panel-tab="info">Info</button>
+                </div>
+                <div id="panelTabProduk" class="panel-tab-content active">
+                    <h3>Daftar Produk</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Untuk produk Nokos, isi No. HP di kolom yang tersedia.</p>
+                    ${productListHtml}
+                    <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                    <h3>Tambah Produk</h3>
+                    <div class="form-group"><label>Nama</label><input type="text" id="newProductName" placeholder="Nama" /></div>
+                    <div class="form-group"><label>Harga (Rp)</label><input type="number" id="newProductPrice" placeholder="Harga" /></div>
+                    <div class="form-group"><label>Stok</label><input type="number" id="newProductStock" placeholder="Stok" /></div>
+                    <div class="form-group"><label>Gambar</label><input type="file" id="newProductImage" accept="image/*" /></div>
+                    <div class="form-group"><label>Nokos Indo?</label>
+                        <select id="newProductNokos" style="width:100%; padding:10px 16px; border:1px solid var(--border); border-radius:30px; background:var(--bg-input); color:var(--text-primary);">
+                            <option value="false">Tidak</option>
+                            <option value="true">Ya (Nokos Indo)</option>
+                        </select>
+                    </div>
+                    <button class="btn-save" id="addProductBtn"><i class="fas fa-save"></i> Tambah</button>
+                    <div id="panelAlert" class="alert"></div>
+                    <div class="qr-upload">
+                        <h3><i class="fas fa-qrcode"></i> QR Pembayaran</h3>
+                        <div class="form-group"><label>Upload QR</label><input type="file" id="qrUpload" accept="image/*" /></div>
+                        ${config.paymentQr && config.paymentQr.length > 100 ? `<div class="qr-preview"><img src="${config.paymentQr}" /></div>` : '<p style="color:var(--text-muted);">Belum ada QR.</p>'}
+                        <button class="btn-save" id="saveQrBtn"><i class="fas fa-save"></i> Simpan QR</button>
+                        <div id="qrAlert" class="alert"></div>
+                    </div>
+                </div>
+                <div id="panelTabAkun" class="panel-tab-content">
+                    <h3>Daftar Akun</h3><p style="font-size:13px; color:var(--text-muted);">Username, Password, No HP, Saldo.</p>
+                    ${userListHtml}
+                    <div id="userAlert" class="alert"></div>
+                </div>
+                <div id="panelTabDeposit" class="panel-tab-content">
+                    <h3>Permintaan Deposit</h3>
+                    ${pendingHtml}
+                    <div id="depositAlert" class="alert"></div>
+                </div>
+                <div id="panelTabPembelian" class="panel-tab-content">
+                    <h3>Riwayat Pembelian Semua Member</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Klik "Catatan" untuk menambahkan pesan, atau "Isi Kode" untuk produk Nokos Indo.</p>
+                    ${purchaseHtml}
+                    <div id="purchaseAlert" class="alert"></div>
+                </div>
+                <div id="panelTabInfo" class="panel-tab-content">
+                    <h3>Edit Info Toko</h3>
+                    <div class="form-group"><label>Nama/Deskripsi</label><textarea id="editStoreInfo" rows="3">${config.storeInfo || ''}</textarea></div>
+                    <div class="form-group"><label>Nomor WA Admin</label><input type="text" id="editWaNumber" value="${config.waNumber || ''}" /></div>
+                    <div class="form-group"><label>Link Saluran</label><input type="text" id="editSlLink" value="${config.slLink || ''}" /></div>
+                    <button class="btn-save" id="saveInfoBtn"><i class="fas fa-save"></i> Simpan Info</button>
+                    <div id="infoAlert" class="alert"></div>
+                </div>
+            </div>
+        `;
+        const container = document.getElementById('panelContent');
+        if (container) container.innerHTML = html;
+        attachPanelEvents();
+        attachEvents();
+        Object.values(users).forEach(u => {
+            refs.saldo.child(u.username).on('value', snap => {
+                const el = document.getElementById('saldo-' + u.username);
+                if (el) el.textContent = (snap.val() || 0).toLocaleString('id-ID');
+            });
+        });
+    }).catch(err => console.error('renderPanelContent error:', err));
 }
 
 // ================================================================
-// EVENT ATTACH (sama seperti sebelumnya)
+// EVENT ATTACH
 // ================================================================
 function attachEvents() {
     mainContent.removeEventListener('click', handlePurchase);
     mainContent.addEventListener('click', handlePurchase);
 }
-function attachPanelEvents() { /* ... */ }
-function handlePurchase(e) { /* ... */ }
-function handlePanelTab(e) { /* ... */ }
-function handleDeleteProduct(e) { /* ... */ }
-function handleProductImage(e) { /* ... */ }
-function handleNokosPhone(e) { /* ... */ }
-function handleAddProduct(e) { /* ... */ }
-function handleSaveQr(e) { /* ... */ }
-function handleSaveInfo(e) { /* ... */ }
-function handleUserSaldo(e) { /* ... */ }
-function handleDeleteUser(e) { /* ... */ }
-function handleApprove(e) { /* ... */ }
-function handleReject(e) { /* ... */ }
-function handleOpenNoteModal(e) { /* ... */ }
-function saveNote() { /* ... */ }
-function handleOpenCodeModal(e) { /* ... */ }
-function saveCode() { /* ... */ }
+function attachPanelEvents() {
+    document.querySelectorAll('.panel-tab').forEach(tab => {
+        tab.removeEventListener('click', handlePanelTab);
+        tab.addEventListener('click', handlePanelTab);
+    });
+    document.querySelectorAll('.product-item .btn-del').forEach(btn => {
+        btn.removeEventListener('click', handleDeleteProduct);
+        btn.addEventListener('click', handleDeleteProduct);
+    });
+    document.querySelectorAll('.product-item input[type="file"]').forEach(input => {
+        input.removeEventListener('change', handleProductImage);
+        input.addEventListener('change', handleProductImage);
+    });
+    document.querySelectorAll('.product-item .btn-phone').forEach(btn => {
+        btn.removeEventListener('click', handleNokosPhone);
+        btn.addEventListener('click', handleNokosPhone);
+    });
+    const addBtn = document.getElementById('addProductBtn');
+    if (addBtn) { addBtn.removeEventListener('click', handleAddProduct); addBtn.addEventListener('click', handleAddProduct); }
+    const saveQr = document.getElementById('saveQrBtn');
+    if (saveQr) { saveQr.removeEventListener('click', handleSaveQr); saveQr.addEventListener('click', handleSaveQr); }
+    const saveInfo = document.getElementById('saveInfoBtn');
+    if (saveInfo) { saveInfo.removeEventListener('click', handleSaveInfo); saveInfo.addEventListener('click', handleSaveInfo); }
+    document.querySelectorAll('.btn-saldo').forEach(btn => {
+        btn.removeEventListener('click', handleUserSaldo);
+        btn.addEventListener('click', handleUserSaldo);
+    });
+    document.querySelectorAll('.btn-del-user').forEach(btn => {
+        btn.removeEventListener('click', handleDeleteUser);
+        btn.addEventListener('click', handleDeleteUser);
+    });
+    document.querySelectorAll('.btn-approve').forEach(btn => {
+        btn.removeEventListener('click', handleApprove);
+        btn.addEventListener('click', handleApprove);
+    });
+    document.querySelectorAll('.btn-reject').forEach(btn => {
+        btn.removeEventListener('click', handleReject);
+        btn.addEventListener('click', handleReject);
+    });
+    document.querySelectorAll('.btn-note').forEach(btn => {
+        btn.removeEventListener('click', handleOpenNoteModal);
+        btn.addEventListener('click', handleOpenNoteModal);
+    });
+    document.querySelectorAll('.btn-code').forEach(btn => {
+        btn.removeEventListener('click', handleOpenCodeModal);
+        btn.addEventListener('click', handleOpenCodeModal);
+    });
+}
+
+// ================================================================
+// HANDLERS
+// ================================================================
+function handlePurchase(e) {
+    const btn = e.target.closest('.btn-beli');
+    if (!btn) return;
+    const productId = btn.dataset.id;
+    const user = getCurrentUser();
+    if (!user) { alert('Silakan login.'); return; }
+    if (user.role && user.role.toLowerCase() === 'owner') { alert('OWN tidak bisa membeli.'); return; }
+
+    refs.products.child(productId).once('value')
+        .then(snap => {
+            const product = snap.val();
+            if (!product) { alert('Produk tidak ditemukan.'); return; }
+            if (product.stock <= 0) { alert('Stok habis.'); return; }
+            return refs.saldo.child(user.username).once('value')
+                .then(snapSaldo => {
+                    const saldo = snapSaldo.val() || 0;
+                    if (saldo < product.price) {
+                        alert('Saldo tidak cukup! Saldo: Rp ' + saldo.toLocaleString('id-ID') + ' | Harga: Rp ' + product.price.toLocaleString('id-ID'));
+                        return;
+                    }
+                    if (confirm('Beli "' + product.name + '" seharga Rp ' + product.price.toLocaleString('id-ID') + '?')) {
+                        return refs.saldo.child(user.username).set(saldo - product.price)
+                            .then(() => refs.products.child(productId).update({ stock: product.stock - 1 }))
+                            .then(() => {
+                                const isNokos = product.isNokos || false;
+                                const phone = isNokos ? (product.nokosPhone || '') : '';
+                                return savePurchase(user.username, productId, product.name, product.price, 1, product.price, phone, isNokos);
+                            })
+                            .then(() => {
+                                showToast('Pembelian berhasil! Saldo berkurang Rp ' + product.price.toLocaleString('id-ID'), 'success');
+                                navigateTo('produk');
+                                updateStats();
+                            });
+                    }
+                });
+        })
+        .catch(err => console.error('Purchase error:', err));
+}
+
+function handlePanelTab(e) {
+    document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    const target = this.dataset.panelTab;
+    document.querySelectorAll('.panel-tab-content').forEach(el => el.classList.remove('active'));
+    const map = { produk: 'panelTabProduk', akun: 'panelTabAkun', deposit: 'panelTabDeposit', pembelian: 'panelTabPembelian', info: 'panelTabInfo' };
+    const el = document.getElementById(map[target]);
+    if (el) {
+        el.classList.add('active');
+        if (target === 'akun') {
+            refs.users.once('value').then(snap => {
+                const users = snap.val();
+                const container = document.getElementById('panelTabAkun');
+                const list = container.querySelector('.user-list');
+                if (list) list.outerHTML = renderUserList(users);
+                attachPanelEvents();
+            });
+        }
+        if (target === 'deposit') {
+            getPendingDeposits().then(pending => {
+                const container = document.getElementById('panelTabDeposit');
+                const list = container.querySelector('.user-list');
+                if (list) list.outerHTML = renderPendingRequests(pending);
+                attachPanelEvents();
+            });
+        }
+        if (target === 'pembelian') {
+            getAllPurchases().then(purchases => {
+                const container = document.getElementById('panelTabPembelian');
+                const list = container.querySelector('.user-list');
+                if (list) {
+                    let html = '';
+                    if (purchases.length === 0) html = `<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Belum ada pembelian</h3></div>`;
+                    else {
+                        html = '<div class="user-list">';
+                        purchases.forEach(p => {
+                            const noteDisplay = p.note ? `<div class="note-text"><i class="fas fa-pen"></i> ${p.note}</div>` : '';
+                            let nokosDetail = '';
+                            if (p.isNokos) {
+                                const phoneDisplay = p.phone || 'Belum diisi';
+                                const codeDisplay = p.verificationCode || 'Belum diisi';
+                                nokosDetail = `
+                                    <div class="nokos-detail"><i class="fas fa-phone"></i> No. HP: ${phoneDisplay}</div>
+                                    <div class="nokos-detail"><i class="fas fa-key"></i> Kode: ${codeDisplay}</div>
+                                `;
+                            }
+                            html += `
+                                <div class="purchase-item" data-id="${p.id}">
+                                    <div class="purchase-info">
+                                        <div class="pname">${p.productName}</div>
+                                        <div class="detail">Pembeli: <strong>${p.username}</strong> &nbsp;|&nbsp; Total: Rp ${p.total.toLocaleString('id-ID')}</div>
+                                        <div class="detail" style="font-size:12px; color:var(--text-muted);">${new Date(p.timestamp).toLocaleString()}</div>
+                                        ${nokosDetail}
+                                        ${noteDisplay}
+                                    </div>
+                                    <div class="purchase-actions">
+                                        <button class="btn-note" data-id="${p.id}"><i class="fas fa-pen"></i> Catatan</button>
+                                        ${p.isNokos ? `<button class="btn-code" data-id="${p.id}"><i class="fas fa-key"></i> Isi Kode</button>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    list.outerHTML = html;
+                    attachPanelEvents();
+                }
+            });
+        }
+    }
+}
+
+function handleDeleteProduct(e) {
+    if (!confirm('Hapus produk ini?')) return;
+    const id = this.dataset.id;
+    refs.products.child(id).remove()
+        .then(() => { showToast('Produk dihapus!', 'success'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Delete product error:', err));
+}
+function handleProductImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        const base64 = ev.target.result;
+        const productId = this.closest('.product-item').dataset.id;
+        refs.products.child(productId).update({ image: base64 })
+            .then(() => { showToast('Gambar diperbarui!', 'success'); navigateTo('panel'); })
+            .catch(err => console.error('Update image error:', err));
+    }.bind(this);
+    reader.readAsDataURL(file);
+}
+function handleNokosPhone(e) {
+    const btn = e.currentTarget;
+    const productId = btn.dataset.id;
+    const input = document.getElementById('nokos-phone-' + productId);
+    if (!input) return;
+    const phone = input.value.trim();
+    if (!phone) { alert('Masukkan nomor HP.'); return; }
+    refs.products.child(productId).update({ nokosPhone: phone })
+        .then(() => { showToast('No HP untuk Nokos berhasil disimpan!', 'success'); navigateTo('panel'); })
+        .catch(err => console.error('Save nokos phone error:', err));
+}
+function handleAddProduct() {
+    const name = document.getElementById('newProductName').value.trim();
+    const price = parseInt(document.getElementById('newProductPrice').value);
+    const stock = parseInt(document.getElementById('newProductStock').value);
+    const isNokos = document.getElementById('newProductNokos').value === 'true';
+    const fileInput = document.getElementById('newProductImage');
+    if (!name || isNaN(price) || isNaN(stock)) { showAlert('panelAlert', 'Isi semua field.', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        refs.products.once('value')
+            .then(snap => {
+                const products = snap.val() || {};
+                const ids = Object.keys(products).map(Number);
+                const newId = ids.length ? Math.max(...ids) + 1 : 1;
+                return refs.products.child(newId).set({
+                    id: newId, name, price, stock, image: e.target.result || '', isNokos, nokosPhone: ''
+                });
+            })
+            .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
+            .catch(err => console.error('Add product error:', err));
+    };
+    if (fileInput.files && fileInput.files[0]) {
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        refs.products.once('value')
+            .then(snap => {
+                const products = snap.val() || {};
+                const ids = Object.keys(products).map(Number);
+                const newId = ids.length ? Math.max(...ids) + 1 : 1;
+                return refs.products.child(newId).set({
+                    id: newId, name, price, stock, image: '', isNokos, nokosPhone: ''
+                });
+            })
+            .then(() => { showAlert('panelAlert', 'Produk ditambahkan!', 'success'); navigateTo('panel'); updateStats(); })
+            .catch(err => console.error('Add product error:', err));
+    }
+}
+function handleSaveQr() {
+    const fileInput = document.getElementById('qrUpload');
+    if (!fileInput.files || !fileInput.files[0]) { showAlert('qrAlert', 'Pilih file QR.', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        refs.config.update({ paymentQr: e.target.result })
+            .then(() => { showAlert('qrAlert', 'QR disimpan!', 'success'); navigateTo('panel'); })
+            .catch(err => console.error('Save QR error:', err));
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+}
+function handleSaveInfo() {
+    const info = document.getElementById('editStoreInfo').value.trim();
+    const wa = document.getElementById('editWaNumber').value.trim();
+    const sl = document.getElementById('editSlLink').value.trim();
+    refs.config.update({
+        storeInfo: info || 'PutzxStore - Toko Online',
+        waNumber: wa || WA_NUMBER,
+        slLink: sl || WA_LINK
+    })
+    .then(() => { showAlert('infoAlert', 'Info disimpan!', 'success'); navigateTo('panel'); })
+    .catch(err => console.error('Save info error:', err));
+}
+function handleUserSaldo(e) {
+    const btn = this;
+    const username = btn.dataset.username;
+    const item = btn.closest('.user-item');
+    const input = item.querySelector('.saldo-input');
+    const amount = parseInt(input.value);
+    if (isNaN(amount) || amount < 0) { alert('Nominal valid (min 0).'); return; }
+    if (!confirm('Ubah saldo ' + username + ' menjadi Rp ' + amount.toLocaleString('id-ID') + '?')) return;
+    refs.saldo.child(username).set(amount)
+        .then(() => {
+            input.value = '';
+            showToast('Saldo ' + username + ' diubah!', 'success');
+            updateStats();
+            const user = getCurrentUser();
+            if (user && user.username === username) updateSaldoDisplay();
+        })
+        .catch(err => console.error('Update saldo error:', err));
+}
+function handleDeleteUser(e) {
+    if (this.disabled) return;
+    const username = this.dataset.username;
+    if (!confirm('Hapus akun "' + username + '"?')) return;
+    refs.users.child(username).remove()
+        .then(() => refs.saldo.child(username).remove())
+        .then(() => { showToast('Akun dihapus!', 'success'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Delete user error:', err));
+}
+function handleApprove(e) {
+    const id = parseInt(this.dataset.id);
+    if (!confirm('Setujui deposit ini?')) return;
+    refs.deposits.child(id).once('value')
+        .then(snap => {
+            const req = snap.val();
+            if (req) {
+                return refs.saldo.child(req.username).once('value')
+                    .then(snapSaldo => {
+                        const saldo = snapSaldo.val() || 0;
+                        return refs.saldo.child(req.username).set(saldo + req.amount)
+                            .then(() => updateDepositRequest(id, 'approved'));
+                    });
+            }
+        })
+        .then(() => { showToast('Deposit disetujui!', 'success'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Approve error:', err));
+}
+function handleReject(e) {
+    const id = parseInt(this.dataset.id);
+    if (!confirm('Tolak deposit ini?')) return;
+    updateDepositRequest(id, 'rejected')
+        .then(() => { showToast('Deposit ditolak.', 'error'); navigateTo('panel'); updateStats(); })
+        .catch(err => console.error('Reject error:', err));
+}
+function handleOpenNoteModal(e) {
+    const btn = e.currentTarget;
+    const purchaseId = btn.dataset.id;
+    currentNotePurchaseId = purchaseId;
+    refs.purchases.child(purchaseId).once('value')
+        .then(snap => {
+            const data = snap.val();
+            if (data && data.note) noteInput.value = data.note;
+            else noteInput.value = '';
+            noteAlert.style.display = 'none';
+            noteModal.classList.add('active');
+            noteInput.focus();
+        })
+        .catch(() => {
+            noteInput.value = '';
+            noteAlert.style.display = 'none';
+            noteModal.classList.add('active');
+            noteInput.focus();
+        });
+}
+function saveNote() {
+    const note = noteInput.value.trim();
+    if (!note) {
+        noteAlert.textContent = 'Catatan tidak boleh kosong.';
+        noteAlert.style.display = 'block';
+        return;
+    }
+    if (!currentNotePurchaseId) return;
+    updatePurchaseNote(currentNotePurchaseId, note)
+        .then(() => {
+            noteModal.classList.remove('active');
+            showToast('Catatan berhasil disimpan!', 'success');
+            if (currentPage === 'panel') navigateTo('panel');
+        })
+        .catch(err => {
+            console.error('Save note error:', err);
+            noteAlert.textContent = 'Gagal menyimpan catatan.';
+            noteAlert.style.display = 'block';
+        });
+}
+noteCancel.addEventListener('click', () => { noteModal.classList.remove('active'); noteAlert.style.display = 'none'; });
+noteSave.addEventListener('click', saveNote);
+noteInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.ctrlKey) saveNote(); });
+
+function handleOpenCodeModal(e) {
+    const btn = e.currentTarget;
+    const purchaseId = btn.dataset.id;
+    currentCodePurchaseId = purchaseId;
+    refs.purchases.child(purchaseId).once('value')
+        .then(snap => {
+            const data = snap.val();
+            if (data && data.verificationCode) codeInput.value = data.verificationCode;
+            else codeInput.value = '';
+            codeAlert.style.display = 'none';
+            codeModal.classList.add('active');
+            codeInput.focus();
+        })
+        .catch(() => {
+            codeInput.value = '';
+            codeAlert.style.display = 'none';
+            codeModal.classList.add('active');
+            codeInput.focus();
+        });
+}
+function saveCode() {
+    const code = codeInput.value.trim();
+    if (!code) {
+        codeAlert.textContent = 'Kode verifikasi tidak boleh kosong.';
+        codeAlert.style.display = 'block';
+        return;
+    }
+    if (!currentCodePurchaseId) return;
+    updatePurchaseCode(currentCodePurchaseId, code)
+        .then(() => {
+            codeModal.classList.remove('active');
+            showToast('Kode verifikasi berhasil disimpan!', 'success');
+            if (currentPage === 'panel') navigateTo('panel');
+        })
+        .catch(err => {
+            console.error('Save code error:', err);
+            codeAlert.textContent = 'Gagal menyimpan kode.';
+            codeAlert.style.display = 'block';
+        });
+}
+codeCancel.addEventListener('click', () => { codeModal.classList.remove('active'); codeAlert.style.display = 'none'; });
+codeSave.addEventListener('click', saveCode);
+codeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveCode(); });
 
 // ================================================================
 // DEPOSIT MODAL
@@ -921,9 +1385,7 @@ depositBtn.addEventListener('click', function() {
         })
         .catch(err => console.error('Deposit modal error:', err));
 });
-
 depositCancelBtn.addEventListener('click', () => depositModal.classList.remove('active'));
-
 depositConfirmBtn.addEventListener('click', function() {
     const amount = parseInt(depositAmount.value);
     if (isNaN(amount) || amount <= 0) { depositError.style.display = 'block'; return; }
@@ -940,7 +1402,6 @@ depositConfirmBtn.addEventListener('click', function() {
         .catch(err => console.error('Get QR error:', err));
     requestDepositBtn.disabled = false;
 });
-
 requestDepositBtn.addEventListener('click', function() {
     const user = getCurrentUser();
     if (!user) { alert('Login dulu.'); return; }
@@ -958,21 +1419,18 @@ requestDepositBtn.addEventListener('click', function() {
         })
         .catch(err => console.error('Request deposit error:', err));
 });
-
 depositBack.addEventListener('click', function() {
     depositStep2.classList.add('hidden');
     depositStep1.classList.remove('hidden');
     depositAmount.value = '';
     depositError.style.display = 'none';
 });
-
 depositClose.addEventListener('click', function() {
     depositModal.classList.remove('active');
     updateSaldoDisplay();
     if (currentPage === 'riwayat') navigateTo('riwayat');
     updateStats();
 });
-
 depositModal.addEventListener('click', function(e) {
     if (e.target === this) depositModal.classList.remove('active');
 });
@@ -1050,7 +1508,6 @@ authTabs.forEach(tab => {
         signupError.style.display = 'none';
     });
 });
-
 switchToSignup.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="signup"]').click(); });
 switchToLogin.addEventListener('click', e => { e.preventDefault(); document.querySelector('.auth-tab[data-tab="login"]').click(); });
 

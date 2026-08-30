@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>PutzxStore - Nokos Indo</title>
+    <title>PutzxStore - Nokos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        /* ===== DARK THEME ===== */
+        /* ===== DARK THEME (sama seperti sebelumnya, dipotong agar ringkas) ===== */
         :root { --bg-primary:#0f0f13; --bg-secondary:#1a1a24; --bg-card:#23232e; --bg-input:#2a2a36; --text-primary:#e8e8f0; --text-secondary:#a0a0b8; --text-muted:#6a6a7e; --accent:#00c853; --accent-hover:#00e676; --danger:#ef5350; --danger-hover:#e53935; --warning:#ffb300; --border:#2f2f3e; --radius:16px; --shadow:0 4px 20px rgba(0,0,0,0.6); }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:var(--bg-primary); color:var(--text-primary); display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:12px 0 80px 0; }
@@ -91,7 +91,6 @@
         .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
         .empty-state i { font-size:48px; color:var(--text-muted); margin-bottom:12px; }
         .empty-state h3 { font-weight:600; color:var(--text-primary); margin-bottom:6px; }
-        .empty-state p { font-size:14px; color:var(--text-secondary); }
 
         .own-panel { background:var(--bg-card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); margin-top:8px; }
         .own-panel .panel-tabs { display:flex; gap:8px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; flex-wrap:wrap; }
@@ -374,7 +373,7 @@
 
 <script>
 // ================================================================
-// 🔥 FIREBASE CONFIG (ganti dengan milik Anda jika berbeda)
+// 🔥 FIREBASE CONFIG
 // ================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyAUjNdfvGcJm4TtLPGP-5aogj2xTdfrmrE",
@@ -512,40 +511,73 @@ function updatePurchaseCode(purchaseId, code) {
     return refs.purchases.child(purchaseId).update({ verificationCode: code });
 }
 
-function initData() {
-    // OWN
-    refs.users.orderByChild('role').equalTo('owner').once('value').then(snap => {
-        if (!snap.exists()) {
-            return refs.users.child(OWNER_USER).set({ username: OWNER_USER, password: OWNER_PASS, name: 'Putzx', phone: WA_NUMBER, role: 'owner' })
-                .then(() => refs.saldo.child(OWNER_USER).set(0));
-        }
-    }).catch(console.error);
+// ================================================================
+// INISIALISASI DATA DEFAULT (hanya sekali)
+// ================================================================
+function initDataOnce() {
+    // Cek flag di localStorage agar tidak dijalankan berulang
+    if (localStorage.getItem('putzxstore_initialized') === 'true') {
+        console.log('Data sudah diinisialisasi sebelumnya.');
+        return Promise.resolve();
+    }
 
-    // Produk default
-    refs.products.once('value').then(snap => {
-        if (!snap.exists()) {
-            const defaultProducts = [
-                { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '', isNokos: false, nokosPhone: '' },
-                { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '', isNokos: false, nokosPhone: '' },
-                { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '', isNokos: false, nokosPhone: '' },
-                { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '', isNokos: false, nokosPhone: '' },
-                { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '', isNokos: false, nokosPhone: '' },
-                { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '', isNokos: false, nokosPhone: '' },
-                { id: 7, name: 'Nokos Indo 10GB', price: 25000, stock: 50, image: '', isNokos: true, nokosPhone: '' }
-            ];
-            const promises = defaultProducts.map(p => refs.products.child(p.id).set(p));
-            return Promise.all(promises);
-        }
-    }).catch(console.error);
+    console.log('Menjalankan inisialisasi data default...');
 
-    // Config
-    refs.config.once('value').then(snap => {
-        if (!snap.exists()) {
-            return refs.config.set({ waNumber: WA_NUMBER, slLink: WA_LINK, paymentQr: '', storeInfo: 'PutzxStore - Toko Online' });
-        }
-    }).catch(console.error);
+    // Buat OWN jika belum ada
+    return refs.users.orderByChild('role').equalTo('owner').once('value')
+        .then(snap => {
+            if (!snap.exists()) {
+                return refs.users.child(OWNER_USER).set({
+                    username: OWNER_USER,
+                    password: OWNER_PASS,
+                    name: 'Putzx',
+                    phone: WA_NUMBER,
+                    role: 'owner'
+                }).then(() => refs.saldo.child(OWNER_USER).set(0));
+            }
+        })
+        .then(() => {
+            // Cek produk, jika kosong baru isi default
+            return refs.products.once('value');
+        })
+        .then(snap => {
+            if (!snap.exists()) {
+                const defaultProducts = [
+                    { id: 1, name: 'Kaos Polos Premium', price: 99000, stock: 30, image: '', isNokos: false, nokosPhone: '' },
+                    { id: 2, name: 'Mug Custom', price: 65000, stock: 20, image: '', isNokos: false, nokosPhone: '' },
+                    { id: 3, name: 'Headset Bluetooth', price: 250000, stock: 8, image: '', isNokos: false, nokosPhone: '' },
+                    { id: 4, name: 'Jam Tangan Smart', price: 180000, stock: 12, image: '', isNokos: false, nokosPhone: '' },
+                    { id: 5, name: 'Tas Ransel', price: 320000, stock: 5, image: '', isNokos: false, nokosPhone: '' },
+                    { id: 6, name: 'Dompet Kulit', price: 150000, stock: 15, image: '', isNokos: false, nokosPhone: '' },
+                    { id: 7, name: 'Nokos Indo 10GB', price: 25000, stock: 50, image: '', isNokos: true, nokosPhone: '' }
+                ];
+                const promises = defaultProducts.map(p => refs.products.child(p.id).set(p));
+                return Promise.all(promises);
+            }
+        })
+        .then(() => {
+            // Config
+            return refs.config.once('value');
+        })
+        .then(snap => {
+            if (!snap.exists()) {
+                return refs.config.set({
+                    waNumber: WA_NUMBER,
+                    slLink: WA_LINK,
+                    paymentQr: '',
+                    storeInfo: 'PutzxStore - Toko Online'
+                });
+            }
+        })
+        .then(() => {
+            // Tandai sudah diinisialisasi
+            localStorage.setItem('putzxstore_initialized', 'true');
+        })
+        .catch(err => console.error('Init error:', err));
 }
-initData();
+
+// Jalankan inisialisasi sekali
+initDataOnce();
 
 // ================================================================
 // DOM REFS
